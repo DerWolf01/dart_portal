@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="wormhole API docs, for the Dart programming language.">
+  <title>wormhole - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">wormhole package</li>
+  </ol>
+  <div class="self-name">wormhole</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="wormhole">Wormhole</h1>
+<p>Wormhole is a Dart-based server-client communication framework that leverages controllers and the reflectable package to dynamically handle requests and responses. It provides a structured way to manage socket communication, making it easier to develop scalable and maintainable real-time applications.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Controller-Based Architecture</strong>: Organize your code into controllers for both server &amp; client to handle specific paths and actions, improving modularity and readability.</li>
+<li><strong>Middleware Support</strong>: Easily add middleware for request preprocessing and postprocessing.</li>
+<li><strong>Serializable Models</strong>: Define models that can be automatically serialized and deserialized from JSON, streamlining client-server data exchange.</li>
+<li><strong>Reflectable</strong>: Utilizes Dart's reflectable package for runtime reflection, enabling dynamic invocation of methods based on request paths.</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<p>To get started with Wormhole, follow these steps:</p>
+<ol>
+<li><strong>Add Dependencies</strong>: Ensure you have <code>wormhole</code>, <code>reflectable</code> and <code>build_runner</code> added to your <code>pubspec.yaml</code> file.
+<ol>
+<li>
+<p>Make sure to define 'analyzer: ^6.4.0' ( bigger version have conflcits with reflectable &amp; build_runner )</p>
+<pre class="language-dart"><code>```yaml
+dependencies:
+  wormhole: ^latest_version
+  reflectable: ^latest_version
+  analyzer: ^6.4.0
+dev_dependencies:
+  build_runner: ^latest_version
+```
+</code></pre>
+</li>
+<li>
+<p><strong>Define Controllers</strong>: Create controllers annotated with <code>@Controller</code> to handle specific paths and actions. Use <code>@RequestHandler</code> and <code>@ResponseHandler</code> to define methods for handling requests and responses.</p>
+</li>
+</ol>
+</li>
+</ol>
+<pre class="language-dart"><code class="language-dart">//server side code   
+@Controller('/example')
+@component
+class ExampleControllerServer {
+
+  // This method will now act as an handler for the path /example/sayHello
+  // It has to return SocketMessage as value &amp; has to match the same argument type of the handler in the client side!
+  // If it doesn't either on the client- or server side an exception will be thrown because of incompatible types
+
+  @RequestHandler('/sayHello')
+  SocketMessage sayHello(SocketMessage request) {
+    // this will be the response to the client
+    print("client says: ${request.text}");
+    return SocketMessage('Hello Client!');
+  }
+}
+//... 
+</code></pre>
+<pre class="language-dart"><code class="language-dart">import 'package:wormhole/wormhole.dart';
+
+// This class will be available on both client and server side
+@component
+class SocketMessage extends SerializableModel {
+  String text;
+
+  SocketMessage(this.text);
+
+//...member methods: toJson, toMap...
+}
+
+//...server side code 
+
+
+//...client side code 
+@component
+@Controller('/example')
+class ExampleControllerClient {
+
+  // This method will now act as an response handler for the path /example/sayHello
+  // It has no response handler as it is an response handler only!
+  // If it doesn't either on the client- or server side an exception will be thrown because of incompatible types
+  // The Response and Request handler with the sane paths have to match the same types when it comes to the handler argument  
+  @ResponseHandler('/sayHello')
+  void sayHello(SocketMessage response) {
+    print("server says: ${response.text}");
+    //... 
+  }
+}
+//...
+void main() async {
+  WormholeClient client = await WormholeClient.connect("localhost", 3000);
+  // this will send the message to the server
+  // the above defined controller will handle everything else
+  await ClientMessageService().send(SocketMessage("Hello Server!"));
+}
+</code></pre>
+<ol start="3">
+<li>
+<p><strong>Register Controllers</strong>: Before running your application, register your controllers with the framework.</p>
+<pre class="language-dart"><code class="language-dart">void main() {
+  ControllerService().registerController(ExampleController());
+  // Start your server or client
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Define Middlewares</strong>: Create middlewares to preprocess and postprocess requests and responses. Use the <code>MiddlewareService</code> to register your middleware.</p>
+<pre class="language-dart"><code class="language-dart">import 'package:wormhole/wormhole.dart';
+
+var exampleMiddleware = Middleware&lt;SocketMessage&gt;("/example", preHandle: (accepts) async =&gt; true, postHandle: (controllerAccepted, {controllerReturned}) async =&gt; print(controllerAccepted));
+   
+</code></pre>
+</li>
+<li>
+<p><strong>Register Middleware</strong>: Before running your application, register your middleware with the framework.</p>
+<pre class="language-dart"><code class="language-dart">void main() {
+  //...
+  MiddlewareService().registerMiddleware(exampleMiddleware);
+  //or use the member method
+  exampleMiddleware.register();
+  //or use the anonymousMiddleware function if you do not wanna define a class
+  anonymousMiddleware("/example", preHandle: (UInt8List request) {
+    print("Middleware for /example");
+    return true;
+  }, postHandle: (SerializableModel controllerAccepted, {SerializableModel? controllerReturned}) {
+    print("Middleware for /example");
+  });
+  // Start your server or client
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Use Build Runner</strong>: Wormhole uses the reflectable package, which requires generating code. Run the build runner to generate the necessary files.</p>
+<pre class="language-shell"><code class="language-shell">dart run build_runner build
+</code></pre>
+</li>
+<li>
+<p><strong>Run Your Application</strong>: With all controllers registered and necessary files generated, your application is ready to run.</p>
+</li>
+</ol>
+<h2 id="important-notes">Important Notes</h2>
+<ul>
+<li>
+<p><strong>Controller Registration</strong>: Ensure all controllers are registered before starting your server or client to avoid runtime errors.</p>
+</li>
+<li>
+<p><strong>Build Runner</strong>: Always run the build runner after making changes to controllers or models to regenerate the necessary reflective files.</p>
+</li>
+<li>
+<p><strong>Import generated file</strong>: Import the generated file <code>wormhole.reflectable.dart</code> in your main file and call "initializeReflectable()" to enable reflection.</p>
+<pre class="language-dart"><code class="language-dart">import 'wormhole.reflectable.dart';
+
+void main() {
+  ControllerService().registerController(ExampleController());
+  initializeReflectable();
+  // Register controllers and start your server or client
+}
+</code></pre>
+</li>
+</ul>
+<h2 id="example">Example</h2>
+<p>Here's a simple example of a Wormhole server and client setup:</p>
+<ul>
+<li><strong>Server</strong>: Listens for connections and handles requests using registered controllers.</li>
+<li><strong>Client</strong>: Connects to the server and sends requests based on user actions or application logic.</li>
+</ul>
+<p>For detailed examples and advanced usage, refer to the <code>examples</code> directory in the Wormhole repository.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Contributions are welcome! Feel free to open issues or submit pull requests to help improve Wormhole.</p>
+<h2 id="license">License</h2>
+<p>Wormhole is released under the MIT License. See the LICENSE file for more details.</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="anonymous_middleware">
+  <span class="name"><a href="common_middleware_anonymous_middleware/common_middleware_anonymous_middleware-library.html">common/middleware/anonymous_middleware</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="client_message_service">
+  <span class="name"><a href="wormhole_client_client_message_service/wormhole_client_client_message_service-library.html">wormhole_client/client_message_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="client_session">
+  <span class="name"><a href="wormhole_server_session_client_session/wormhole_server_session_client_session-library.html">wormhole_server/session/client_session</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="client_sessions">
+  <span class="name"><a href="wormhole_server_session_client_sessions/wormhole_server_session_client_sessions-library.html">wormhole_server/session/client_sessions</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="component">
+  <span class="name"><a href="common_component_component/common_component_component-library.html">common/component/component</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="controller">
+  <span class="name"><a href="common_controller_controller/common_controller_controller-library.html">common/controller/controller</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="controller_service">
+  <span class="name"><a href="common_controller_controller_service/common_controller_controller_service-library.html">common/controller/controller_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="middleware">
+  <span class="name"><a href="common_middleware_middleware/common_middleware_middleware-library.html">common/middleware/middleware</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="middleware_service">
+  <span class="name"><a href="common_middleware_middleware_service/common_middleware_middleware_service-library.html">common/middleware/middleware_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="model">
+  <span class="name"><a href="common_model_model/common_model_model-library.html">common/model/model</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="serializable_model">
+  <span class="name"><a href="common_model_serializable_model/common_model_serializable_model-library.html">common/model/serializable_model</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="server_message_service">
+  <span class="name"><a href="wormhole_server_server_message_service/wormhole_server_server_message_service-library.html">wormhole_server/server_message_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="simple_message">
+  <span class="name"><a href="common_messages_simple_message_simple_message/common_messages_simple_message_simple_message-library.html">common/messages/simple_message/simple_message</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="socket_connection_change_notifier">
+  <span class="name"><a href="common_socket_connection_change_notifier/common_socket_connection_change_notifier-library.html">common/socket_connection_change_notifier</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="socket_message">
+  <span class="name"><a href="common_messages_socket_message_socket_message/common_messages_socket_message_socket_message-library.html">common/messages/socket_message/socket_message</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="socket_message_service">
+  <span class="name"><a href="common_messages_socket_message_service/common_messages_socket_message_service-library.html">common/messages/socket_message_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="socket_request">
+  <span class="name"><a href="common_messages_socket_request_socket_request/common_messages_socket_request_socket_request-library.html">common/messages/socket_request/socket_request</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="socket_response">
+  <span class="name"><a href="common_messages_socket_response_socket_response/common_messages_socket_response_socket_response-library.html">common/messages/socket_response/socket_response</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wormhole">
+  <span class="name"><a href="wormhole/wormhole-library.html">wormhole</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wormhole_client">
+  <span class="name"><a href="wormhole_client_wormhole_client/wormhole_client_wormhole_client-library.html">wormhole_client/wormhole_client</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wormhole_server">
+  <span class="name"><a href="wormhole_server_wormhole_server/wormhole_server_wormhole_server-library.html">wormhole_server/wormhole_server</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">wormhole package</li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">wormhole</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="common_middleware_anonymous_middleware/common_middleware_anonymous_middleware-library.html">common/middleware/anonymous_middleware</a></li>
+      <li><a href="wormhole_client_client_message_service/wormhole_client_client_message_service-library.html">wormhole_client/client_message_service</a></li>
+      <li><a href="wormhole_server_session_client_session/wormhole_server_session_client_session-library.html">wormhole_server/session/client_session</a></li>
+      <li><a href="wormhole_server_session_client_sessions/wormhole_server_session_client_sessions-library.html">wormhole_server/session/client_sessions</a></li>
+      <li><a href="common_component_component/common_component_component-library.html">common/component/component</a></li>
+      <li><a href="common_controller_controller/common_controller_controller-library.html">common/controller/controller</a></li>
+      <li><a href="common_controller_controller_service/common_controller_controller_service-library.html">common/controller/controller_service</a></li>
+      <li><a href="common_middleware_middleware/common_middleware_middleware-library.html">common/middleware/middleware</a></li>
+      <li><a href="common_middleware_middleware_service/common_middleware_middleware_service-library.html">common/middleware/middleware_service</a></li>
+      <li><a href="common_model_model/common_model_model-library.html">common/model/model</a></li>
+      <li><a href="common_model_serializable_model/common_model_serializable_model-library.html">common/model/serializable_model</a></li>
+      <li><a href="wormhole_server_server_message_service/wormhole_server_server_message_service-library.html">wormhole_server/server_message_service</a></li>
+      <li><a href="common_messages_simple_message_simple_message/common_messages_simple_message_simple_message-library.html">common/messages/simple_message/simple_message</a></li>
+      <li><a href="common_socket_connection_change_notifier/common_socket_connection_change_notifier-library.html">common/socket_connection_change_notifier</a></li>
+      <li><a href="common_messages_socket_message_socket_message/common_messages_socket_message_socket_message-library.html">common/messages/socket_message/socket_message</a></li>
+      <li><a href="common_messages_socket_message_service/common_messages_socket_message_service-library.html">common/messages/socket_message_service</a></li>
+      <li><a href="common_messages_socket_request_socket_request/common_messages_socket_request_socket_request-library.html">common/messages/socket_request/socket_request</a></li>
+      <li><a href="common_messages_socket_response_socket_response/common_messages_socket_response_socket_response-library.html">common/messages/socket_response/socket_response</a></li>
+      <li><a href="wormhole/wormhole-library.html">wormhole</a></li>
+      <li><a href="wormhole_client_wormhole_client/wormhole_client_wormhole_client-library.html">wormhole_client/wormhole_client</a></li>
+      <li><a href="wormhole_server_wormhole_server/wormhole_server_wormhole_server-library.html">wormhole_server/wormhole_server</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    wormhole
+      1.0.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
