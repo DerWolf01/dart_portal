@@ -89,7 +89,7 @@ class MiddlewareService {
   ///   A [FutureOr<void>] representing the asynchronous operation.
   FutureOr<void> postHandle(String path,
       {required dynamic portalAccepted,
-      dynamic? portalReturned}) async {
+      dynamic portalReturned}) async {
     for (var middleware in middlewares.where(
       (element) => element.postHandle != null && element.path == path,
     )) {

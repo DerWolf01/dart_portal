@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:mirrors';
 import 'package:characters/characters.dart';
 import 'package:portal/portal.dart';
 import 'package:portal/reflection.dart';
@@ -43,23 +42,8 @@ class PortalService {
   }
 
   registerPortal(dynamic portal) {
-    final mirror = reflectClass(portal);
     final path = metadata(type: portal.runtimeType).first.getPath;
     _portalMap[path] = portal;
-  }
-
-  /// Retrieves a portal instance based on its path.
-  ///
-  /// This method looks up the portal in the [_portalMap] using the provided path and returns
-  /// the instance if found.
-  ///
-  /// Parameters:
-  ///   - [path]: The path of the portal to retrieve.
-  ///
-  /// Returns:
-  ///   The portal instance associated with the given path, if found.
-  dynamic _getPortal(String path) {
-    return _portalMap[path];
   }
 
   /// Retrieves a portal instance based on the full path of a request.

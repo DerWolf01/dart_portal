@@ -68,9 +68,9 @@ List<MethodMirror> methods(dynamic element) {
 }
 
 List<AnnotatedMethod<T>> annotatedMethods<T>(dynamic element) {
-  List<MethodMirror> _methods = methods(element);
+  List<MethodMirror> methodsList = methods(element);
 
-  return _methods
+  return methodsList
       .where((element) =>
           element.metadata
               .map((e) => e.type.reflectedType)

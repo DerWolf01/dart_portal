@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:mirrors';
-import 'dart:typed_data';
 
 class ConverterService {
   static Map<String, dynamic> objectToMap(dynamic object) {
