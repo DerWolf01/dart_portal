@@ -37,7 +37,7 @@ class Portal {
 /// An abstract class representing a type of request that can be handled by the application.
 ///
 /// This class serves as a base for more specific request handler annotations, such as
-/// [RequestHandler] and [ResponseHandler]. It includes a `path` property that is used
+/// [RequestHandler] and [Post]. It includes a `path` property that is used
 /// for routing requests to the appropriate handler based on the URL path.
 
 abstract class RequestType {
@@ -58,9 +58,9 @@ abstract class RequestType {
 /// to handle specific requests. The `path` parameter is used for routing, allowing the application
 /// to match incoming requests to the correct method based on the URL path.
 
-class RequestHandler extends RequestType {
-  /// Constructs a [RequestHandler] instance with the given path.
-  const RequestHandler(super.path);
+class Get extends RequestType {
+  /// Constructs a [Get] instance with the given path.
+  const Get(super.path);
 }
 
 /// A decorator for methods that handle responses to specific types of requests.
@@ -69,7 +69,7 @@ class RequestHandler extends RequestType {
 /// to handle responses. The `path` parameter is used for routing, allowing the application
 /// to match outgoing responses to the correct method based on the URL path.
 
-class ResponseHandler extends RequestType {
-  /// Constructs a [ResponseHandler] instance with the given path.
-  const ResponseHandler(super.path);
+class Post extends RequestType {
+  /// Constructs a [Post] instance with the given path.
+  const Post(super.path);
 }

@@ -24,7 +24,7 @@ To get started with Portal, follow these steps:
           dev_dependencies:
             build_runner: ^latest_version
           ```
-   2. **Define Portals**: Create portals annotated with `@Portal` to handle specific paths and actions. Use `@RequestHandler` and `@ResponseHandler` to define methods for handling requests and responses. 
+   2. **Define Portals**: Create portals annotated with `@Portal` to handle specific paths and actions. Use `@Get` and `@ResponseHandler` to define methods for handling requests and responses. 
       
 
 ```dart 
@@ -37,7 +37,7 @@ class ExamplePortalServer {
   // It has to return SocketMessage as value & has to match the same argument type of the handler in the client side!
   // If it doesn't either on the client- or server side an exception will be thrown because of incompatible types
 
-  @RequestHandler('/sayHello')
+  @Get('/sayHello')
   SocketMessage sayHello(SocketMessage request) {
     // this will be the response to the client
     print("client says: ${request.text}");

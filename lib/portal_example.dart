@@ -3,7 +3,7 @@ import 'package:portal/portal.dart';
 
 @Portal("/auth")
 class PortalExample {
-  @RequestHandler("/sign-up")
+  @Post("/sign-up")
   handle(SignUpForm data) {
     print(data);
     return "Hello, World!";

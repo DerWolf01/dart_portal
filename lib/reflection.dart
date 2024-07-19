@@ -13,7 +13,6 @@ metadata<T>({Type? type}) {
       );
 }
 
-
 class AnnotatedMethod<AnotatedWith> {
   final dynamic partOf;
   final MethodMirror method;
@@ -33,8 +32,9 @@ class AnnotatedMethod<AnotatedWith> {
   }
 
   FutureOr<T>? invoke<T>(List<dynamic> positionalArguments) async {
-    return await (reflect(partOf).invoke(method.simpleName, positionalArguments)
-        as FutureOr<T>);
+    return await (reflect(partOf)
+            .invoke(method.simpleName, positionalArguments))
+        .reflectee as FutureOr<T>;
   }
 
   Future<T> invokeUsingMap<T>(Map map) async {
@@ -51,7 +51,16 @@ class AnnotatedMethod<AnotatedWith> {
 }
 
 List<MethodMirror> methods(dynamic element) {
-  return reflectClass(element)
+  if (element is Type) {
+    return reflectClass(element)
+        .declarations
+        .values
+        .whereType<MethodMirror>()
+        .toList();
+  }
+
+  return reflect(element)
+      .type
       .declarations
       .values
       .whereType<MethodMirror>()
@@ -59,10 +68,18 @@ List<MethodMirror> methods(dynamic element) {
 }
 
 List<AnnotatedMethod<T>> annotatedMethods<T>(dynamic element) {
-  return methods(element)
-      .where((element) => element.metadata.whereType<T>().firstOrNull != null)
+  List<MethodMirror> _methods = methods(element);
+
+  return _methods
+      .where((element) =>
+          element.metadata
+              .map((e) => e.type.reflectedType)
+              .whereType<T>()
+              .firstOrNull !=
+          null)
       .map(
-        (e) => AnnotatedMethod<T>(element, e, e.metadata.whereType<T>().first),
+        (e) => AnnotatedMethod<T>(element, e,
+            e.metadata.map((e) => e.reflectee).whereType<T>().first),
       )
       .toList();
 }

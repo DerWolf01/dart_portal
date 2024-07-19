@@ -73,10 +73,9 @@ class PortalServer {
     server.listen((HttpRequest request) async {
       print(
           'Request from ${request.connectionInfo?.remoteAddress}:${request.connectionInfo?.remotePort}');
-      var responseData = 'Hello, World!';
+
       print('Request: ${request.uri.path}');
-      print(PortalService().portalByFullPath(request.uri.path));
-      request.response.write('Hello, world!');
+      await portalService.callGateway(request.uri.path, request);
       await request.response.close();
     });
     print("listening on ${server.address.address}:${server.port}");

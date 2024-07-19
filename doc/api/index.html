@@ -78,7 +78,7 @@ dev_dependencies:
 </code></pre>
 </li>
 <li>
-<p><strong>Define Portals</strong>: Create portals annotated with <code>@Portal</code> to handle specific paths and actions. Use <code>@RequestHandler</code> and <code>@ResponseHandler</code> to define methods for handling requests and responses.</p>
+<p><strong>Define Portals</strong>: Create portals annotated with <code>@Portal</code> to handle specific paths and actions. Use <code>@Get</code> and <code>@ResponseHandler</code> to define methods for handling requests and responses.</p>
 </li>
 </ol>
 </li>
@@ -92,7 +92,7 @@ class ExamplePortalServer {
   // It has to return SocketMessage as value &amp; has to match the same argument type of the handler in the client side!
   // If it doesn't either on the client- or server side an exception will be thrown because of incompatible types
 
-  @RequestHandler('/sayHello')
+  @Get('/sayHello')
   SocketMessage sayHello(SocketMessage request) {
     // this will be the response to the client
     print("client says: ${request.text}");

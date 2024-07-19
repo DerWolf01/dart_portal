@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:mirrors';
 import 'package:characters/characters.dart';
 import 'package:portal/portal.dart';
 import 'package:portal/reflection.dart';
 import 'package:portal/services/collection_service.dart';
+import 'package:portal/services/conversion_service.dart';
 
 PortalService get portalService => PortalService();
 
@@ -55,7 +58,7 @@ class PortalService {
   ///
   /// Returns:
   ///   The portal instance associated with the given path, if found.
-  dynamic getPortal(String path) {
+  dynamic _getPortal(String path) {
     return _portalMap[path];
   }
 
@@ -69,7 +72,7 @@ class PortalService {
   ///
   /// Returns:
   ///   The portal instance associated with the extracted path.
-  dynamic portalByFullPath(String fullPath) {
+  dynamic _portalByFullPath(String fullPath) {
     print(_portalMap);
     dynamic portal;
     try {
@@ -137,10 +140,18 @@ class PortalService {
   ///
   /// Returns:
   ///   The result of invoking the method.
-  dynamic callMethodFromMap(AnnotatedMethod m, Map map) {
-    var argument = m.invokeMethodArgumentInstance(
-        constructorName: "fromMap", positionalArguments: [map]);
-    return m.partOf.invoke(m.method.simpleName, [argument]);
+  dynamic callMethodFromMap(AnnotatedMethod m, Map<String, dynamic> map) async {
+    final expectedData = ConverterService.mapToObject(map);
+
+    return await (m.partOf.invoke(m.method.simpleName, [expectedData])
+        as FutureOr);
+  }
+
+  dynamic callMethod(AnnotatedMethod m, Map<String, dynamic> map) async {
+    final expectedData = ConverterService.mapToObject(map);
+
+    return await (m.partOf.invoke(m.method.simpleName, [expectedData])
+        as FutureOr);
   }
 
   /// Finds an annotated method within a portal based on the full request path.
@@ -157,16 +168,17 @@ class PortalService {
   /// Returns:
   ///   An [AnnotatedMethod] instance representing the method to handle the request, or null
   ///   if no matching method is found.
-  AnnotatedMethod? methodMirrorByFullPath<AnnotatedWith extends RequestType>(
-      String fullPath) {
+  AnnotatedMethod? methodMirrorByFullPath(String fullPath) {
     try {
-      var portal = portalByFullPath(fullPath);
+      var portal = _portalByFullPath(fullPath);
+      print(portal);
       if (portal == null) {
         throw Exception("No Portal registered with path: $fullPath");
       }
       var mPath = methodPath(fullPath);
+      print("Method path: $mPath");
 
-      AnnotatedMethod? res = annotatedMethods<AnnotatedWith>(portal)
+      AnnotatedMethod? res = annotatedMethods(portal)
           .where(
             (e) => e.annotation.getPath == mPath,
           )
@@ -179,6 +191,57 @@ class PortalService {
       print("Error: $e");
     }
     return null;
+  }
+
+  Future<HttpRequest> callGateway(
+    String fullPath,
+    HttpRequest request,
+  ) async {
+    final m = methodMirrorByFullPath(fullPath);
+
+    if (m?.annotation is Get) {
+      print(request.method);
+      if (request.method != "GET") {
+        request.response.statusCode = HttpStatus.methodNotAllowed;
+        return request;
+      }
+      print("is get");
+      return await handleGet(request, m!, fullPath);
+    } else if (m?.annotation is Post) {
+      if (request.method != "POST") {
+        request.response.statusCode = HttpStatus.methodNotAllowed;
+        return request;
+      }
+      print("is post");
+      return await handlePost(request, m!, fullPath);
+    }
+
+    request.response.statusCode = HttpStatus.notFound;
+    return request;
+  }
+
+  Future<HttpRequest> handleGet(
+      HttpRequest request, AnnotatedMethod m, String fullPath) async {
+    request.uri.queryParameters.forEach((key, value) {
+      print("$key: $value");
+    });
+    request.response.write("Got the get request");
+    return request;
+  }
+
+  Future<HttpRequest> handlePost(
+      HttpRequest request, AnnotatedMethod m, String fullPath) async {
+    var object = await ConverterService.requestToObject(request,
+        type: m.methodArgumentType());
+
+    final result = await m.invoke([object]);
+    print(result);
+    if (result is String || result is num) {
+      request.response.write(result);
+      return request;
+    }
+    request.response.write(jsonEncode(result));
+    return request;
   }
 }
 
