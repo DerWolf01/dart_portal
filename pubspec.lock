@@ -177,6 +177,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  dart_conversion:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: main
+      resolved-ref: "2c6170ba9407a9efcbc6d602dd3d6f6ee3f8d6bc"
+      url: "https://github.com/DerWolf01/dart_conversion.git"
+    source: git
+    version: "1.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -554,4 +563,4 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.4.0 <4.0.0"
+  dart: ">=3.4.3 <4.0.0"

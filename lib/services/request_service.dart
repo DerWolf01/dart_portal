@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/portal.dart';
-import 'package:portal/services/conversion_service.dart';
+
 
 class RequestService extends RequestServiceNotifier {
   FutureOr handleRequest(HttpRequest request) async {
     final body = await utf8.decodeStream(request);
-    var instance = ConverterService.mapToObject(jsonDecode(body));
+    var instance = ConversionService.mapToObject(jsonDecode(body));
     print(instance);
   }
 

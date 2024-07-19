@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:characters/characters.dart';
+import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/portal.dart';
 import 'package:portal/reflection.dart';
 import 'package:portal/services/collection_service.dart';
-import 'package:portal/services/conversion_service.dart';
+
 
 PortalService get portalService => PortalService();
 
@@ -125,14 +126,14 @@ class PortalService {
   /// Returns:
   ///   The result of invoking the method.
   dynamic callMethodFromMap(AnnotatedMethod m, Map<String, dynamic> map) async {
-    final expectedData = ConverterService.mapToObject(map);
+    final expectedData = ConversionService.mapToObject(map);
 
     return await (m.partOf.invoke(m.method.simpleName, [expectedData])
         as FutureOr);
   }
 
   dynamic callMethod(AnnotatedMethod m, Map<String, dynamic> map) async {
-    final expectedData = ConverterService.mapToObject(map);
+    final expectedData = ConversionService.mapToObject(map);
 
     return await (m.partOf.invoke(m.method.simpleName, [expectedData])
         as FutureOr);
@@ -215,7 +216,7 @@ class PortalService {
 
   Future<HttpRequest> handlePost(
       HttpRequest request, AnnotatedMethod m, String fullPath) async {
-    var object = await ConverterService.requestToObject(request,
+    var object = await ConversionService.requestToObject(request,
         type: m.methodArgumentType());
 
     final result = await m.invoke([object]);
