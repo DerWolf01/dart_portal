@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
     <meta name="description"
-          content="API docs for the registerController method from the ControllerService class, for the Dart programming language.">
-    <title>registerController method - ControllerService class - controller_service library - Dart API</title>
+          content="API docs for the registerPortal method from the PortalService class, for the Dart programming language.">
+    <title>registerPortal method - PortalService class - portal_service library - Dart API</title>
 
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -30,13 +30,13 @@
 <header id="title">
     <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
     <ol class="breadcrumbs gt-separated dark hidden-xs">
-        <li><a href="../../index.html">wormhole</a></li>
-        <li><a href="../../common_controller_controller_service/common_controller_controller_service-library.html">common&#47;controller&#47;controller_service.dart</a>
+        <li><a href="../../index.html">portal</a></li>
+        <li><a href="../../common_portal_portal_service/common_portal_portal_service-library.html">common&#47;portal&#47;portal_service.dart</a>
         </li>
-        <li><a href="../../common_controller_controller_service/ControllerService-class.html">ControllerService</a></li>
-        <li class="self-crumb">registerController method</li>
+        <li><a href="../../common_portal_portal_service/PortalService-class.html">PortalService</a></li>
+        <li class="self-crumb">registerPortal method</li>
     </ol>
-    <div class="self-name">registerController</div>
+    <div class="self-name">registerPortal</div>
     <form class="search navbar-right" role="search">
         <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead"
                placeholder="Loading search...">
@@ -58,21 +58,21 @@
     <div
             id="dartdoc-main-content"
             class="main-content"
-            data-above-sidebar="common_controller_controller_service&#47;ControllerService-class-sidebar.html"
+            data-above-sidebar="common_portal_portal_service&#47;PortalService-class-sidebar.html"
             data-below-sidebar="">
         <div>
-            <h1><span class="kind-method">registerController</span> method
+            <h1><span class="kind-method">registerPortal</span> method
             </h1></div>
 
         <section class="multi-line-signature">
 
 
             <span class="returntype">dynamic</span>
-            <span class="name ">registerController</span>(
+            <span class="name ">registerPortal</span>(
             <wbr>
             <ol class="parameter-list">
-                <li><span class="parameter" id="registerController-param-controller"><span class="type-annotation">dynamic</span> <span
-                        class="parameter-name">controller</span></span></li>
+                <li><span class="parameter" id="registerPortal-param-portal"><span class="type-annotation">dynamic</span> <span
+                        class="parameter-name">portal</span></span></li>
             </ol>
             )
 
@@ -80,23 +80,23 @@
         </section>
 
         <section class="desc markdown">
-            <p>Registers a controller with the service.</p>
-            <p>This method takes a controller instance, retrieves its path using the <a
-                    href="../../common_controller_controller/Controller-class.html">Controller</a> annotation,
-                and maps the path to the controller in the <code>_controllerMap</code>. This allows for the retrieval of
-                controller instances based on their path.</p>
+            <p>Registers a portal with the service.</p>
+            <p>This method takes a portal instance, retrieves its path using the <a
+                    href="../../common_portal_portal/Portal-class.html">Portal</a> annotation,
+                and maps the path to the portal in the <code>_portalMap</code>. This allows for the retrieval of
+                portal instances based on their path.</p>
             <p>Parameters:</p>
             <ul>
-                <li><code>controller</code>: The controller instance to register.</li>
+                <li><code>portal</code>: The portal instance to register.</li>
             </ul>
         </section>
 
 
         <section class="summary source-code" id="source">
             <h2><span>Implementation</span></h2>
-            <pre class="language-dart"><code class="language-dart">registerController(dynamic controller) {
-  var path = Controller.byImplementation(controller).getPath;
-  _controllerMap[path] = controller;
+            <pre class="language-dart"><code class="language-dart">registerPortal(dynamic portal) {
+  var path = Portal.fromInstance(portal).getPath;
+  _portalMap[path] = portal;
 }</code></pre>
         </section>
 
@@ -113,16 +113,16 @@
         </header>
 
         <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-            <li><a href="../../index.html">wormhole</a></li>
-            <li><a href="../../common_controller_controller_service/common_controller_controller_service-library.html">controller_service</a>
+            <li><a href="../../index.html">portal</a></li>
+            <li><a href="../../common_portal_portal_service/common_portal_portal_service-library.html">portal_service</a>
             </li>
-            <li><a href="../../common_controller_controller_service/ControllerService-class.html">ControllerService</a>
+            <li><a href="../../common_portal_portal_service/PortalService-class.html">PortalService</a>
             </li>
-            <li class="self-crumb">registerController method</li>
+            <li class="self-crumb">registerPortal method</li>
         </ol>
 
 
-        <h5>ControllerService class</h5>
+        <h5>PortalService class</h5>
         <div id="dartdoc-sidebar-left-content"></div>
     </div><!--/.sidebar-offcanvas-->
 
@@ -133,7 +133,7 @@
 
 <footer>
   <span class="no-break">
-    wormhole
+    portal
       1.0.0
   </span>
 

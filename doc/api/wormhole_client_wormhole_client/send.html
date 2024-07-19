@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the send function from the wormhole_client library, for the Dart programming language.">
-  <title>send function - wormhole_client library - Dart API</title>
+  <meta name="description" content="API docs for the send function from the portal_client library, for the Dart programming language.">
+  <title>send function - portal_client library - Dart API</title>
 
 
   
@@ -28,8 +28,8 @@
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li><a href="../index.html">wormhole</a></li>
-    <li><a href="../wormhole_client_wormhole_client/wormhole_client_wormhole_client-library.html">wormhole_client&#47;wormhole_client.dart</a></li>
+    <li><a href="../index.html">portal</a></li>
+    <li><a href="../portal_client_portal_client/portal_client_portal_client-library.html">portal_client&#47;portal_client.dart</a></li>
     <li class="self-crumb">send function</li>
   </ol>
   <div class="self-name">send</div>
@@ -53,7 +53,7 @@
   <div
       id="dartdoc-main-content"
       class="main-content"
-      data-above-sidebar="wormhole_client_wormhole_client&#47;wormhole_client_wormhole_client-library-sidebar.html"
+      data-above-sidebar="portal_client_portal_client&#47;portal_client_portal_client-library-sidebar.html"
       data-below-sidebar="">
       <div>
 <h1><span class="kind-function">send</span> function 
@@ -72,9 +72,9 @@
     </section>
     
 <section class="desc markdown">
-  <p>Sends a message to the server using the <a href="../wormhole_client_wormhole_client/WormholeClient-class.html">WormholeClient</a> instance.</p>
+  <p>Sends a message to the server using the <a href="../portal_client_portal_client/PortalClient-class.html">PortalClient</a> instance.</p>
 <p>This function takes a <a href="https://api.flutter.dev/flutter/dart-io/SocketMessage-class.html">SocketMessage</a> object as an argument, which it sends to the server
-through the <a href="../wormhole_client_wormhole_client/WormholeClient-class.html">WormholeClient</a> instance. It ensures that the message is sent asynchronously
+through the <a href="../portal_client_portal_client/PortalClient-class.html">PortalClient</a> instance. It ensures that the message is sent asynchronously
 and waits for the send operation to complete.</p>
 </section>
 
@@ -83,7 +83,7 @@ and waits for the send operation to complete.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">send(messages.SocketMessage message) async {
-  await wormholeClient.send(message.toJson());
+  await portalClient.send(message.toJson());
 }</code></pre>
 </section>
 
@@ -99,13 +99,13 @@ and waits for the send operation to complete.</p>
 </header>
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-    <li><a href="../index.html">wormhole</a></li>
-    <li><a href="../wormhole_client_wormhole_client/wormhole_client_wormhole_client-library.html">wormhole_client</a></li>
+    <li><a href="../index.html">portal</a></li>
+    <li><a href="../portal_client_portal_client/portal_client_portal_client-library.html">portal_client</a></li>
     <li class="self-crumb">send function</li>
 </ol>
 
 
-    <h5>wormhole_client library</h5>
+    <h5>portal_client library</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-left-->
 
@@ -116,7 +116,7 @@ and waits for the send operation to complete.</p>
 
 <footer>
   <span class="no-break">
-    wormhole
+    portal
       1.0.0
   </span>
 

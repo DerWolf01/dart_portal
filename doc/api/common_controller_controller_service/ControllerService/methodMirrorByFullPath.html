@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the methodMirrorByFullPath method from the ControllerService class, for the Dart programming language.">
-  <title>methodMirrorByFullPath method - ControllerService class - controller_service library - Dart API</title>
+  <meta name="description" content="API docs for the methodMirrorByFullPath method from the PortalService class, for the Dart programming language.">
+  <title>methodMirrorByFullPath method - PortalService class - portal_service library - Dart API</title>
 
 
   
@@ -28,9 +28,9 @@
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li><a href="../../index.html">wormhole</a></li>
-    <li><a href="../../common_controller_controller_service/common_controller_controller_service-library.html">common&#47;controller&#47;controller_service.dart</a></li>
-    <li><a href="../../common_controller_controller_service/ControllerService-class.html">ControllerService</a></li>
+    <li><a href="../../index.html">portal</a></li>
+    <li><a href="../../common_portal_portal_service/common_portal_portal_service-library.html">common&#47;portal&#47;portal_service.dart</a></li>
+    <li><a href="../../common_portal_portal_service/PortalService-class.html">PortalService</a></li>
     <li class="self-crumb">methodMirrorByFullPath&lt;<wbr><span class="type-parameter">AnnotatedWith extends RequestType</span>&gt; method</li>
   </ol>
   <div class="self-name">methodMirrorByFullPath</div>
@@ -54,7 +54,7 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="common_controller_controller_service&#47;ControllerService-class-sidebar.html"
+    data-above-sidebar="common_portal_portal_service&#47;PortalService-class-sidebar.html"
     data-below-sidebar="">
     <div>
 <h1><span class="kind-method">methodMirrorByFullPath&lt;<wbr><span class="type-parameter">AnnotatedWith extends RequestType</span>&gt;</span> method 
@@ -72,8 +72,8 @@
     </section>
     
 <section class="desc markdown">
-  <p>Finds an annotated method within a controller based on the full request path.</p>
-<p>This method locates a method within a controller that matches a specific request path.
+  <p>Finds an annotated method within a portal based on the full request path.</p>
+<p>This method locates a method within a portal that matches a specific request path.
 It uses annotations to find methods that are designated to handle certain paths.</p>
 <p>Type Parameters:</p>
 <ul>
@@ -94,10 +94,10 @@ An <a href="../../common_component_component/AnnotatedMethod-class.html">Annotat
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">AnnotatedMethod? methodMirrorByFullPath&lt;AnnotatedWith extends RequestType&gt;(
     String fullPath) {
-  var controller = controllerByFullPath(fullPath);
+  var portal = portalByFullPath(fullPath);
   var mPath = methodPath(fullPath);
 
-  AnnotatedMethod? res = annotatedMethods&lt;AnnotatedWith&gt;(controller)
+  AnnotatedMethod? res = annotatedMethods&lt;AnnotatedWith&gt;(portal)
       .where(
         (e) =&gt; e.annotation.getPath == mPath,
       )
@@ -121,14 +121,14 @@ An <a href="../../common_component_component/AnnotatedMethod-class.html">Annotat
 </header>
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-    <li><a href="../../index.html">wormhole</a></li>
-    <li><a href="../../common_controller_controller_service/common_controller_controller_service-library.html">controller_service</a></li>
-    <li><a href="../../common_controller_controller_service/ControllerService-class.html">ControllerService</a></li>
+    <li><a href="../../index.html">portal</a></li>
+    <li><a href="../../common_portal_portal_service/common_portal_portal_service-library.html">portal_service</a></li>
+    <li><a href="../../common_portal_portal_service/PortalService-class.html">PortalService</a></li>
     <li class="self-crumb">methodMirrorByFullPath&lt;<wbr><span class="type-parameter">AnnotatedWith extends RequestType</span>&gt; method</li>
 </ol>
 
 
-    <h5>ControllerService class</h5>
+    <h5>PortalService class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 
@@ -139,7 +139,7 @@ An <a href="../../common_component_component/AnnotatedMethod-class.html">Annotat
 
 <footer>
   <span class="no-break">
-    wormhole
+    portal
       1.0.0
   </span>
 

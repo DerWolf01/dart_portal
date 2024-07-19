@@ -28,7 +28,7 @@
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li><a href="../index.html">wormhole</a></li>
+    <li><a href="../index.html">portal</a></li>
     <li><a href="../common_component_component/common_component_component-library.html">common&#47;component&#47;component.dart</a></li>
     <li class="self-crumb">metadata function</li>
   </ol>
@@ -63,7 +63,7 @@
     <section class="multi-line-signature">
         
 
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/dynamic-class.html">dynamic</a></span>&gt;</span></span>
 <span class="name ">metadata</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="metadata-param-element"><span class="type-annotation">dynamic</span> <span class="parameter-name">element</span></span></li>
 </ol>)
 
@@ -76,8 +76,8 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">List&lt;Object&gt; metadata(dynamic element) {
-  return instanceMirror(element).type.metadata;
+  <pre class="language-dart"><code class="language-dart">List&lt;dynamic&gt; metadata(dynamic element) {
+  return reflect(element).type.metadata;
 }</code></pre>
 </section>
 
@@ -93,7 +93,7 @@
 </header>
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-    <li><a href="../index.html">wormhole</a></li>
+    <li><a href="../index.html">portal</a></li>
     <li><a href="../common_component_component/common_component_component-library.html">component</a></li>
     <li class="self-crumb">metadata function</li>
 </ol>
@@ -110,7 +110,7 @@
 
 <footer>
   <span class="no-break">
-    wormhole
+    portal
       1.0.0
   </span>
 

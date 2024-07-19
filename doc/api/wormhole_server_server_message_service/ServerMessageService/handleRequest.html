@@ -28,9 +28,9 @@
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li><a href="../../index.html">wormhole</a></li>
-    <li><a href="../../wormhole_server_server_message_service/wormhole_server_server_message_service-library.html">wormhole_server&#47;server_message_service.dart</a></li>
-    <li><a href="../../wormhole_server_server_message_service/ServerMessageService-class.html">ServerMessageService</a></li>
+    <li><a href="../../index.html">portal</a></li>
+    <li><a href="../../portal_server_server_message_service/portal_server_server_message_service-library.html">portal_server&#47;server_message_service.dart</a></li>
+    <li><a href="../../portal_server_server_message_service/ServerMessageService-class.html">ServerMessageService</a></li>
     <li class="self-crumb">handleRequest method</li>
   </ol>
   <div class="self-name">handleRequest</div>
@@ -54,7 +54,7 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="wormhole_server_server_message_service&#47;ServerMessageService-class-sidebar.html"
+    data-above-sidebar="portal_server_server_message_service&#47;ServerMessageService-class-sidebar.html"
     data-below-sidebar="">
     <div>
 <h1><span class="kind-method">handleRequest</span> method 
@@ -78,9 +78,9 @@
     
 <section class="desc markdown">
   <p>Handles incoming request messages from clients.</p>
-<p>This method overrides the <a href="../../wormhole_server_server_message_service/ServerMessageService/handleRequest.html">handleRequest</a> method from <a href="../../common_messages_socket_message_service/SocketMessageService-class.html">SocketMessageService</a> to provide
+<p>This method overrides the <a href="../../portal_server_server_message_service/ServerMessageService/handleRequest.html">handleRequest</a> method from <a href="../../common_messages_socket_message_service/SocketMessageService-class.html">SocketMessageService</a> to provide
 specific logic for handling request messages. It decodes the message, identifies the appropriate
-controller method to handle the request, and invokes that method. If the method returns a result
+portal method to handle the request, and invokes that method. If the method returns a result
 that is a <a href="../../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a>, it serializes the model to JSON and sends it back to the client.</p>
 <p>Parameters:</p>
 <ul>
@@ -97,7 +97,7 @@ handleRequest(Map&lt;String, dynamic&gt; message) async {
   var path = message[&quot;path&quot;];
   print(&#39;handleRequest-path: $path&#39;);
   var pingedMethod =
-      controllerService.methodMirrorByFullPath&lt;RequestHandler&gt;(path);
+      portalService.methodMirrorByFullPath&lt;RequestHandler&gt;(path);
   print(&quot;pingedMethod: $pingedMethod&quot;);
   if (pingedMethod is AnnotatedMethod&lt;RequestHandler&gt;) {
     try {
@@ -107,7 +107,7 @@ handleRequest(Map&lt;String, dynamic&gt; message) async {
       if (res is SerializableModel) {
         await send(SocketResponse(message[&quot;path&quot;], res));
         await MiddlewareService().postHandle(path,
-            controllerAccepted: argument, controllerReturned: res);
+            portalAccepted: argument, portalReturned: res);
       }
     } catch (e) {
       print(e);
@@ -128,9 +128,9 @@ handleRequest(Map&lt;String, dynamic&gt; message) async {
 </header>
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-    <li><a href="../../index.html">wormhole</a></li>
-    <li><a href="../../wormhole_server_server_message_service/wormhole_server_server_message_service-library.html">server_message_service</a></li>
-    <li><a href="../../wormhole_server_server_message_service/ServerMessageService-class.html">ServerMessageService</a></li>
+    <li><a href="../../index.html">portal</a></li>
+    <li><a href="../../portal_server_server_message_service/portal_server_server_message_service-library.html">server_message_service</a></li>
+    <li><a href="../../portal_server_server_message_service/ServerMessageService-class.html">ServerMessageService</a></li>
     <li class="self-crumb">handleRequest method</li>
 </ol>
 
@@ -146,7 +146,7 @@ handleRequest(Map&lt;String, dynamic&gt; message) async {
 
 <footer>
   <span class="no-break">
-    wormhole
+    portal
       1.0.0
   </span>
 

@@ -28,7 +28,7 @@
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li><a href="../index.html">wormhole</a></li>
+    <li><a href="../index.html">portal</a></li>
     <li><a href="../common_component_component/common_component_component-library.html">common&#47;component&#47;component.dart</a></li>
     <li class="self-crumb">methods function</li>
   </ol>
@@ -77,7 +77,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">List&lt;MethodMirror&gt; methods(dynamic element) {
-  return classMirror(element)
+  return reflectClass(element)
       .declarations
       .values
       .whereType&lt;MethodMirror&gt;()
@@ -97,7 +97,7 @@
 </header>
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-    <li><a href="../index.html">wormhole</a></li>
+    <li><a href="../index.html">portal</a></li>
     <li><a href="../common_component_component/common_component_component-library.html">component</a></li>
     <li class="self-crumb">methods function</li>
 </ol>
@@ -114,7 +114,7 @@
 
 <footer>
   <span class="no-break">
-    wormhole
+    portal
       1.0.0
   </span>
 

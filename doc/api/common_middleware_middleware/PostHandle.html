@@ -28,7 +28,7 @@
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li><a href="../index.html">wormhole</a></li>
+    <li><a href="../index.html">portal</a></li>
     <li><a href="../common_middleware_middleware/common_middleware_middleware-library.html">common&#47;middleware&#47;middleware.dart</a></li>
     <li class="self-crumb">PostHandle&lt;<wbr><span class="type-parameter">T extends SerializableModel</span>&gt; typedef</li>
   </ol>
@@ -62,7 +62,7 @@
 
     <section class="multi-line-signature">
         <span class="name ">PostHandle</span>&lt;<wbr><span class="type-parameter">T extends <a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt; =
-     <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/FutureOr-class.html">FutureOr</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span> Function<span class="signature">(<span class="parameter" id="param-controllerAccepted"><span class="type-annotation">T</span> <span class="parameter-name">controllerAccepted</span>, </span><span class="parameter" id="param-controllerReturned">{<span class="type-annotation">T?</span> <span class="parameter-name">controllerReturned</span>}</span>)</span></span>
+     <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/FutureOr-class.html">FutureOr</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span> Function<span class="signature">(<span class="parameter" id="param-portalAccepted"><span class="type-annotation">T</span> <span class="parameter-name">portalAccepted</span>, </span><span class="parameter" id="param-portalReturned">{<span class="type-annotation">T?</span> <span class="parameter-name">portalReturned</span>}</span>)</span></span>
 
     </section>
 
@@ -76,7 +76,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">typedef PostHandle&lt;T extends SerializableModel&gt; = FutureOr&lt;void&gt;
-    Function(T controllerAccepted, {T? controllerReturned});</code></pre>
+    Function(T portalAccepted, {T? portalReturned});</code></pre>
 </section>
 
 
@@ -91,7 +91,7 @@
 </header>
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-    <li><a href="../index.html">wormhole</a></li>
+    <li><a href="../index.html">portal</a></li>
     <li><a href="../common_middleware_middleware/common_middleware_middleware-library.html">middleware</a></li>
     <li class="self-crumb">PostHandle&lt;<wbr><span class="type-parameter">T extends SerializableModel</span>&gt; typedef</li>
 </ol>
@@ -108,7 +108,7 @@
 
 <footer>
   <span class="no-break">
-    wormhole
+    portal
       1.0.0
   </span>
 

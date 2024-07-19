@@ -7,13 +7,13 @@ var hljs=function(){"use strict";function e(n){
 return n instanceof Map?n.clear=n.delete=n.set=()=>{
 throw Error("map is read-only")}:n instanceof Set&&(n.add=n.clear=n.delete=()=>{
 throw Error("set is read-only")
-}),Object.freeze(n),Object.getOwnPropertyNames(n).forEach((t=>{
-const a=n[t],i=typeof a;"object"!==i&&"function"!==i||Object.isFrozen(a)||e(a)
+}),dynamic.freeze(n),dynamic.getOwnPropertyNames(n).forEach((t=>{
+const a=n[t],i=typeof a;"object"!==i&&"function"!==i||dynamic.isFrozen(a)||e(a)
 })),n}class n{constructor(e){
 void 0===e.data&&(e.data={}),this.data=e.data,this.isMatchIgnored=!1}
 ignoreMatch(){this.isMatchIgnored=!0}}function t(e){
 return e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#x27;")
-}function a(e,...n){const t=Object.create(null);for(const n in e)t[n]=e[n]
+}function a(e,...n){const t=dynamic.create(null);for(const n in e)t[n]=e[n]
 ;return n.forEach((e=>{for(const n in e)t[n]=e[n]})),t}const i=e=>!!e.scope
 ;class s{constructor(e,n){
 this.buffer="",this.classPrefix=n.classPrefix,e.walk(this)}addText(e){
@@ -24,7 +24,7 @@ if(e.startsWith("language:"))return e.replace("language:","language-")
 }return`${n}${e}`})(e.scope,{prefix:this.classPrefix});this.span(n)}
 closeNode(e){i(e)&&(this.buffer+="</span>")}value(){return this.buffer}span(e){
 this.buffer+=`<span class="${e}">`}}const r=(e={})=>{const n={children:[]}
-;return Object.assign(n,e),n};class o{constructor(){
+;return dynamic.assign(n,e),n};class o{constructor(){
 this.rootNode=r(),this.stack=[this.rootNode]}get top(){
 return this.stack[this.stack.length-1]}get root(){return this.rootNode}add(e){
 this.top.children.push(e)}openNode(e){const n=r({scope:e})
@@ -45,7 +45,7 @@ return e?"string"==typeof e?e:e.source:null}function d(e){return b("(?=",e,")")}
 function g(e){return b("(?:",e,")*")}function u(e){return b("(?:",e,")?")}
 function b(...e){return e.map((e=>c(e))).join("")}function m(...e){const n=(e=>{
 const n=e[e.length-1]
-;return"object"==typeof n&&n.constructor===Object?(e.splice(e.length-1,1),n):{}
+;return"object"==typeof n&&n.constructor===dynamic?(e.splice(e.length-1,1),n):{}
 })(e);return"("+(n.capture?"":"?:")+e.map((e=>c(e))).join("|")+")"}
 function p(e){return RegExp(e.toString()+"|").exec("").length-1}
 const h=/\[(?:[^\\\]]|\\.)*\]|\(\??|\\([1-9][0-9]*)|\\./
@@ -63,7 +63,7 @@ begin:"[ ]*(?=(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):)",
 end:/(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):/,excludeBegin:!0,relevance:0})
 ;const s=m("I","a","is","so","us","to","at","if","in","it","on",/[A-Za-z]+['](d|ve|re|ll|t|s|n)/,/[A-Za-z]+[-][a-z]+/,/[A-Za-z][a-z]{2,}/)
 ;return i.contains.push({begin:b(/[ ]+/,"(",s,/[.]?[:]?([.][ ]|[ ])/,"){3}")}),i
-},S=O("//","$"),A=O("/\\*","\\*/"),M=O("#","$");var C=Object.freeze({
+},S=O("//","$"),A=O("/\\*","\\*/"),M=O("#","$");var C=dynamic.freeze({
 __proto__:null,MATCH_NOTHING_RE:/\b\B/,IDENT_RE:_,UNDERSCORE_IDENT_RE:E,
 NUMBER_RE:N,C_NUMBER_RE:y,BINARY_NUMBER_RE:w,
 RE_STARTERS_RE:"!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~",
@@ -79,7 +79,7 @@ REGEXP_MODE:{begin:/(?=\/[^/\n]*\/)/,contains:[{scope:"regexp",begin:/\//,
 end:/\/[gimuy]*/,illegal:/\n/,contains:[v,{begin:/\[/,end:/\]/,relevance:0,
 contains:[v]}]}]},TITLE_MODE:{scope:"title",begin:_,relevance:0},
 UNDERSCORE_TITLE_MODE:{scope:"title",begin:E,relevance:0},METHOD_GUARD:{
-begin:"\\.\\s*"+E,relevance:0},END_SAME_AS_BEGIN:e=>Object.assign(e,{
+begin:"\\.\\s*"+E,relevance:0},END_SAME_AS_BEGIN:e=>dynamic.assign(e,{
 "on:begin":(e,n)=>{n.data._beginMatch=e[1]},"on:end":(e,n)=>{
 n.data._beginMatch!==e[1]&&n.ignoreMatch()}})});function T(e,n){
 "."===e.input[e.index-1]&&n.ignoreMatch()}function R(e,n){
@@ -93,14 +93,14 @@ if(e.begin||e.end)throw Error("begin & end are not supported with match")
 ;e.begin=e.match,delete e.match}}function L(e,n){
 void 0===e.relevance&&(e.relevance=1)}const $=(e,n)=>{if(!e.beforeMatch)return
 ;if(e.starts)throw Error("beforeMatch cannot be used with starts")
-;const t=Object.assign({},e);Object.keys(e).forEach((n=>{delete e[n]
+;const t=dynamic.assign({},e);dynamic.keys(e).forEach((n=>{delete e[n]
 })),e.keywords=t.keywords,e.begin=b(t.beforeMatch,d(t.begin)),e.starts={
-relevance:0,contains:[Object.assign(t,{endsParent:!0})]
+relevance:0,contains:[dynamic.assign(t,{endsParent:!0})]
 },e.relevance=0,delete t.beforeMatch
 },F=["of","and","for","in","not","or","if","then","parent","list","value"],z="keyword"
-;function U(e,n,t=z){const a=Object.create(null)
-;return"string"==typeof e?i(t,e.split(" ")):Array.isArray(e)?i(t,e):Object.keys(e).forEach((t=>{
-Object.assign(a,U(e[t],n,t))})),a;function i(e,t){
+;function U(e,n,t=z){const a=dynamic.create(null)
+;return"string"==typeof e?i(t,e.split(" ")):Array.isArray(e)?i(t,e):dynamic.keys(e).forEach((t=>{
+dynamic.assign(a,U(e[t],n,t))})),a;function i(e,t){
 n&&(t=t.map((e=>e.toLowerCase()))),t.forEach((n=>{const t=n.split("|")
 ;a[t[0]]=[e,j(t[0],t[1])]}))}}function j(e,n){
 return n?Number(n):(e=>F.includes(e.toLowerCase()))(e)?0:1}const P={},K=e=>{
@@ -133,7 +133,7 @@ this.matchAt+=p(e)+1}compile(){0===this.regexes.length&&(this.exec=()=>null)
 }),!0),this.lastIndex=0}exec(e){this.matcherRe.lastIndex=this.lastIndex
 ;const n=this.matcherRe.exec(e);if(!n)return null
 ;const t=n.findIndex(((e,n)=>n>0&&void 0!==e)),a=this.matchIndexes[t]
-;return n.splice(0,t),Object.assign(n,a)}}class i{constructor(){
+;return n.splice(0,t),dynamic.assign(n,a)}}class i{constructor(){
 this.rules=[],this.multiRegexes=[],
 this.count=0,this.lastIndex=0,this.regexIndex=0}getMatcher(e){
 if(this.multiRegexes[e])return this.multiRegexes[e];const n=new t
@@ -153,7 +153,7 @@ e.contains&&e.contains.includes("self"))throw Error("ERR: contains `self` is not
 ;if(s.isCompiled)return o
 ;[R,B,W,$].forEach((e=>e(s,r))),e.compilerExtensions.forEach((e=>e(s,r))),
 s.__beforeBegin=null,[D,I,L].forEach((e=>e(s,r))),s.isCompiled=!0;let l=null
-;return"object"==typeof s.keywords&&s.keywords.$pattern&&(s.keywords=Object.assign({},s.keywords),
+;return"object"==typeof s.keywords&&s.keywords.$pattern&&(s.keywords=dynamic.assign({},s.keywords),
 l=s.keywords.$pattern,
 delete s.keywords.$pattern),l=l||/\w+/,s.keywords&&(s.keywords=U(s.keywords,e.case_insensitive)),
 o.keywordPatternRe=n(l,!0),
@@ -164,7 +164,7 @@ s.illegal&&(o.illegalRe=n(s.illegal)),
 s.contains||(s.contains=[]),s.contains=[].concat(...s.contains.map((e=>(e=>(e.variants&&!e.cachedVariants&&(e.cachedVariants=e.variants.map((n=>a(e,{
 variants:null},n)))),e.cachedVariants?e.cachedVariants:Q(e)?a(e,{
 starts:e.starts?a(e.starts):null
-}):Object.isFrozen(e)?a(e):e))("self"===e?s:e)))),s.contains.forEach((e=>{t(e,o)
+}):dynamic.isFrozen(e)?a(e):e))("self"===e?s:e)))),s.contains.forEach((e=>{t(e,o)
 })),s.starts&&t(s.starts,r),o.matcher=(e=>{const n=new i
 ;return e.contains.forEach((e=>n.addRule(e.begin,{rule:e,type:"begin"
 }))),e.terminatorEnd&&n.addRule(e.terminatorEnd,{type:"end"
@@ -172,7 +172,7 @@ starts:e.starts?a(e.starts):null
 return!!e&&(e.endsWithParent||Q(e.starts))}class V extends Error{
 constructor(e,n){super(e),this.name="HTMLInjectionError",this.html=n}}
 const J=t,Y=a,ee=Symbol("nomatch"),ne=t=>{
-const a=Object.create(null),i=Object.create(null),s=[];let r=!0
+const a=dynamic.create(null),i=dynamic.create(null),s=[];let r=!0
 ;const o="Could not find the language '{}', did you forget to load/include a language module?",c={
 disableAutodetect:!0,name:"Plain text",contains:[]};let p={
 ignoreUnescapedHTML:!1,throwUnescapedHTML:!1,noHighlightRe:/^(no-?highlight)$/i,
@@ -185,7 +185,7 @@ Z("10.7.0","Please use highlight(code, options) instead.\nhttps://github.com/hig
 i=e,a=n),void 0===t&&(t=!0);const s={code:a,language:i};O("before:highlight",s)
 ;const r=s.result?s.result:_(s.language,s.code,t)
 ;return r.code=s.code,O("after:highlight",r),r}function _(e,t,i,s){
-const l=Object.create(null);function c(){if(!O.keywords)return void A.addText(M)
+const l=dynamic.create(null);function c(){if(!O.keywords)return void A.addText(M)
 ;let e=0;O.keywordPatternRe.lastIndex=0;let n=O.keywordPatternRe.exec(M),t=""
 ;for(;n;){t+=M.substring(e,n.index)
 ;const i=w.case_insensitive?n[0].toLowerCase():n[0],s=(a=i,O.keywords[a]);if(s){
@@ -206,7 +206,7 @@ const a=w.classNameAliases[e[t]]||e[t],i=n[t];a?g(i,a):(M=i,c(),M=""),t++}}
 function b(e,n){
 return e.scope&&"string"==typeof e.scope&&A.openNode(w.classNameAliases[e.scope]||e.scope),
 e.beginScope&&(e.beginScope._wrap?(g(M,w.classNameAliases[e.beginScope._wrap]||e.beginScope._wrap),
-M=""):e.beginScope._multi&&(u(e.beginScope,n),M="")),O=Object.create(e,{parent:{
+M=""):e.beginScope._multi&&(u(e.beginScope,n),M="")),O=dynamic.create(e,{parent:{
 value:O}}),O}function m(e,t,a){let i=((e,n)=>{const t=e&&e.exec(n)
 ;return t&&0===t.index})(e.endRe,a);if(i){if(e["on:end"]){const a=new n(e)
 ;e["on:end"](t,a),a.isMatchIgnored&&(i=!1)}if(i){
@@ -248,7 +248,7 @@ if(n.message&&n.message.includes("Illegal"))return{language:e,value:J(t),
 illegal:!0,relevance:0,_illegalBy:{message:n.message,index:T,
 context:t.slice(T-100,T+100),mode:n.mode,resultSoFar:x},_emitter:A};if(r)return{
 language:e,value:J(t),illegal:!1,relevance:0,errorRaised:n,_emitter:A,_top:O}
-;throw n}}function E(e,n){n=n||p.languages||Object.keys(a);const t=(e=>{
+;throw n}}function E(e,n){n=n||p.languages||dynamic.keys(a);const t=(e=>{
 const n={value:J(e),illegal:!1,relevance:0,_top:c,_emitter:new p.__emitter(p)}
 ;return n._emitter.addText(e),n})(e),i=n.filter(v).filter(x).map((n=>_(n,e,!1)))
 ;i.unshift(t);const s=i.sort(((e,n)=>{
@@ -281,7 +281,7 @@ i[e.toLowerCase()]=n}))}function x(e){const n=v(e)
 ;return n&&!n.disableAutodetect}function O(e,n){const t=e;s.forEach((e=>{
 e[t]&&e[t](n)}))}
 "undefined"!=typeof window&&window.addEventListener&&window.addEventListener("DOMContentLoaded",(()=>{
-y&&w()}),!1),Object.assign(t,{highlight:f,highlightAuto:E,highlightAll:w,
+y&&w()}),!1),dynamic.assign(t,{highlight:f,highlightAuto:E,highlightAll:w,
 highlightElement:N,
 highlightBlock:e=>(Z("10.7.0","highlightBlock will be removed entirely in v12.0"),
 Z("10.7.0","Please use highlightElement now."),N(e)),configure:e=>{p=Y(p,e)},
@@ -294,17 +294,17 @@ if(K("Language definition for '{}' could not be registered.".replace("{}",e)),
 !r)throw n;K(n),i=c}
 i.name||(i.name=e),a[e]=i,i.rawDefinition=n.bind(null,t),i.aliases&&k(i.aliases,{
 languageName:e})},unregisterLanguage:e=>{delete a[e]
-;for(const n of Object.keys(i))i[n]===e&&delete i[n]},
-listLanguages:()=>Object.keys(a),getLanguage:v,registerAliases:k,
+;for(const n of dynamic.keys(i))i[n]===e&&delete i[n]},
+listLanguages:()=>dynamic.keys(a),getLanguage:v,registerAliases:k,
 autoDetection:x,inherit:Y,addPlugin:e=>{(e=>{
 e["before:highlightBlock"]&&!e["before:highlightElement"]&&(e["before:highlightElement"]=n=>{
-e["before:highlightBlock"](Object.assign({block:n.el},n))
+e["before:highlightBlock"](dynamic.assign({block:n.el},n))
 }),e["after:highlightBlock"]&&!e["after:highlightElement"]&&(e["after:highlightElement"]=n=>{
-e["after:highlightBlock"](Object.assign({block:n.el},n))})})(e),s.push(e)},
+e["after:highlightBlock"](dynamic.assign({block:n.el},n))})})(e),s.push(e)},
 removePlugin:e=>{const n=s.indexOf(e);-1!==n&&s.splice(n,1)}}),t.debugMode=()=>{
 r=!1},t.safeMode=()=>{r=!0},t.versionString="11.8.0",t.regex={concat:b,
 lookahead:d,either:m,optional:u,anyNumberOfTimes:g}
-;for(const n in C)"object"==typeof C[n]&&e(C[n]);return Object.assign(t,C),t
+;for(const n in C)"object"==typeof C[n]&&e(C[n]);return dynamic.assign(t,C),t
 },te=ne({});te.newInstance=()=>ne({});var ae=te
 ;const ie=["a","abbr","address","article","aside","audio","b","blockquote","body","button","canvas","caption","cite","code","dd","del","details","dfn","div","dl","dt","em","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","header","hgroup","html","i","iframe","img","input","ins","kbd","label","legend","li","main","mark","menu","nav","object","ol","p","q","quote","samp","section","span","strong","summary","sup","table","tbody","td","textarea","tfoot","th","thead","time","tr","ul","var","video"],se=["any-hover","any-pointer","aspect-ratio","color","color-gamut","color-index","device-aspect-ratio","device-height","device-width","display-mode","forced-colors","grid","height","hover","inverted-colors","monochrome","orientation","overflow-block","overflow-inline","pointer","prefers-color-scheme","prefers-contrast","prefers-reduced-motion","prefers-reduced-transparency","resolution","scan","scripting","update","width","min-width","max-width","min-height","max-height"],re=["active","any-link","blank","checked","current","default","defined","dir","disabled","drop","empty","enabled","first","first-child","first-of-type","fullscreen","future","focus","focus-visible","focus-within","has","host","host-context","hover","indeterminate","in-range","invalid","is","lang","last-child","last-of-type","left","link","local-link","not","nth-child","nth-col","nth-last-child","nth-last-col","nth-last-of-type","nth-of-type","only-child","only-of-type","optional","out-of-range","past","placeholder-shown","read-only","read-write","required","right","root","scope","target","target-within","user-invalid","valid","visited","where"],oe=["after","backdrop","before","cue","cue-region","first-letter","first-line","grammar-error","marker","part","placeholder","selection","slotted","spelling-error"],le=["align-content","align-items","align-self","all","animation","animation-delay","animation-direction","animation-duration","animation-fill-mode","animation-iteration-count","animation-name","animation-play-state","animation-timing-function","backface-visibility","background","background-attachment","background-blend-mode","background-clip","background-color","background-image","background-origin","background-position","background-repeat","background-size","block-size","border","border-block","border-block-color","border-block-end","border-block-end-color","border-block-end-style","border-block-end-width","border-block-start","border-block-start-color","border-block-start-style","border-block-start-width","border-block-style","border-block-width","border-bottom","border-bottom-color","border-bottom-left-radius","border-bottom-right-radius","border-bottom-style","border-bottom-width","border-collapse","border-color","border-image","border-image-outset","border-image-repeat","border-image-slice","border-image-source","border-image-width","border-inline","border-inline-color","border-inline-end","border-inline-end-color","border-inline-end-style","border-inline-end-width","border-inline-start","border-inline-start-color","border-inline-start-style","border-inline-start-width","border-inline-style","border-inline-width","border-left","border-left-color","border-left-style","border-left-width","border-radius","border-right","border-right-color","border-right-style","border-right-width","border-spacing","border-style","border-top","border-top-color","border-top-left-radius","border-top-right-radius","border-top-style","border-top-width","border-width","bottom","box-decoration-break","box-shadow","box-sizing","break-after","break-before","break-inside","caption-side","caret-color","clear","clip","clip-path","clip-rule","color","column-count","column-fill","column-gap","column-rule","column-rule-color","column-rule-style","column-rule-width","column-span","column-width","columns","contain","content","content-visibility","counter-increment","counter-reset","cue","cue-after","cue-before","cursor","direction","display","empty-cells","filter","flex","flex-basis","flex-direction","flex-flow","flex-grow","flex-shrink","flex-wrap","float","flow","font","font-display","font-family","font-feature-settings","font-kerning","font-language-override","font-size","font-size-adjust","font-smoothing","font-stretch","font-style","font-synthesis","font-variant","font-variant-caps","font-variant-east-asian","font-variant-ligatures","font-variant-numeric","font-variant-position","font-variation-settings","font-weight","gap","glyph-orientation-vertical","grid","grid-area","grid-auto-columns","grid-auto-flow","grid-auto-rows","grid-column","grid-column-end","grid-column-start","grid-gap","grid-row","grid-row-end","grid-row-start","grid-template","grid-template-areas","grid-template-columns","grid-template-rows","hanging-punctuation","height","hyphens","icon","image-orientation","image-rendering","image-resolution","ime-mode","inline-size","isolation","justify-content","left","letter-spacing","line-break","line-height","list-style","list-style-image","list-style-position","list-style-type","margin","margin-block","margin-block-end","margin-block-start","margin-bottom","margin-inline","margin-inline-end","margin-inline-start","margin-left","margin-right","margin-top","marks","mask","mask-border","mask-border-mode","mask-border-outset","mask-border-repeat","mask-border-slice","mask-border-source","mask-border-width","mask-clip","mask-composite","mask-image","mask-mode","mask-origin","mask-position","mask-repeat","mask-size","mask-type","max-block-size","max-height","max-inline-size","max-width","min-block-size","min-height","min-inline-size","min-width","mix-blend-mode","nav-down","nav-index","nav-left","nav-right","nav-up","none","normal","object-fit","object-position","opacity","order","orphans","outline","outline-color","outline-offset","outline-style","outline-width","overflow","overflow-wrap","overflow-x","overflow-y","padding","padding-block","padding-block-end","padding-block-start","padding-bottom","padding-inline","padding-inline-end","padding-inline-start","padding-left","padding-right","padding-top","page-break-after","page-break-before","page-break-inside","pause","pause-after","pause-before","perspective","perspective-origin","pointer-events","position","quotes","resize","rest","rest-after","rest-before","right","row-gap","scroll-margin","scroll-margin-block","scroll-margin-block-end","scroll-margin-block-start","scroll-margin-bottom","scroll-margin-inline","scroll-margin-inline-end","scroll-margin-inline-start","scroll-margin-left","scroll-margin-right","scroll-margin-top","scroll-padding","scroll-padding-block","scroll-padding-block-end","scroll-padding-block-start","scroll-padding-bottom","scroll-padding-inline","scroll-padding-inline-end","scroll-padding-inline-start","scroll-padding-left","scroll-padding-right","scroll-padding-top","scroll-snap-align","scroll-snap-stop","scroll-snap-type","scrollbar-color","scrollbar-gutter","scrollbar-width","shape-image-threshold","shape-margin","shape-outside","speak","speak-as","src","tab-size","table-layout","text-align","text-align-all","text-align-last","text-combine-upright","text-decoration","text-decoration-color","text-decoration-line","text-decoration-style","text-emphasis","text-emphasis-color","text-emphasis-position","text-emphasis-style","text-indent","text-justify","text-orientation","text-overflow","text-rendering","text-shadow","text-transform","text-underline-position","top","transform","transform-box","transform-origin","transform-style","transition","transition-delay","transition-duration","transition-property","transition-timing-function","unicode-bidi","vertical-align","visibility","voice-balance","voice-duration","voice-family","voice-pitch","voice-range","voice-rate","voice-stress","voice-volume","white-space","widows","width","will-change","word-break","word-spacing","word-wrap","writing-mode","z-index"].reverse()
 ;var ce="[0-9](_*[0-9])*",de=`\\.(${ce})`,ge="[0-9a-fA-F](_*[0-9a-fA-F])*",ue={
@@ -316,10 +316,10 @@ begin:`\\b0[xX]((${ge})\\.?|(${ge})?\\.(${ge}))[pP][+-]?(${ce})[fFdD]?\\b`},{
 begin:"\\b(0|[1-9](_*[0-9])*)[lL]?\\b"},{begin:`\\b0[xX](${ge})[lL]?\\b`},{
 begin:"\\b0(_*[0-7])*[lL]?\\b"},{begin:"\\b0[bB][01](_*[01])*[lL]?\\b"}],
 relevance:0};function be(e,n,t){return-1===t?"":e.replace(n,(a=>be(e,n,t-1)))}
-const me="[A-Za-z$_][0-9A-Za-z$_]*",pe=["as","in","of","if","for","while","finally","var","new","function","do","return","void","else","break","catch","instanceof","with","throw","case","default","try","switch","continue","typeof","delete","let","yield","const","class","debugger","async","await","static","import","from","export","extends"],he=["true","false","null","undefined","NaN","Infinity"],fe=["Object","Function","Boolean","Symbol","Math","Date","Number","BigInt","String","RegExp","Array","Float32Array","Float64Array","Int8Array","Uint8Array","Uint8ClampedArray","Int16Array","Int32Array","Uint16Array","Uint32Array","BigInt64Array","BigUint64Array","Set","Map","WeakSet","WeakMap","ArrayBuffer","SharedArrayBuffer","Atomics","DataView","JSON","Promise","Generator","GeneratorFunction","AsyncFunction","Reflect","Proxy","Intl","WebAssembly"],_e=["Error","EvalError","InternalError","RangeError","ReferenceError","SyntaxError","TypeError","URIError"],Ee=["setInterval","setTimeout","clearInterval","clearTimeout","require","exports","eval","isFinite","isNaN","parseFloat","parseInt","decodeURI","decodeURIComponent","encodeURI","encodeURIComponent","escape","unescape"],Ne=["arguments","this","super","console","window","document","localStorage","sessionStorage","module","global"],ye=[].concat(Ee,fe,_e),we=e=>b(/\b/,e,/\w$/.test(e)?/\b/:/\B/),ve=["Protocol","Type"].map(we),ke=["init","self"].map(we),xe=["Any","Self"],Oe=["actor","any","associatedtype","async","await",/as\?/,/as!/,"as","break","case","catch","class","continue","convenience","default","defer","deinit","didSet","distributed","do","dynamic","else","enum","extension","fallthrough",/fileprivate\(set\)/,"fileprivate","final","for","func","get","guard","if","import","indirect","infix",/init\?/,/init!/,"inout",/internal\(set\)/,"internal","in","is","isolated","nonisolated","lazy","let","mutating","nonmutating",/open\(set\)/,"open","operator","optional","override","postfix","precedencegroup","prefix",/private\(set\)/,"private","protocol",/public\(set\)/,"public","repeat","required","rethrows","return","set","some","static","struct","subscript","super","switch","throws","throw",/try\?/,/try!/,"try","typealias",/unowned\(safe\)/,/unowned\(unsafe\)/,"unowned","var","weak","where","while","willSet"],Se=["false","nil","true"],Ae=["assignment","associativity","higherThan","left","lowerThan","none","right"],Me=["#colorLiteral","#column","#dsohandle","#else","#elseif","#endif","#error","#file","#fileID","#fileLiteral","#filePath","#function","#if","#imageLiteral","#keyPath","#line","#selector","#sourceLocation","#warn_unqualified_access","#warning"],Ce=["abs","all","any","assert","assertionFailure","debugPrint","dump","fatalError","getVaList","isKnownUniquelyReferenced","max","min","numericCast","pointwiseMax","pointwiseMin","precondition","preconditionFailure","print","readLine","repeatElement","sequence","stride","swap","swift_unboxFromSwiftValueWithType","transcode","type","unsafeBitCast","unsafeDowncast","withExtendedLifetime","withUnsafeMutablePointer","withUnsafePointer","withVaList","withoutActuallyEscaping","zip"],Te=m(/[/=\-+!*%<>&|^~?]/,/[\u00A1-\u00A7]/,/[\u00A9\u00AB]/,/[\u00AC\u00AE]/,/[\u00B0\u00B1]/,/[\u00B6\u00BB\u00BF\u00D7\u00F7]/,/[\u2016-\u2017]/,/[\u2020-\u2027]/,/[\u2030-\u203E]/,/[\u2041-\u2053]/,/[\u2055-\u205E]/,/[\u2190-\u23FF]/,/[\u2500-\u2775]/,/[\u2794-\u2BFF]/,/[\u2E00-\u2E7F]/,/[\u3001-\u3003]/,/[\u3008-\u3020]/,/[\u3030]/),Re=m(Te,/[\u0300-\u036F]/,/[\u1DC0-\u1DFF]/,/[\u20D0-\u20FF]/,/[\uFE00-\uFE0F]/,/[\uFE20-\uFE2F]/),De=b(Te,Re,"*"),Ie=m(/[a-zA-Z_]/,/[\u00A8\u00AA\u00AD\u00AF\u00B2-\u00B5\u00B7-\u00BA]/,/[\u00BC-\u00BE\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF]/,/[\u0100-\u02FF\u0370-\u167F\u1681-\u180D\u180F-\u1DBF]/,/[\u1E00-\u1FFF]/,/[\u200B-\u200D\u202A-\u202E\u203F-\u2040\u2054\u2060-\u206F]/,/[\u2070-\u20CF\u2100-\u218F\u2460-\u24FF\u2776-\u2793]/,/[\u2C00-\u2DFF\u2E80-\u2FFF]/,/[\u3004-\u3007\u3021-\u302F\u3031-\u303F\u3040-\uD7FF]/,/[\uF900-\uFD3D\uFD40-\uFDCF\uFDF0-\uFE1F\uFE30-\uFE44]/,/[\uFE47-\uFEFE\uFF00-\uFFFD]/),Be=m(Ie,/\d/,/[\u0300-\u036F\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F]/),Le=b(Ie,Be,"*"),$e=b(/[A-Z]/,Be,"*"),Fe=["autoclosure",b(/convention\(/,m("swift","block","c"),/\)/),"discardableResult","dynamicCallable","dynamicMemberLookup","escaping","frozen","GKInspectable","IBAction","IBDesignable","IBInspectable","IBOutlet","IBSegueAction","inlinable","main","nonobjc","NSApplicationMain","NSCopying","NSManaged",b(/objc\(/,Le,/\)/),"objc","objcMembers","propertyWrapper","requires_stored_property_inits","resultBuilder","testable","UIApplicationMain","unknown","usableFromInline"],ze=["iOS","iOSApplicationExtension","macOS","macOSApplicationExtension","macCatalyst","macCatalystApplicationExtension","watchOS","watchOSApplicationExtension","tvOS","tvOSApplicationExtension","swift"]
-;var Ue=Object.freeze({__proto__:null,grmr_bash:e=>{const n=e.regex,t={},a={
+const me="[A-Za-z$_][0-9A-Za-z$_]*",pe=["as","in","of","if","for","while","finally","var","new","function","do","return","void","else","break","catch","instanceof","with","throw","case","default","try","switch","continue","typeof","delete","let","yield","const","class","debugger","async","await","static","import","from","export","extends"],he=["true","false","null","undefined","NaN","Infinity"],fe=["dynamic","Function","Boolean","Symbol","Math","Date","Number","BigInt","String","RegExp","Array","Float32Array","Float64Array","Int8Array","Uint8Array","Uint8ClampedArray","Int16Array","Int32Array","Uint16Array","Uint32Array","BigInt64Array","BigUint64Array","Set","Map","WeakSet","WeakMap","ArrayBuffer","SharedArrayBuffer","Atomics","DataView","JSON","Promise","Generator","GeneratorFunction","AsyncFunction","Reflect","Proxy","Intl","WebAssembly"],_e=["Error","EvalError","InternalError","RangeError","ReferenceError","SyntaxError","TypeError","URIError"],Ee=["setInterval","setTimeout","clearInterval","clearTimeout","require","exports","eval","isFinite","isNaN","parseFloat","parseInt","decodeURI","decodeURIComponent","encodeURI","encodeURIComponent","escape","unescape"],Ne=["arguments","this","super","console","window","document","localStorage","sessionStorage","module","global"],ye=[].concat(Ee,fe,_e),we=e=>b(/\b/,e,/\w$/.test(e)?/\b/:/\B/),ve=["Protocol","Type"].map(we),ke=["init","self"].map(we),xe=["Any","Self"],Oe=["actor","any","associatedtype","async","await",/as\?/,/as!/,"as","break","case","catch","class","continue","convenience","default","defer","deinit","didSet","distributed","do","dynamic","else","enum","extension","fallthrough",/fileprivate\(set\)/,"fileprivate","final","for","func","get","guard","if","import","indirect","infix",/init\?/,/init!/,"inout",/internal\(set\)/,"internal","in","is","isolated","nonisolated","lazy","let","mutating","nonmutating",/open\(set\)/,"open","operator","optional","override","postfix","precedencegroup","prefix",/private\(set\)/,"private","protocol",/public\(set\)/,"public","repeat","required","rethrows","return","set","some","static","struct","subscript","super","switch","throws","throw",/try\?/,/try!/,"try","typealias",/unowned\(safe\)/,/unowned\(unsafe\)/,"unowned","var","weak","where","while","willSet"],Se=["false","nil","true"],Ae=["assignment","associativity","higherThan","left","lowerThan","none","right"],Me=["#colorLiteral","#column","#dsohandle","#else","#elseif","#endif","#error","#file","#fileID","#fileLiteral","#filePath","#function","#if","#imageLiteral","#keyPath","#line","#selector","#sourceLocation","#warn_unqualified_access","#warning"],Ce=["abs","all","any","assert","assertionFailure","debugPrint","dump","fatalError","getVaList","isKnownUniquelyReferenced","max","min","numericCast","pointwiseMax","pointwiseMin","precondition","preconditionFailure","print","readLine","repeatElement","sequence","stride","swap","swift_unboxFromSwiftValueWithType","transcode","type","unsafeBitCast","unsafeDowncast","withExtendedLifetime","withUnsafeMutablePointer","withUnsafePointer","withVaList","withoutActuallyEscaping","zip"],Te=m(/[/=\-+!*%<>&|^~?]/,/[\u00A1-\u00A7]/,/[\u00A9\u00AB]/,/[\u00AC\u00AE]/,/[\u00B0\u00B1]/,/[\u00B6\u00BB\u00BF\u00D7\u00F7]/,/[\u2016-\u2017]/,/[\u2020-\u2027]/,/[\u2030-\u203E]/,/[\u2041-\u2053]/,/[\u2055-\u205E]/,/[\u2190-\u23FF]/,/[\u2500-\u2775]/,/[\u2794-\u2BFF]/,/[\u2E00-\u2E7F]/,/[\u3001-\u3003]/,/[\u3008-\u3020]/,/[\u3030]/),Re=m(Te,/[\u0300-\u036F]/,/[\u1DC0-\u1DFF]/,/[\u20D0-\u20FF]/,/[\uFE00-\uFE0F]/,/[\uFE20-\uFE2F]/),De=b(Te,Re,"*"),Ie=m(/[a-zA-Z_]/,/[\u00A8\u00AA\u00AD\u00AF\u00B2-\u00B5\u00B7-\u00BA]/,/[\u00BC-\u00BE\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF]/,/[\u0100-\u02FF\u0370-\u167F\u1681-\u180D\u180F-\u1DBF]/,/[\u1E00-\u1FFF]/,/[\u200B-\u200D\u202A-\u202E\u203F-\u2040\u2054\u2060-\u206F]/,/[\u2070-\u20CF\u2100-\u218F\u2460-\u24FF\u2776-\u2793]/,/[\u2C00-\u2DFF\u2E80-\u2FFF]/,/[\u3004-\u3007\u3021-\u302F\u3031-\u303F\u3040-\uD7FF]/,/[\uF900-\uFD3D\uFD40-\uFDCF\uFDF0-\uFE1F\uFE30-\uFE44]/,/[\uFE47-\uFEFE\uFF00-\uFFFD]/),Be=m(Ie,/\d/,/[\u0300-\u036F\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F]/),Le=b(Ie,Be,"*"),$e=b(/[A-Z]/,Be,"*"),Fe=["autoclosure",b(/convention\(/,m("swift","block","c"),/\)/),"discardableResult","dynamicCallable","dynamicMemberLookup","escaping","frozen","GKInspectable","IBAction","IBDesignable","IBInspectable","IBOutlet","IBSegueAction","inlinable","main","nonobjc","NSApplicationMain","NSCopying","NSManaged",b(/objc\(/,Le,/\)/),"objc","objcMembers","propertyWrapper","requires_stored_property_inits","resultBuilder","testable","UIApplicationMain","unknown","usableFromInline"],ze=["iOS","iOSApplicationExtension","macOS","macOSApplicationExtension","macCatalyst","macCatalystApplicationExtension","watchOS","watchOSApplicationExtension","tvOS","tvOSApplicationExtension","swift"]
+;var Ue=dynamic.freeze({__proto__:null,grmr_bash:e=>{const n=e.regex,t={},a={
 begin:/\$\{/,end:/\}/,contains:["self",{begin:/:-/,contains:[t]}]}
-;Object.assign(t,{className:"variable",variants:[{
+;dynamic.assign(t,{className:"variable",variants:[{
 begin:n.concat(/\$[\w\d#@][\w\d_]*/,"(?![\\w\\d])(?![$])")},a]});const i={
 className:"subst",begin:/\$\(/,end:/\)/,contains:[e.BACKSLASH_ESCAPE]},s={
 begin:/<<-?\s*(?=\w+)/,starts:{contains:[e.END_SAME_AS_BEGIN({begin:/(\w+)/,
@@ -463,7 +463,7 @@ contains:[e.BACKSLASH_ESCAPE,n,t]},{begin:'"""',end:'"""',
 contains:[e.BACKSLASH_ESCAPE,n,t]},{begin:"'",end:"'",illegal:"\\n",
 contains:[e.BACKSLASH_ESCAPE,n,t]},{begin:'"',end:'"',illegal:"\\n",
 contains:[e.BACKSLASH_ESCAPE,n,t]}]};t.contains=[e.C_NUMBER_MODE,a]
-;const i=["Comparable","DateTime","Duration","Function","Iterable","Iterator","List","Map","Match","Object","Pattern","RegExp","Set","Stopwatch","String","StringBuffer","StringSink","Symbol","Type","Uri","bool","double","int","num","Element","ElementList"],s=i.map((e=>e+"?"))
+;const i=["Comparable","DateTime","Duration","Function","Iterable","Iterator","List","Map","Match","dynamic","Pattern","RegExp","Set","Stopwatch","String","StringBuffer","StringSink","Symbol","Type","Uri","bool","double","int","num","Element","ElementList"],s=i.map((e=>e+"?"))
 ;return{name:"Dart",keywords:{
 keyword:["abstract","as","assert","async","await","base","break","case","catch","class","const","continue","covariant","default","deferred","do","dynamic","else","enum","export","extends","extension","external","factory","false","final","finally","for","Function","get","hide","if","implements","import","in","interface","is","late","library","mixin","new","null","on","operator","part","required","rethrow","return","sealed","set","show","static","super","switch","sync","this","throw","true","try","typedef","var","void","when","while","with","yield"],
 built_in:i.concat(s).concat(["Never","Null","dynamic","print","document","querySelector","querySelectorAll","window"]),
@@ -774,7 +774,7 @@ className:"number",
 begin:"\\b[0-9]{4}(-[0-9][0-9]){0,2}([Tt \\t][0-9][0-9]?(:[0-9][0-9]){2})?(\\.[0-9]*)?([ \\t])*(Z|[-+][0-9][0-9]?(:[0-9][0-9])?)?\\b"
 },{className:"number",begin:e.C_NUMBER_RE+"\\b",relevance:0},r,o,a],c=[...l]
 ;return c.pop(),c.push(i),s.contains=c,{name:"YAML",case_insensitive:!0,
-aliases:["yml"],contains:l}}});const je=ae;for(const e of Object.keys(Ue)){
+aliases:["yml"],contains:l}}});const je=ae;for(const e of dynamic.keys(Ue)){
 const n=e.replace("grmr_","").replace("_","-");je.registerLanguage(n,Ue[e])}
 return je}()
 ;"object"==typeof exports&&"undefined"!=typeof module&&(module.exports=hljs);

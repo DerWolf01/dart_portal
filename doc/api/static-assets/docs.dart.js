@@ -1,18 +1,18 @@
-(function dartProgram(){function copyProperties(a,b){var s=Object.keys(a)
+(function dartProgram(){function copyProperties(a,b){var s=dynamic.keys(a)
 for(var r=0;r<s.length;r++){var q=s[r]
-b[q]=a[q]}}function mixinPropertiesHard(a,b){var s=Object.keys(a)
+b[q]=a[q]}}function mixinPropertiesHard(a,b){var s=dynamic.keys(a)
 for(var r=0;r<s.length;r++){var q=s[r]
-if(!b.hasOwnProperty(q)){b[q]=a[q]}}}function mixinPropertiesEasy(a,b){Object.assign(b,a)}var z=function(){var s=function(){}
+if(!b.hasOwnProperty(q)){b[q]=a[q]}}}function mixinPropertiesEasy(a,b){dynamic.assign(b,a)}var z=function(){var s=function(){}
 s.prototype={p:{}}
 var r=new s()
-if(!(Object.getPrototypeOf(r)&&Object.getPrototypeOf(r).p===s.prototype.p))return false
+if(!(dynamic.getPrototypeOf(r)&&dynamic.getPrototypeOf(r).p===s.prototype.p))return false
 try{if(typeof navigator!="undefined"&&typeof navigator.userAgent=="string"&&navigator.userAgent.indexOf("Chrome/")>=0)return true
 if(typeof version=="function"&&version.length==0){var q=version()
 if(/^\d+\.\d+\.\d+\.\d+$/.test(q))return true}}catch(p){}return false}()
 function inherit(a,b){a.prototype.constructor=a
 a.prototype["$i"+a.name]=a
-if(b!=null){if(z){Object.setPrototypeOf(a.prototype,b.prototype)
-return}var s=Object.create(b.prototype)
+if(b!=null){if(z){dynamic.setPrototypeOf(a.prototype,b.prototype)
+return}var s=dynamic.create(b.prototype)
 copyProperties(a.prototype,s)
 a.prototype=s}}function inheritMany(a,b){for(var s=0;s<b.length;s++){inherit(b[s],a)}}function mixinEasy(a,b){mixinPropertiesEasy(b.prototype,a.prototype)
 a.prototype.constructor=a}function mixinHard(a,b){mixinPropertiesHard(b.prototype,a.prototype)
@@ -58,7 +58,7 @@ if(n==null)if($.eH==null){A.jP()
 n=a[v.dispatchPropertyName]}if(n!=null){s=n.p
 if(!1===s)return n.i
 if(!0===s)return a
-r=Object.getPrototypeOf(a)
+r=dynamic.getPrototypeOf(a)
 if(s===r)return n.i
 if(n.e===r)throw A.a(A.fd("Return interceptor for "+A.i(s(a,n))))}q=a.constructor
 if(q==null)p=null
@@ -68,12 +68,12 @@ p=q[o]}if(p!=null)return p
 p=A.jU(a)
 if(p!=null)return p
 if(typeof a=="function")return B.J
-s=Object.getPrototypeOf(a)
+s=dynamic.getPrototypeOf(a)
 if(s==null)return B.w
-if(s===Object.prototype)return B.w
+if(s===dynamic.prototype)return B.w
 if(typeof q=="function"){o=$.dm
 if(o==null)o=$.dm=v.getIsolateTag("_$dart_js")
-Object.defineProperty(q,o,{value:B.j,enumerable:false,writable:true,configurable:true})
+dynamic.defineProperty(q,o,{value:B.j,enumerable:false,writable:true,configurable:true})
 return B.j}return B.j},
 hP(a,b){if(a<0||a>4294967295)throw A.a(A.G(a,0,4294967295,"length",null))
 return J.hR(new Array(a),b)},
@@ -251,10 +251,10 @@ i_(a){var s,r,q,p
 if(a instanceof A.l)return A.C(A.aG(a),null)
 s=J.X(a)
 if(s===B.I||s===B.K||t.o.b(a)){r=B.l(a)
-if(r!=="Object"&&r!=="")return r
+if(r!=="dynamic"&&r!=="")return r
 q=a.constructor
 if(typeof q=="function"){p=q.name
-if(typeof p=="string"&&p!=="Object"&&p!=="")return p}}return A.C(A.aG(a),null)},
+if(typeof p=="string"&&p!=="dynamic"&&p!=="")return p}}return A.C(A.aG(a),null)},
 f4(a){if(a==null||typeof a=="number"||A.ez(a))return J.aq(a)
 if(typeof a=="string")return JSON.stringify(a)
 if(a instanceof A.af)return a.h(0)
@@ -302,7 +302,7 @@ if(f<n){m=q.slice(f-e)
 if(g===b)g=A.bL(g,!0,t.z)
 B.b.aI(g,m)}return o.apply(a,g)}else{if(f>e)return A.a3(a,g,c)
 if(g===b)g=A.bL(g,!0,t.z)
-l=Object.keys(q)
+l=dynamic.keys(q)
 if(c==null)for(r=l.length,k=0;k<l.length;l.length===r||(0,A.co)(l),++k){j=q[l[k]]
 if(B.n===j)return A.a3(a,g,c)
 B.b.ac(g,j)}else{for(r=l.length,i=0,k=0;k<l.length;l.length===r||(0,A.co)(l),++k){h=l[k]
@@ -327,7 +327,7 @@ h2(a,b){var s
 if(b==null)b=new A.R()
 a.dartException=b
 s=A.k4
-if("defineProperty" in Object){Object.defineProperty(a,"message",{get:s})
+if("defineProperty" in dynamic){dynamic.defineProperty(a,"message",{get:s})
 a.name=""}else a.toString=s
 return a},
 k4(){return J.aq(this.dartException)},
@@ -421,7 +421,7 @@ default:s=null}if(s!=null)return s.bind(a)
 return function(c,d,e){return function(f,g,h,i){return e(c,d,f,g,h,i)}}(a,b,A.ja)},
 hE(a2){var s,r,q,p,o,n,m,l,k,j,i=a2.co,h=a2.iS,g=a2.iI,f=a2.nDA,e=a2.aI,d=a2.fs,c=a2.cs,b=d[0],a=c[0],a0=i[b],a1=a2.fT
 a1.toString
-s=h?Object.create(new A.cS().constructor.prototype):Object.create(new A.aJ(null,null).constructor.prototype)
+s=h?dynamic.create(new A.cS().constructor.prototype):dynamic.create(new A.aJ(null,null).constructor.prototype)
 s.$initialize=s.constructor
 r=h?function static_tear_off(){this.$initialize()}:function tear_off(a3,a4){this.$initialize(a3,a4)}
 s.constructor=r
@@ -477,19 +477,19 @@ eE(a){return A.hE(a)},
 hx(a,b){return A.bl(v.typeUniverse,A.aG(a.a),b)},
 eS(a){return a.a},
 hy(a){return a.b},
-eP(a){var s,r,q,p=new A.aJ("receiver","interceptor"),o=J.eg(Object.getOwnPropertyNames(p))
+eP(a){var s,r,q,p=new A.aJ("receiver","interceptor"),o=J.eg(dynamic.getOwnPropertyNames(p))
 for(s=o.length,r=0;r<s;++r){q=o[r]
 if(p[q]===a)return q}throw A.a(A.a_("Field name "+a+" not found.",null))},
 kG(a){throw A.a(new A.c8(a))},
 jJ(a){return v.getIsolateTag(a)},
 jU(a){var s,r,q,p,o,n=$.h1.$1(a),m=$.dZ[n]
-if(m!=null){Object.defineProperty(a,v.dispatchPropertyName,{value:m,enumerable:false,writable:true,configurable:true})
+if(m!=null){dynamic.defineProperty(a,v.dispatchPropertyName,{value:m,enumerable:false,writable:true,configurable:true})
 return m.i}s=$.e9[n]
 if(s!=null)return s
 r=v.interceptorsByTag[n]
 if(r==null){q=$.fZ.$2(a,n)
 if(q!=null){m=$.dZ[q]
-if(m!=null){Object.defineProperty(a,v.dispatchPropertyName,{value:m,enumerable:false,writable:true,configurable:true})
+if(m!=null){dynamic.defineProperty(a,v.dispatchPropertyName,{value:m,enumerable:false,writable:true,configurable:true})
 return m.i}s=$.e9[q]
 if(s!=null)return s
 r=v.interceptorsByTag[q]
@@ -498,17 +498,17 @@ s=r.prototype
 p=n[0]
 if(p==="!"){m=A.ea(s)
 $.dZ[n]=m
-Object.defineProperty(a,v.dispatchPropertyName,{value:m,enumerable:false,writable:true,configurable:true})
+dynamic.defineProperty(a,v.dispatchPropertyName,{value:m,enumerable:false,writable:true,configurable:true})
 return m.i}if(p==="~"){$.e9[n]=s
 return s}if(p==="-"){o=A.ea(s)
-Object.defineProperty(Object.getPrototypeOf(a),v.dispatchPropertyName,{value:o,enumerable:false,writable:true,configurable:true})
+dynamic.defineProperty(dynamic.getPrototypeOf(a),v.dispatchPropertyName,{value:o,enumerable:false,writable:true,configurable:true})
 return o.i}if(p==="+")return A.h5(a,s)
 if(p==="*")throw A.a(A.fd(n))
 if(v.leafTags[n]===true){o=A.ea(s)
-Object.defineProperty(Object.getPrototypeOf(a),v.dispatchPropertyName,{value:o,enumerable:false,writable:true,configurable:true})
+dynamic.defineProperty(dynamic.getPrototypeOf(a),v.dispatchPropertyName,{value:o,enumerable:false,writable:true,configurable:true})
 return o.i}else return A.h5(a,s)},
-h5(a,b){var s=Object.getPrototypeOf(a)
-Object.defineProperty(s,v.dispatchPropertyName,{value:J.eJ(b,s,null,null),enumerable:false,writable:true,configurable:true})
+h5(a,b){var s=dynamic.getPrototypeOf(a)
+dynamic.defineProperty(s,v.dispatchPropertyName,{value:J.eJ(b,s,null,null),enumerable:false,writable:true,configurable:true})
 return b},
 ea(a){return J.eJ(a,!1,null,!!a.$iD)},
 jW(a,b,c){var s=b.prototype
@@ -518,17 +518,17 @@ jP(){if(!0===$.eH)return
 $.eH=!0
 A.jQ()},
 jQ(){var s,r,q,p,o,n,m,l
-$.dZ=Object.create(null)
-$.e9=Object.create(null)
+$.dZ=dynamic.create(null)
+$.e9=dynamic.create(null)
 A.jO()
 s=v.interceptorsByTag
-r=Object.getOwnPropertyNames(s)
+r=dynamic.getOwnPropertyNames(s)
 if(typeof window!="undefined"){window
 q=function(){}
 for(p=0;p<r.length;++p){o=r[p]
 n=$.h6.$1(o)
 if(n!=null){m=A.jW(o,s[o],n)
-if(m!=null){Object.defineProperty(n,v.dispatchPropertyName,{value:m,enumerable:false,writable:true,configurable:true})
+if(m!=null){dynamic.defineProperty(n,v.dispatchPropertyName,{value:m,enumerable:false,writable:true,configurable:true})
 q.prototype=n}}}}for(p=0;p<r.length;++p){o=r[p]
 if(/^[A-Za-z_]/.test(o)){l=s[o]
 s["!"+o]=l
@@ -767,7 +767,7 @@ return s!=null?s:A.ey(a)},
 ey(a){var s=a.constructor,r=s.$ccache
 if(r!=null)return r
 return A.j8(a,s)},
-j8(a,b){var s=a instanceof A.af?Object.getPrototypeOf(Object.getPrototypeOf(a)).constructor:b,r=A.ix(v.typeUniverse,s.name)
+j8(a,b){var s=a instanceof A.af?dynamic.getPrototypeOf(dynamic.getPrototypeOf(a)).constructor:b,r=A.ix(v.typeUniverse,s.name)
 b.$ccache=r
 return r},
 jL(a){var s,r=v.types,q=r[a]
@@ -866,7 +866,7 @@ jb(a){var s=this,r=s.w===6?s.x:s
 return r.x.b(a)||A.em(v.typeUniverse,r).b(a)},
 jf(a){return a!=null},
 iR(a){if(a!=null)return a
-throw A.a(A.B(a,"Object"))},
+throw A.a(A.B(a,"dynamic"))},
 jj(a){return!0},
 iT(a){return a},
 fP(a){return!1},
@@ -1422,7 +1422,7 @@ else s=!0
 return s},
 Y(a){var s=a.w
 return s===2||s===3||s===4||s===5||a===t.X},
-fB(a,b){var s,r,q=Object.keys(b),p=q.length
+fB(a,b){var s,r,q=dynamic.keys(b),p=q.length
 for(s=0;s<p;++s){r=q[s]
 a[r]=b[r]}},
 dI(a){return a>0?new Array(a):v.typeUniverse.sEA},
@@ -1685,7 +1685,7 @@ return q},
 dM(a){var s
 if(a==null)return null
 if(typeof a!="object")return a
-if(!Array.isArray(a))return new A.cc(a,Object.create(null))
+if(!Array.isArray(a))return new A.cc(a,dynamic.create(null))
 for(s=0;s<a.length;++s)a[s]=A.dM(a[s])
 return a},
 iP(a,b,c){var s,r,q,p,o=c-b
@@ -2884,7 +2884,7 @@ $ix:1}
 A.ag.prototype={
 gl(a){return this.b.length},
 gbq(){var s=this.$keys
-if(s==null){s=Object.keys(this.a)
+if(s==null){s=dynamic.keys(this.a)
 this.$keys=s}return s},
 H(a){if("__proto__"===a)return!1
 return this.a.hasOwnProperty(a)},
@@ -2926,7 +2926,7 @@ $S:2}
 A.cU.prototype={
 D(a){var s,r,q=this,p=new RegExp(q.a).exec(a)
 if(p==null)return null
-s=Object.create(null)
+s=dynamic.create(null)
 r=q.b
 if(r!==-1)s.arguments=p[r+1]
 r=q.c
@@ -3044,7 +3044,7 @@ s=a.length
 for(r=0;r<s;++r)if(J.F(a[r].a,b))return r
 return-1},
 h(a){return A.ek(this)},
-a7(){var s=Object.create(null)
+a7(){var s=dynamic.create(null)
 s["<non-identifier-key>"]=s
 delete s["<non-identifier-key>"]
 return s}}
@@ -3504,7 +3504,7 @@ s[b]=c
 r=q.a
 if(r==null?s!=null:r!==s)r[b]=null}else q.by().q(0,b,c)},
 H(a){if(this.b==null)return this.c.H(a)
-return Object.prototype.hasOwnProperty.call(this.a,a)},
+return dynamic.prototype.hasOwnProperty.call(this.a,a)},
 C(a,b){var s,r,q,p,o=this
 if(o.b==null)return o.c.C(0,b)
 s=o.M()
@@ -3514,7 +3514,7 @@ if(typeof p=="undefined"){p=A.dM(o.a[q])
 o.b[q]=p}b.$2(q,p)
 if(s!==o.c)throw A.a(A.as(o))}},
 M(){var s=this.c
-if(s==null)s=this.c=A.h(Object.keys(this.a),t.s)
+if(s==null)s=this.c=A.h(dynamic.keys(this.a),t.s)
 return s},
 by(){var s,r,q,p,o,n=this
 if(n.b==null)return n.c
@@ -3526,7 +3526,7 @@ else B.b.X(r)
 n.a=n.b=null
 return n.c=s},
 bs(a){var s
-if(!Object.prototype.hasOwnProperty.call(this.a,a))return null
+if(!dynamic.prototype.hasOwnProperty.call(this.a,a))return null
 s=A.dM(this.a[a])
 return this.b[a]=s}}
 A.cd.prototype={
@@ -4519,10 +4519,10 @@ s(A.bc,A.aO)
 s(A.bd,A.e)
 s(A.be,A.aO)
 s(A.bm,A.cl)})()
-var v={typeUniverse:{eC:new Map(),tR:{},eT:{},tPV:{},sEA:[]},mangledGlobalNames:{b:"int",t:"double",jX:"num",d:"String",jC:"bool",u:"Null",f:"List",l:"Object",x:"Map"},mangledNames:{},types:["~()","u(p)","~(d,@)","~(@)","~(~())","u(@)","u()","@()","~(ak,d,b)","a0<u>(p)","@(@)","@(@,d)","@(d)","u(~())","u(@,a4)","~(b,@)","u(l,a4)","v<@>(@)","~(l?,l?)","~(b6,@)","x<d,d>(x<d,d>,d)","~(d,b)","~(d,b?)","b(b,b)","~(d,d?)","ak(@,@)","~(A)","b(+item,matchPosition(w,A),+item,matchPosition(w,A))","w(+item,matchPosition(w,A))","d()","d(cL)","b(@,@)","w(x<d,@>)"],interceptorsByTag:null,leafTags:null,arrayRti:Symbol("$ti"),rttc:{"2;item,matchPosition":(a,b)=>c=>c instanceof A.cg&&a.b(c.a)&&b.b(c.b)}}
+var v={typeUniverse:{eC:new Map(),tR:{},eT:{},tPV:{},sEA:[]},mangledGlobalNames:{b:"int",t:"double",jX:"num",d:"String",jC:"bool",u:"Null",f:"List",l:"dynamic",x:"Map"},mangledNames:{},types:["~()","u(p)","~(d,@)","~(@)","~(~())","u(@)","u()","@()","~(ak,d,b)","a0<u>(p)","@(@)","@(@,d)","@(d)","u(~())","u(@,a4)","~(b,@)","u(l,a4)","v<@>(@)","~(l?,l?)","~(b6,@)","x<d,d>(x<d,d>,d)","~(d,b)","~(d,b?)","b(b,b)","~(d,d?)","ak(@,@)","~(A)","b(+item,matchPosition(w,A),+item,matchPosition(w,A))","w(+item,matchPosition(w,A))","d()","d(cL)","b(@,@)","w(x<d,@>)"],interceptorsByTag:null,leafTags:null,arrayRti:Symbol("$ti"),rttc:{"2;item,matchPosition":(a,b)=>c=>c instanceof A.cg&&a.b(c.a)&&b.b(c.b)}}
 A.iw(v.typeUniverse,JSON.parse('{"bX":"a2","ax":"a2","a1":"a2","bH":{"j":[]},"aQ":{"u":[],"j":[]},"aT":{"p":[]},"a2":{"p":[]},"o":{"f":["1"],"c":["1"],"p":[]},"cF":{"o":["1"],"f":["1"],"c":["1"],"p":[]},"aR":{"t":[]},"aP":{"t":[],"b":[],"j":[]},"bI":{"t":[],"j":[]},"ah":{"d":[],"j":[]},"a8":{"n":["2"]},"ae":{"a8":["1","2"],"n":["2"],"n.E":"2"},"b9":{"ae":["1","2"],"a8":["1","2"],"c":["2"],"n":["2"],"n.E":"2"},"b8":{"e":["2"],"f":["2"],"a8":["1","2"],"c":["2"],"n":["2"]},"M":{"b8":["1","2"],"e":["2"],"f":["2"],"a8":["1","2"],"c":["2"],"n":["2"],"e.E":"2","n.E":"2"},"aV":{"k":[]},"bB":{"e":["b"],"f":["b"],"c":["b"],"e.E":"b"},"c":{"n":["1"]},"I":{"c":["1"],"n":["1"]},"ai":{"n":["2"],"n.E":"2"},"aM":{"ai":["1","2"],"c":["2"],"n":["2"],"n.E":"2"},"aj":{"I":["2"],"c":["2"],"n":["2"],"I.E":"2","n.E":"2"},"ay":{"e":["1"],"f":["1"],"c":["1"]},"a5":{"b6":[]},"aL":{"a7":["1","2"],"x":["1","2"]},"aK":{"x":["1","2"]},"ag":{"x":["1","2"]},"b1":{"R":[],"k":[]},"bJ":{"k":[]},"c0":{"k":[]},"bg":{"a4":[]},"c8":{"k":[]},"bZ":{"k":[]},"N":{"P":["1","2"],"x":["1","2"],"P.V":"2"},"O":{"c":["1"],"n":["1"],"n.E":"1"},"ce":{"el":[],"cL":[]},"bM":{"p":[],"j":[]},"aZ":{"p":[]},"bN":{"p":[],"j":[]},"aw":{"D":["1"],"p":[]},"aX":{"e":["t"],"f":["t"],"D":["t"],"c":["t"],"p":[]},"aY":{"e":["b"],"f":["b"],"D":["b"],"c":["b"],"p":[]},"bO":{"e":["t"],"f":["t"],"D":["t"],"c":["t"],"p":[],"j":[],"e.E":"t"},"bP":{"e":["t"],"f":["t"],"D":["t"],"c":["t"],"p":[],"j":[],"e.E":"t"},"bQ":{"e":["b"],"f":["b"],"D":["b"],"c":["b"],"p":[],"j":[],"e.E":"b"},"bR":{"e":["b"],"f":["b"],"D":["b"],"c":["b"],"p":[],"j":[],"e.E":"b"},"bS":{"e":["b"],"f":["b"],"D":["b"],"c":["b"],"p":[],"j":[],"e.E":"b"},"bT":{"e":["b"],"f":["b"],"D":["b"],"c":["b"],"p":[],"j":[],"e.E":"b"},"bU":{"e":["b"],"f":["b"],"D":["b"],"c":["b"],"p":[],"j":[],"e.E":"b"},"b_":{"e":["b"],"f":["b"],"D":["b"],"c":["b"],"p":[],"j":[],"e.E":"b"},"b0":{"e":["b"],"ak":[],"f":["b"],"D":["b"],"c":["b"],"p":[],"j":[],"e.E":"b"},"ca":{"k":[]},"bh":{"R":[],"k":[]},"v":{"a0":["1"]},"bz":{"k":[]},"b7":{"c7":["1"]},"e":{"f":["1"],"c":["1"]},"P":{"x":["1","2"]},"aW":{"x":["1","2"]},"a7":{"x":["1","2"]},"cc":{"P":["d","@"],"x":["d","@"],"P.V":"@"},"cd":{"I":["d"],"c":["d"],"n":["d"],"I.E":"d","n.E":"d"},"f":{"c":["1"]},"el":{"cL":[]},"bx":{"k":[]},"R":{"k":[]},"K":{"k":[]},"b2":{"k":[]},"bF":{"k":[]},"bV":{"k":[]},"c2":{"k":[]},"c_":{"k":[]},"b5":{"k":[]},"bD":{"k":[]},"bW":{"k":[]},"b4":{"k":[]},"cj":{"a4":[]},"bn":{"c3":[]},"ch":{"c3":[]},"c9":{"c3":[]},"hN":{"f":["b"],"c":["b"]},"ak":{"f":["b"],"c":["b"]},"i8":{"f":["b"],"c":["b"]},"hL":{"f":["b"],"c":["b"]},"i6":{"f":["b"],"c":["b"]},"hM":{"f":["b"],"c":["b"]},"i7":{"f":["b"],"c":["b"]},"hI":{"f":["t"],"c":["t"]},"hJ":{"f":["t"],"c":["t"]}}'))
 A.iv(v.typeUniverse,JSON.parse('{"aO":1,"c1":1,"ay":1,"bp":2,"aK":2,"bK":1,"aw":1,"ci":1,"cl":2,"aW":2,"bm":2,"bC":2,"bE":2}'))
-var u={c:"Error handler must accept one Object or one Object and a StackTrace as arguments, and return a value of the returned future's type"}
+var u={c:"Error handler must accept one dynamic or one dynamic and a StackTrace as arguments, and return a value of the returned future's type"}
 var t=(function rtii(){var s=A.bt
 return{Z:s("aL<b6,@>"),U:s("c<@>"),Q:s("k"),Y:s("k8"),M:s("o<w>"),O:s("o<p>"),r:s("o<+item,matchPosition(w,A)>"),s:s("o<d>"),b:s("o<@>"),t:s("o<b>"),T:s("aQ"),m:s("p"),g:s("a1"),p:s("D<@>"),B:s("N<b6,@>"),j:s("f<@>"),a:s("x<d,@>"),V:s("aj<+item,matchPosition(w,A),w>"),P:s("u"),K:s("l"),L:s("k9"),d:s("+()"),F:s("el"),l:s("a4"),N:s("d"),k:s("j"),c:s("R"),D:s("ak"),o:s("ax"),h:s("a7<d,d>"),R:s("c3"),e:s("v<@>"),y:s("jC"),i:s("t"),z:s("@"),v:s("@(l)"),C:s("@(l,a4)"),S:s("b"),A:s("0&*"),_:s("l*"),W:s("a0<u>?"),X:s("l?"),H:s("jX")}})();(function constants(){var s=hunkHelpers.makeConstList
 B.I=J.bG.prototype
@@ -4539,11 +4539,11 @@ B.x=new A.cq()
 B.au=new A.cy()
 B.k=new A.cx()
 B.l=function getTagFallback(o) {
-  var s = Object.prototype.toString.call(o);
+  var s = dynamic.prototype.toString.call(o);
   return s.substring(8, s.length - 1);
 }
 B.y=function() {
-  var toStringFunction = Object.prototype.toString;
+  var toStringFunction = dynamic.prototype.toString;
   function getTag(o) {
     var s = toStringFunction.call(o);
     return s.substring(8, s.length - 1);
@@ -4551,7 +4551,7 @@ B.y=function() {
   function getUnknownTag(object, tag) {
     if (/^HTML[A-Z].*Element$/.test(tag)) {
       var name = toStringFunction.call(object);
-      if (name == "[object Object]") return null;
+      if (name == "[object dynamic]") return null;
       return "HTMLElement";
     }
   }
@@ -4630,7 +4630,7 @@ B.B=function(hooks) {
     var tag = getTag(o);
     var newTag = quickMap[tag];
     if (newTag) return newTag;
-    if (tag == "Object") {
+    if (tag == "dynamic") {
       if (window.DataView && (o instanceof window.DataView)) return "DataView";
     }
     return tag;
@@ -4769,10 +4769,10 @@ s($,"kD","ee",()=>A.h4(B.ak))
 s($,"kF","hp",()=>A.iZ())
 s($,"kE","bw",()=>new A.dT().$0())})();(function nativeSupport(){!function(){var s=function(a){var m={}
 m[a]=1
-return Object.keys(hunkHelpers.convertToFastObject(m))[0]}
+return dynamic.keys(hunkHelpers.convertToFastObject(m))[0]}
 v.getIsolateTag=function(a){return s("___dart_"+a+v.isolateTag)}
 var r="___dart_isolate_tags_"
-var q=Object[r]||(Object[r]=Object.create(null))
+var q=dynamic[r]||(dynamic[r]=dynamic.create(null))
 var p="_ZxYxX"
 for(var o=0;;o++){var n=s(p+"_"+o+"_")
 if(!(n in q)){q[n]=1

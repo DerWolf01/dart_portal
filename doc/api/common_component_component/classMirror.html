@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the classMirror function from the component library, for the Dart programming language.">
-  <title>classMirror function - component library - Dart API</title>
+  <meta name="description" content="API docs for the reflectClass function from the component library, for the Dart programming language.">
+  <title>reflectClass function - component library - Dart API</title>
 
 
   
@@ -28,11 +28,11 @@
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li><a href="../index.html">wormhole</a></li>
+    <li><a href="../index.html">portal</a></li>
     <li><a href="../common_component_component/common_component_component-library.html">common&#47;component&#47;component.dart</a></li>
-    <li class="self-crumb">classMirror function</li>
+    <li class="self-crumb">reflectClass function</li>
   </ol>
-  <div class="self-name">classMirror</div>
+  <div class="self-name">reflectClass</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -56,15 +56,15 @@
       data-above-sidebar="common_component_component&#47;common_component_component-library-sidebar.html"
       data-below-sidebar="">
       <div>
-<h1><span class="kind-function">classMirror</span> function 
+<h1><span class="kind-function">reflectClass</span> function
  
 </h1></div>
 
     <section class="multi-line-signature">
         
 
-<span class="returntype"><a href="https://pub.dev/documentation/reflectable/4.0.6/reflectable.mirrors/ClassMirror-class.html">ClassMirror</a></span>
-<span class="name ">classMirror</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="classMirror-param-element"><span class="type-annotation">dynamic</span> <span class="parameter-name">element</span></span></li>
+<span class="returntype"><a href="https://pub.dev/documentation/reflectable/4.0.6/reflectable.mirrors/ReflectClass-class.html">ReflectClass</a></span>
+<span class="name ">reflectClass</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="reflectClass-param-element"><span class="type-annotation">dynamic</span> <span class="parameter-name">element</span></span></li>
 </ol>)
 
         
@@ -76,9 +76,9 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">ClassMirror classMirror(dynamic element) {
+  <pre class="language-dart"><code class="language-dart">ReflectClass reflectClass(dynamic element) {
   if (element.runtimeType == Type) {
-    return component.reflectType(element) as ClassMirror;
+    return component.reflectType(element) as ReflectClass;
   }
   return component.reflect(element).type;
 }</code></pre>
@@ -96,9 +96,9 @@
 </header>
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-    <li><a href="../index.html">wormhole</a></li>
+    <li><a href="../index.html">portal</a></li>
     <li><a href="../common_component_component/common_component_component-library.html">component</a></li>
-    <li class="self-crumb">classMirror function</li>
+    <li class="self-crumb">reflectClass function</li>
 </ol>
 
 
@@ -113,7 +113,7 @@
 
 <footer>
   <span class="no-break">
-    wormhole
+    portal
       1.0.0
   </span>
 
