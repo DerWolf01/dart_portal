@@ -51,6 +51,9 @@ class AnnotatedMethod<AnotatedWith> {
 }
 
 List<MethodMirror> methods(dynamic element) {
+  if (element is ClassMirror) {
+    return element.declarations.values.whereType<MethodMirror>().toList();
+  }
   if (element is Type) {
     return reflectClass(element)
         .declarations
@@ -86,7 +89,7 @@ List<AnnotatedMethod<T>> annotatedMethods<T>(dynamic element) {
 
 List<T> methodAnotations<T>(MethodMirror method) {
   return method.metadata
-      .where((e) => e.type.isAssignableTo(reflectClass(T)))
-      .map((e) => e.reflectee)
-      .toList() as List<T>;
+      .where((e) => e.type.isSubclassOf(reflectClass(T)))
+      .map((e) => e.reflectee as T)
+      .toList();
 }

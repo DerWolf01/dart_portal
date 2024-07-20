@@ -62,7 +62,7 @@
 
         <section class="multi-line-signature">
           
-          <a href="../common_middleware_middleware/Intercept-class.html">Intercept</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_messages_socket_message_socket_message/SocketMessage-class.html">SocketMessage</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span>&gt;</span>
+          <a href="../common_middleware_middleware/Interceptor-class.html">Interceptor</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_messages_socket_message_socket_message/SocketMessage-class.html">SocketMessage</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span>&gt;</span>
           <span class="name ">m</span>
           <div class="features"><span class="feature">getter/setter pair</span></div>
 
@@ -72,7 +72,7 @@
         
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">var m =Intercept&lt;SocketMessage&gt;(&quot;&#47;example&quot;, preHandle: (accepts) async =&gt; true, postHandle: (portalAccepted, {portalReturned}) async =&gt; print(portalAccepted))..register();</code></pre>
+  <pre class="language-dart"><code class="language-dart">var m =Interceptor&lt;SocketMessage&gt;(&quot;&#47;example&quot;, preHandle: (accepts) async =&gt; true, postHandle: (portalReceived, {portalGaveBack}) async =&gt; print(portalReceived))..register();</code></pre>
 </section>
 
 

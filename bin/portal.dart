@@ -1,4 +1,6 @@
-import 'package:portal/auth_portal.dart';
+import 'dart:io';
+
+import 'package:portal/example/server/controller/auth_portal.dart';
 import 'package:portal/example/sign_up_form.dart';
 import 'package:portal/portal.dart';
 import 'package:portal/portal/gateway.dart';
@@ -10,11 +12,14 @@ void main<T>() async {
   await PortalServer.init();
 }
 
-@Portal("/auth")
-class AuthPortal {
-  @Post("/sign-in")
-  handle(SignUpForm data) {
-    print(data);
-    return SignUpResult("jdsonfdksjfnsekjfsj");
-  }
-}
+
+
+// @Portal("/auth")
+// class AuthPortal {
+//   @AuthInterceptor()
+//   @Post("/sign-in")
+//   handle(SignUpForm data) {
+//     print(data);
+//     return SignUpResult("jdsonfdksjfnsekjfsj");
+//   }
+// }

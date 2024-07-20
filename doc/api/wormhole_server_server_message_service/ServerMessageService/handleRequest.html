@@ -107,7 +107,7 @@ handleRequest(Map&lt;String, dynamic&gt; message) async {
       if (res is SerializableModel) {
         await send(SocketResponse(message[&quot;path&quot;], res));
         await MiddlewareService().postHandle(path,
-            portalAccepted: argument, portalReturned: res);
+            portalReceived: argument, portalGaveBack: res);
       }
     } catch (e) {
       print(e);

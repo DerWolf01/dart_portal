@@ -64,7 +64,7 @@
       
 
 <span class="returntype">void</span>
-<span class="name ">removeMiddleware</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="removeMiddleware-param-middleware"><span class="type-annotation"><a href="../../common_middleware_middleware/Intercept-class.html">Intercept</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span></li>
+<span class="name ">removeMiddleware</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="removeMiddleware-param-middleware"><span class="type-annotation"><a href="../../common_middleware_middleware/Interceptor-class.html">Interceptor</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span></li>
 </ol>)
 
       
@@ -85,7 +85,7 @@ will no longer be applied to requests.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void removeMiddleware(Intercept middleware) {
+  <pre class="language-dart"><code class="language-dart">void removeMiddleware(Interceptor middleware) {
   middlewares.remove(middleware);
 }</code></pre>
 </section>

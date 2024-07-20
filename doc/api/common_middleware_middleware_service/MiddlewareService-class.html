@@ -64,7 +64,7 @@
 <section class="desc markdown">
   <p>A service for managing middleware in the application.</p>
 <p>This class provides functionality to register, remove, and execute
-middleware for incoming requests. Intercept can be used to perform
+middleware for incoming requests. Interceptor can be used to perform
 actions before and after the main processing of a request, such as
 authentication checks or logging.</p>
 </section>
@@ -105,7 +105,7 @@ authentication checks or logging.</p>
 
         <dt id="middlewares" class="property">
   <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/middlewares.html">middlewares</a></span>
-  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_middleware_middleware/Intercept-class.html">Intercept</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span>&gt;</span></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_middleware_middleware/Interceptor-class.html">Interceptor</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span>&gt;</span></span>
   
 
 </dt>
@@ -149,7 +149,7 @@ authentication checks or logging.</p>
 </dd>
 
         <dt id="postHandle" class="callable">
-  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/postHandle.html">postHandle</a></span><span class="signature">(<wbr><span class="parameter" id="postHandle-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span><span class="parameter" id="postHandle-param-portalAccepted">{<span>required</span> <span class="type-annotation"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span> <span class="parameter-name">portalAccepted</span>, </span><span class="parameter" id="postHandle-param-portalReturned"><span class="type-annotation"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a>?</span> <span class="parameter-name">portalReturned</span>}</span>)
+  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/postHandle.html">postHandle</a></span><span class="signature">(<wbr><span class="parameter" id="postHandle-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span><span class="parameter" id="postHandle-param-portalReceived">{<span>required</span> <span class="type-annotation"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span> <span class="parameter-name">portalReceived</span>, </span><span class="parameter" id="postHandle-param-portalGaveBack"><span class="type-annotation"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a>?</span> <span class="parameter-name">portalGaveBack</span>}</span>)
     <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/FutureOr-class.html">FutureOr</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
@@ -175,7 +175,7 @@ authentication checks or logging.</p>
 </dd>
 
         <dt id="registerMiddleware" class="callable">
-  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/registerMiddleware.html">registerMiddleware</a></span><span class="signature">(<wbr><span class="parameter" id="registerMiddleware-param-middleware"><span class="type-annotation"><a href="../common_middleware_middleware/Intercept-class.html">Intercept</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span>)
+  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/registerMiddleware.html">registerMiddleware</a></span><span class="signature">(<wbr><span class="parameter" id="registerMiddleware-param-middleware"><span class="type-annotation"><a href="../common_middleware_middleware/Interceptor-class.html">Interceptor</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span>)
     <span class="returntype parameter">&#8594; void</span>
   </span>
   
@@ -188,7 +188,7 @@ authentication checks or logging.</p>
 </dd>
 
         <dt id="removeMiddleware" class="callable">
-  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/removeMiddleware.html">removeMiddleware</a></span><span class="signature">(<wbr><span class="parameter" id="removeMiddleware-param-middleware"><span class="type-annotation"><a href="../common_middleware_middleware/Intercept-class.html">Intercept</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span>)
+  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/removeMiddleware.html">removeMiddleware</a></span><span class="signature">(<wbr><span class="parameter" id="removeMiddleware-param-middleware"><span class="type-annotation"><a href="../common_middleware_middleware/Interceptor-class.html">Interceptor</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span>)
     <span class="returntype parameter">&#8594; void</span>
   </span>
   

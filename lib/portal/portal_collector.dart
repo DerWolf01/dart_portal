@@ -18,11 +18,17 @@ class PortalCollector {
   }
 
   static List<GatewayMirror> gateways(ClassMirror classMirror) {
+    print("Collecting data from portal ${classMirror.simpleName}");
     final List<GatewayMirror> gateways = [];
     for (final method in methods(classMirror)) {
+      if(MirrorSystem.getName(method.simpleName)=="handle"){
+
+        print('Collecting data from gateway-method handle');
+
+      }
       final Gateway? gateway = method.metadata
           .where(
-            (element) => element.type.isAssignableTo(reflectClass(Gateway)),
+            (element) => element.type.isSubclassOf(reflectClass(Gateway)),
           )
           .firstOrNull
           ?.reflectee as Gateway?;
@@ -31,9 +37,10 @@ class PortalCollector {
       }
 
       gateways.add(GatewayMirror(
-        classMirror: classMirror,
+        portalClassMirror: classMirror,
+        methodMirror: method,
         gateway: gateway,
-        interceptors: methodAnotations<Intercept>(method),
+        interceptors: methodAnotations<Interceptor>(method),
       ));
     }
     return gateways;

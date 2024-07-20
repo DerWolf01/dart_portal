@@ -65,8 +65,8 @@
 
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/FutureOr-class.html">FutureOr</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">postHandle</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="postHandle-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span></li>
-<li><span class="parameter" id="postHandle-param-portalAccepted">{<span>required</span> <span class="type-annotation"><a href="../../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span> <span class="parameter-name">portalAccepted</span>, </span></li>
-<li><span class="parameter" id="postHandle-param-portalReturned"><span class="type-annotation"><a href="../../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a>?</span> <span class="parameter-name">portalReturned</span>}</span></li>
+<li><span class="parameter" id="postHandle-param-portalReceived">{<span>required</span> <span class="type-annotation"><a href="../../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span> <span class="parameter-name">portalReceived</span>, </span></li>
+<li><span class="parameter" id="postHandle-param-portalGaveBack"><span class="type-annotation"><a href="../../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a>?</span> <span class="parameter-name">portalGaveBack</span>}</span></li>
 </ol>)
 
       
@@ -92,13 +92,13 @@ A <a href="https://api.flutter.dev/flutter/dart-async/FutureOr-class.html">Futur
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">FutureOr&lt;void&gt; postHandle(String path,
-    {required SerializableModel portalAccepted,
-    SerializableModel? portalReturned}) async {
+    {required SerializableModel portalReceived,
+    SerializableModel? portalGaveBack}) async {
   for (var middleware in middlewares.where(
     (element) =&gt; element.postHandle != null &amp;&amp; element.path == path,
   )) {
-    await middleware.postHandle!(portalAccepted,
-        portalReturned: portalReturned);
+    await middleware.postHandle!(portalReceived,
+        portalGaveBack: portalGaveBack);
   }
 }</code></pre>
 </section>

@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:mirrors';
 
 import 'package:portal/interceptor/intercept.dart';
+import 'package:portal/portal/portal_impl.dart';
 
 abstract class Gateway {
   /// The URL path associated with this request type.
@@ -38,12 +40,50 @@ class Post extends Gateway {
 
 class GatewayMirror {
   GatewayMirror(
-      {required this.classMirror,
+      {required this.portalClassMirror,
+      required this.methodMirror,
       required this.gateway,
-      required this.interceptors});
+      required this.interceptors})
+      : portalInstanceMirror = portalClassMirror.newInstance(Symbol(''), []);
 
   String get path => gateway.path;
-  final ClassMirror classMirror;
+
+  final ClassMirror portalClassMirror;
+  final InstanceMirror portalInstanceMirror;
+  final MethodMirror methodMirror;
   final Gateway gateway;
-  final List<Intercept> interceptors;
+  final List<Interceptor> interceptors;
+
+  bool isGet() => gateway is Get;
+
+  bool isPost() => gateway is Post;
+
+  Type methodArgumentType() {
+    return methodMirror.parameters.first.type.reflectedType;
+  }
+
+  dynamic invokeMethodArgumentInstance(
+      {required constructorName, required List<dynamic> positionalArguments}) {
+    var res = reflectClass(methodArgumentType())
+        .newInstance(Symbol("$constructorName"), positionalArguments);
+    return res;
+  }
+
+  FutureOr<T>? invoke<T>(List<dynamic> positionalArguments) async {
+    return await (portalInstanceMirror.invoke(
+            methodMirror.simpleName, positionalArguments))
+        .reflectee as FutureOr<T>;
+  }
+
+  Future<T> invokeUsingMap<T>(Map map) async {
+    dynamic argument;
+    try {
+      argument = invokeMethodArgumentInstance(
+          constructorName: "fromMap", positionalArguments: [map]);
+    } catch (e) {
+      print(e);
+    }
+    return await (portalClassMirror.invoke(methodMirror.simpleName, [argument])
+        as FutureOr<T>);
+  }
 }

@@ -35,7 +35,11 @@ class PortalService {
   registerPortals() {
     _portalMap.clear();
     _portalMap.addAll(Map.fromEntries(PortalCollector.collect().map(
-      (e) => MapEntry(e.portal.path, e),
+      (e) {
+        print("registering portal: ${e.portal.path}");
+        print("gateway: ${e.gateways}");
+        return MapEntry(e.portal.path, e);
+      },
     )));
   }
 
@@ -150,53 +154,52 @@ class PortalService {
   /// Returns:
   ///   An [AnnotatedMethod] instance representing the method to handle the request, or null
   ///   if no matching method is found.
-  AnnotatedMethod? methodMirrorByFullPath(String fullPath) {
-    try {
-      var portal = _portalByFullPath(fullPath);
-      print(portal);
-      if (portal == null) {
-        throw Exception("No Portal registered with path: $fullPath");
-      }
-      var mPath = methodPath(fullPath);
-      print("Method path: $mPath");
-
-      AnnotatedMethod? res = annotatedMethods(portal)
-          .where(
-            (e) => e.annotation.getPath == mPath,
-          )
-          .firstOrNull;
-
-      print("Annotated method found --> ${res?.method.simpleName} --> $res  ");
-
-      return res;
-    } catch (e) {
-      print("Error: $e");
+  GatewayMirror gatewayMirrorUsingFullPath(String fullPath) {
+    var portal = _portalByFullPath(fullPath);
+    print(portal);
+    if (portal == null) {
+      throw Exception("No Portal registered with path: $fullPath");
     }
-    return null;
+    var mPath = methodPath(fullPath);
+    print("Method path: $mPath");
+    print("portal has gateways: ${portal.gateways.length}");
+    portal.gateways.forEach((element) {
+      print(element.path);
+    });
+    final gateway = portal.gateways.firstWhere(
+      (element) => element.path == mPath,
+      orElse: () => throw Exception("No Gateway registered with path: $mPath"),
+    );
+    return gateway;
   }
 
   Future<HttpRequest> callGateway(
     String fullPath,
     HttpRequest request,
   ) async {
-    await MiddlewareService().preHandle(fullPath, request);
-    final m = methodMirrorByFullPath(fullPath);
+    final gatewayMirror = gatewayMirrorUsingFullPath(fullPath);
+    final canPass = await MiddlewareService()
+        .preHandle(request, gatewayMirror.interceptors);
+    if (canPass < 200 || canPass > 300) {
+      request.response.statusCode = canPass;
+      return request;
+    }
 
-    if (m?.annotation is Get) {
+    if (gatewayMirror.isGet()) {
       print(request.method);
       if (request.method != "GET") {
         request.response.statusCode = HttpStatus.methodNotAllowed;
         return request;
       }
       print("is get");
-      return await handleGet(request, m!, fullPath);
-    } else if (m?.annotation is Post) {
+      return await handleGet(request, gatewayMirror, fullPath);
+    } else if (gatewayMirror.isPost()) {
       if (request.method != "POST") {
         request.response.statusCode = HttpStatus.methodNotAllowed;
         return request;
       }
       print("is post");
-      return await handlePost(request, m!, fullPath);
+      return await handlePost(request, gatewayMirror);
     }
 
     request.response.statusCode = HttpStatus.notFound;
@@ -204,27 +207,27 @@ class PortalService {
   }
 
   Future<HttpRequest> handleGet(
-      HttpRequest request, AnnotatedMethod m, String fullPath) async {
+      HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
     final argumentObject = ConversionService.mapToObject(
         request.uri.queryParameters,
-        type: m.methodArgumentType());
-    final response = await m.invoke([argumentObject]);
+        type: gatewayMirror.methodArgumentType());
+    final response = await gatewayMirror.invoke([argumentObject]);
     request.response.write(ConversionService.convertToStringOrJson(response));
-    await MiddlewareService().postHandle(request.uri.path,
-        portalAccepted: argumentObject, portalReturned: response);
+    await MiddlewareService().postHandle(
+        request, gatewayMirror.interceptors, argumentObject, response);
     return request;
   }
 
   Future<HttpRequest> handlePost(
-      HttpRequest request, AnnotatedMethod m, String fullPath) async {
+      HttpRequest request, GatewayMirror gatewayMirror) async {
     var object = await ConversionService.requestToObject(request,
-        type: m.methodArgumentType());
+        type: gatewayMirror.methodArgumentType());
 
-    final result = await m.invoke([object]);
+    final result = await gatewayMirror.invoke([object]);
     print(result);
     request.response.write(ConversionService.convertToStringOrJson(result));
-    await MiddlewareService().postHandle(request.uri.path,
-        portalAccepted: object, portalReturned: result);
+    await MiddlewareService()
+        .postHandle(request, gatewayMirror.interceptors, object, result);
     return request;
   }
 }
