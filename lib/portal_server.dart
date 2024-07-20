@@ -45,7 +45,7 @@ class PortalServer {
       _instance ??= PortalServer._internal(server: server);
 
       if (_instance != null) {
-        print("http-server --> listening on localhost:3000");
+        print("http-server --> listening on $host:$port");
       } else {
         throw Exception("failed to start server");
       }

@@ -10,7 +10,6 @@ class CollectorService {
     MirrorSystem mirrorSystem = currentMirrorSystem();
 
     for (final library in mirrorSystem.libraries.entries) {
-      print(library.key);
       for (final libraryDecleration in library.value.declarations.entries) {
         final isClassMirror = libraryDecleration.value is ClassMirror;
 
@@ -19,9 +18,8 @@ class CollectorService {
           for (final anotationInstanceMirror in classMirror.metadata) {
             final isPortal = anotationInstanceMirror.type
                 .isAssignableTo(reflectType(Portal));
-            print(anotationInstanceMirror.type.toString() == "Portal");
+
             if (isPortal) {
-              print("Found Portal --> $classMirror");
               classes.add(AnotatedClass(
                   classMirror: classMirror,
                   anotatedWith: anotationInstanceMirror.reflectee as T));
@@ -39,7 +37,6 @@ class CollectorService {
     MirrorSystem mirrorSystem = currentMirrorSystem();
 
     for (final library in mirrorSystem.libraries.entries) {
-      print(library.key);
       for (final libraryDecleration in library.value.declarations.entries) {
         final isClassMirror = libraryDecleration.value is ClassMirror;
 
@@ -61,5 +58,3 @@ class AnotatedClass<AnotatedWith> {
   ClassMirror classMirror;
   AnotatedWith anotatedWith;
 }
-
-
