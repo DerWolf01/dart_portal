@@ -8,23 +8,30 @@ import 'package:portal/services/collection_service.dart';
 
 class PortalCollector {
   static List<PortalMirror> collect() {
-    print('Collecting data from portal');
-    return CollectorService().searchClassesUsingAnnotation<Portal>().map((e) {
+    print('Collecting portals');
+    final portals =
+        CollectorService().searchClassesUsingAnnotation<Portal>().map((e) {
       return PortalMirror(
           classMirror: e.classMirror,
           portal: e.anotatedWith,
           gateways: gateways(e.classMirror));
     }).toList();
+    if (portals.isEmpty) {
+      print('No portals found');
+    }else{
+      print('Portals found');
+      print(portals.length);
+      pritn(portals);
+    }
+    return portals;
   }
 
   static List<GatewayMirror> gateways(ClassMirror classMirror) {
     print("Collecting data from portal ${classMirror.simpleName}");
     final List<GatewayMirror> gateways = [];
     for (final method in methods(classMirror)) {
-      if(MirrorSystem.getName(method.simpleName)=="handle"){
-
+      if (MirrorSystem.getName(method.simpleName) == "handle") {
         print('Collecting data from gateway-method handle');
-
       }
       final Gateway? gateway = method.metadata
           .where(
