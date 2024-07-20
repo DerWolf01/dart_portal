@@ -64,7 +64,7 @@
 <section class="desc markdown">
   <p>A service for managing middleware in the application.</p>
 <p>This class provides functionality to register, remove, and execute
-middleware for incoming requests. Middleware can be used to perform
+middleware for incoming requests. Intercept can be used to perform
 actions before and after the main processing of a request, such as
 authentication checks or logging.</p>
 </section>
@@ -105,7 +105,7 @@ authentication checks or logging.</p>
 
         <dt id="middlewares" class="property">
   <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/middlewares.html">middlewares</a></span>
-  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_middleware_middleware/Middleware-class.html">Middleware</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span>&gt;</span></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_middleware_middleware/Intercept-class.html">Intercept</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span>&gt;</span></span>
   
 
 </dt>
@@ -175,7 +175,7 @@ authentication checks or logging.</p>
 </dd>
 
         <dt id="registerMiddleware" class="callable">
-  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/registerMiddleware.html">registerMiddleware</a></span><span class="signature">(<wbr><span class="parameter" id="registerMiddleware-param-middleware"><span class="type-annotation"><a href="../common_middleware_middleware/Middleware-class.html">Middleware</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span>)
+  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/registerMiddleware.html">registerMiddleware</a></span><span class="signature">(<wbr><span class="parameter" id="registerMiddleware-param-middleware"><span class="type-annotation"><a href="../common_middleware_middleware/Intercept-class.html">Intercept</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span>)
     <span class="returntype parameter">&#8594; void</span>
   </span>
   
@@ -188,7 +188,7 @@ authentication checks or logging.</p>
 </dd>
 
         <dt id="removeMiddleware" class="callable">
-  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/removeMiddleware.html">removeMiddleware</a></span><span class="signature">(<wbr><span class="parameter" id="removeMiddleware-param-middleware"><span class="type-annotation"><a href="../common_middleware_middleware/Middleware-class.html">Middleware</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span>)
+  <span class="name"><a href="../common_middleware_middleware_service/MiddlewareService/removeMiddleware.html">removeMiddleware</a></span><span class="signature">(<wbr><span class="parameter" id="removeMiddleware-param-middleware"><span class="type-annotation"><a href="../common_middleware_middleware/Intercept-class.html">Intercept</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span></span> <span class="parameter-name">middleware</span></span>)
     <span class="returntype parameter">&#8594; void</span>
   </span>
   

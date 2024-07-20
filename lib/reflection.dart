@@ -83,3 +83,10 @@ List<AnnotatedMethod<T>> annotatedMethods<T>(dynamic element) {
       )
       .toList();
 }
+
+List<T> methodAnotations<T>(MethodMirror method) {
+  return method.metadata
+      .where((e) => e.type.isAssignableTo(reflectClass(T)))
+      .map((e) => e.reflectee)
+      .toList() as List<T>;
+}

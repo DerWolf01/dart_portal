@@ -135,7 +135,7 @@
     },
     {
       "name": "dart_conversion",
-      "rootUri": "file:///Users/bdemir/.pub-cache/git/dart_conversion-2c6170ba9407a9efcbc6d602dd3d6f6ee3f8d6bc/",
+      "rootUri": "file:///Users/bdemir/.pub-cache/git/dart_conversion-6a1d9f53cead9d04de341a75fe065711d1261cd4/",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -171,9 +171,9 @@
     },
     {
       "name": "graphs",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/graphs-2.3.1",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/graphs-2.3.2",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.4"
     },
     {
       "name": "html",
@@ -339,9 +339,9 @@
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/string_scanner-1.3.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.1"
     },
     {
       "name": "term_glyph",
@@ -351,21 +351,21 @@
     },
     {
       "name": "test",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/test-1.25.7",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/test-1.25.8",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/test_api-0.7.2",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/test_api-0.7.3",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "test_core",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/test_core-0.6.4",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/test_core-0.6.5",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "timing",
@@ -393,19 +393,19 @@
     },
     {
       "name": "web",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/web-0.5.1",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/web-1.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "web_socket",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/web_socket-0.1.5",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/web_socket-0.1.6",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "web_socket_channel",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/web_socket_channel-3.0.0",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/web_socket_channel-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -428,10 +428,10 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-07-19T15:33:09.244075Z",
+  "generated": "2024-07-20T12:32:03.658530Z",
   "generator": "pub",
-  "generatorVersion": "3.4.3",
+  "generatorVersion": "3.4.4",
   "flutterRoot": "file:///opt/homebrew/Caskroom/flutter/3.19.3/flutter",
-  "flutterVersion": "3.22.2",
+  "flutterVersion": "3.22.3",
   "pubCache": "file:///Users/bdemir/.pub-cache"
 }

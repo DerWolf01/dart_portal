@@ -4,7 +4,7 @@ description: none
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
-  analyzer: ^6.4.0
+  analyzer: 6.4.0
   build_runner: ^2.0.0
   characters: ^1.3.0
   dart_conversion:

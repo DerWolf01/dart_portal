@@ -38,7 +38,8 @@ class PortalServer {
   ///   the server is successfully started, or null if the server fails to start.
   static Future<PortalServer?> init(
       {String host = 'localhost', int port = 3000}) async {
-    // PortalService().registerPortals();
+    PortalService().registerPortals();
+    MiddlewareService().registerMiddlewares();
     try {
       final server = await HttpServer.bind(host, port);
       _instance ??= PortalServer._internal(server: server);

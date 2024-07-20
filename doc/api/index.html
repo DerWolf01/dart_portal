@@ -56,7 +56,7 @@
 <h2 id="features">Features</h2>
 <ul>
 <li><strong>Portal-Based Architecture</strong>: Organize your code into portals for both server &amp; client to handle specific paths and actions, improving modularity and readability.</li>
-<li><strong>Middleware Support</strong>: Easily add middleware for request preprocessing and postprocessing.</li>
+<li><strong>Intercept Support</strong>: Easily add middleware for request preprocessing and postprocessing.</li>
 <li><strong>Serializable Models</strong>: Define models that can be automatically serialized and deserialized from JSON, streamlining client-server data exchange.</li>
 <li><strong>Reflectable</strong>: Utilizes Dart's reflectable package for runtime reflection, enabling dynamic invocation of methods based on request paths.</li>
 </ul>
@@ -152,12 +152,12 @@ void main() async {
 <p><strong>Define Middlewares</strong>: Create middlewares to preprocess and postprocess requests and responses. Use the <code>MiddlewareService</code> to register your middleware.</p>
 <pre class="language-dart"><code class="language-dart">import 'package:portal/portal.dart';
 
-var exampleMiddleware = Middleware&lt;SocketMessage&gt;("/example", preHandle: (accepts) async =&gt; true, postHandle: (portalAccepted, {portalReturned}) async =&gt; print(portalAccepted));
+var exampleMiddleware = Intercept&lt;SocketMessage&gt;("/example", preHandle: (accepts) async =&gt; true, postHandle: (portalAccepted, {portalReturned}) async =&gt; print(portalAccepted));
    
 </code></pre>
 </li>
 <li>
-<p><strong>Register Middleware</strong>: Before running your application, register your middleware with the framework.</p>
+<p><strong>Register Intercept</strong>: Before running your application, register your middleware with the framework.</p>
 <pre class="language-dart"><code class="language-dart">void main() {
   //...
   MiddlewareService().registerMiddleware(exampleMiddleware);
@@ -165,10 +165,10 @@ var exampleMiddleware = Middleware&lt;SocketMessage&gt;("/example", preHandle: (
   exampleMiddleware.register();
   //or use the anonymousMiddleware function if you do not wanna define a class
   anonymousMiddleware("/example", preHandle: (UInt8List request) {
-    print("Middleware for /example");
+    print("Intercept for /example");
     return true;
   }, postHandle: (SerializableModel portalAccepted, {SerializableModel? portalReturned}) {
-    print("Middleware for /example");
+    print("Intercept for /example");
   });
   // Start your server or client
 }

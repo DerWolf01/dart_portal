@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:mirrors';
 
-import 'middleware.dart';
+import 'package:portal/services/collection_service.dart';
 
-/// A service for managing middleware in the application.
+import 'intercept.dart';
+
+/// A service for managing interceptor in the application.
 ///
 /// This class provides functionality to register, remove, and execute
-/// middleware for incoming requests. Middleware can be used to perform
+/// interceptor for incoming requests. Intercept can be used to perform
 /// actions before and after the main processing of a request, such as
 /// authentication checks or logging.
 class MiddlewareService {
@@ -26,27 +29,33 @@ class MiddlewareService {
   }
 
   /// A list to hold all registered middlewares.
-  final List<Middleware> middlewares = [];
+  final List<InstanceMirror> middlewares = [];
 
-  /// Registers a middleware to be used by the service.
+  void registerMiddlewares() {
+    for (final mirror in CollectorService().searchClassesByType<Intercept>()) {
+      middlewares.add(mirror.newInstance(const Symbol(""), []));
+    }
+  }
+
+  /// Registers a interceptor to be used by the service.
   ///
   /// Adds the given [middleware] to the list of middlewares that will be
   /// applied to requests.
   ///
   /// Parameters:
-  ///   - [middleware]: The middleware to register.
-  void registerMiddleware(Middleware middleware) {
-    middlewares.add(middleware);
+  ///   - [interceptor]: The interceptor to register.
+  void registerMiddleware(Intercept middleware) {
+    middlewares.add(reflect(middleware));
   }
 
-  /// Removes a middleware from the service.
+  /// Removes a interceptor from the service.
   ///
   /// Removes the given [middleware] from the list of middlewares, so it
   /// will no longer be applied to requests.
   ///
   /// Parameters:
-  ///   - [middleware]: The middleware to remove.
-  void removeMiddleware(Middleware middleware) {
+  ///   - [interceptor]: The interceptor to remove.
+  void removeMiddleware(Intercept middleware) {
     middlewares.remove(middleware);
   }
 
@@ -55,7 +64,7 @@ class MiddlewareService {
   /// Iterates through all registered middlewares and executes their
   /// pre-handle method if they are associated with the given [path] and
   /// if they have a pre-handle method defined. Stops executing further
-  /// middlewares if any middleware returns `false`.
+  /// middlewares if any interceptor returns `false`.
   ///
   /// Parameters:
   ///   - [path]: The path of the request.
@@ -64,11 +73,11 @@ class MiddlewareService {
   /// Returns:
   ///   A [FutureOr<bool>] indicating whether to continue processing the request.
   FutureOr<bool> preHandle(String path, HttpRequest request) async {
-    print("middleware preHandle");
-    for (var middleware in middlewares.where(
-      (element) => element.preHandle != null && element.path == path,
-    )) {
-      if (!(await middleware.preHandle!(request))) {
+    print("interceptor preHandle");
+
+    print(path);
+    for (var middleware in middlewares.preHandle(path)) {
+      if (!(await middleware.invoke("preHandle", [path]))) {
         return false;
       }
     }
@@ -88,13 +97,25 @@ class MiddlewareService {
   /// Returns:
   ///   A [FutureOr<void>] representing the asynchronous operation.
   FutureOr<void> postHandle(String path,
-      {required dynamic portalAccepted,
-      dynamic portalReturned}) async {
-    for (var middleware in middlewares.where(
-      (element) => element.postHandle != null && element.path == path,
-    )) {
+      {required dynamic portalAccepted, dynamic portalReturned}) async {
+    for (var middleware in middlewares.postHandle(path)) {
       await middleware.postHandle!(portalAccepted,
           portalReturned: portalReturned);
     }
   }
+}
+
+extension MiddlewareFilter on List<InstanceMirror> {
+  preHandle(String path) =>
+      where(
+            (element) {
+          final reflectee = element.reflectee as Intercept;
+          return (reflectee).preHandle != null;
+        },
+      );
+
+  postHandle(String path) =>
+      where(
+              (element) => (element.reflectee as Intercept).postHandle != null
+      );
 }

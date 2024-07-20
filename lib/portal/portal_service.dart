@@ -1,17 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:characters/characters.dart';
 import 'package:dart_conversion/dart_conversion.dart';
-import 'package:portal/portal.dart';
+import 'package:portal/interceptor/interceptor_service.dart';
+import 'package:portal/portal/gateway.dart';
+import 'package:portal/portal/portal_collector.dart';
+import 'package:portal/portal/portal_impl.dart';
 import 'package:portal/reflection.dart';
 import 'package:portal/services/collection_service.dart';
-
 
 PortalService get portalService => PortalService();
 
 class PortalService {
-  final Map<String, dynamic> _portalMap = {};
+  final Map<String, PortalMirror> _portalMap = {};
   final Map<String, List<AnonymousPortal<dynamic>>> _anonymousPortalMap = {};
   static PortalService? _instance;
 
@@ -32,14 +33,10 @@ class PortalService {
   /// Parameters:
   ///   - [portal]: The portal instance to register.
   registerPortals() {
-    for (final portalMirror
-        in CollectorService().searchClassesUsingAnnotation<Portal>()) {
-      final portal =
-          portalMirror.classMirror.newInstance(Symbol(""), []).reflectee;
-      var path = portalMirror.anotatedWith.getPath;
-      print("registering  $portal with $path");
-      _portalMap[path] = portal;
-    }
+    _portalMap.clear();
+    _portalMap.addAll(Map.fromEntries(PortalCollector.collect().map(
+      (e) => MapEntry(e.portal.path, e),
+    )));
   }
 
   registerPortal(dynamic portal) {
@@ -182,6 +179,7 @@ class PortalService {
     String fullPath,
     HttpRequest request,
   ) async {
+    await MiddlewareService().preHandle(fullPath, request);
     final m = methodMirrorByFullPath(fullPath);
 
     if (m?.annotation is Get) {
@@ -207,10 +205,13 @@ class PortalService {
 
   Future<HttpRequest> handleGet(
       HttpRequest request, AnnotatedMethod m, String fullPath) async {
-    request.uri.queryParameters.forEach((key, value) {
-      print("$key: $value");
-    });
-    request.response.write("Got the get request");
+    final argumentObject = ConversionService.mapToObject(
+        request.uri.queryParameters,
+        type: m.methodArgumentType());
+    final response = await m.invoke([argumentObject]);
+    request.response.write(ConversionService.convertToStringOrJson(response));
+    await MiddlewareService().postHandle(request.uri.path,
+        portalAccepted: argumentObject, portalReturned: response);
     return request;
   }
 
@@ -221,11 +222,9 @@ class PortalService {
 
     final result = await m.invoke([object]);
     print(result);
-    if (result is String || result is num) {
-      request.response.write(result);
-      return request;
-    }
-    request.response.write(jsonEncode(result));
+    request.response.write(ConversionService.convertToStringOrJson(result));
+    await MiddlewareService().postHandle(request.uri.path,
+        portalAccepted: object, portalReturned: result);
     return request;
   }
 }

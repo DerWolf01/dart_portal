@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the Middleware class from the middleware library, for the Dart programming language.">
-  <title>Middleware class - middleware library - Dart API</title>
+  <meta name="description" content="API docs for the Intercept class from the middleware library, for the Dart programming language.">
+  <title>Intercept class - middleware library - Dart API</title>
 
 
   
@@ -30,9 +30,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">portal</a></li>
     <li><a href="../common_middleware_middleware/common_middleware_middleware-library.html">common&#47;middleware&#47;middleware.dart</a></li>
-    <li class="self-crumb">Middleware<span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span> class</li>
+    <li class="self-crumb">Intercept<span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span> class</li>
   </ol>
-  <div class="self-name">Middleware</div>
+  <div class="self-name">Intercept</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -54,9 +54,9 @@
     id="dartdoc-main-content"
     class="main-content"
     data-above-sidebar="common_middleware_middleware&#47;common_middleware_middleware-library-sidebar.html"
-    data-below-sidebar="common_middleware_middleware&#47;Middleware-class-sidebar.html">
+    data-below-sidebar="common_middleware_middleware&#47;Intercept-class-sidebar.html">
     <div>
-<h1><span class="kind-class">Middleware&lt;<wbr><span class="type-parameter">T extends SerializableModel</span>&gt;</span> class 
+<h1><span class="kind-class">Intercept&lt;<wbr><span class="type-parameter">T extends SerializableModel</span>&gt;</span> class
  
 </h1></div>
 
@@ -64,13 +64,13 @@
 <section class="desc markdown">
   <p>A class representing a middleware component.</p>
 <p>This class allows for the creation and registration of middleware
-components within the application. Middleware components can perform
+components within the application. Intercept components can perform
 actions before and after the main processing of a request.</p>
 <p>Parameters:</p>
 <ul>
-<li><a href="../common_middleware_middleware/Middleware/path.html">path</a>: The path on which the middleware should be applied.</li>
-<li><a href="../common_middleware_middleware/Middleware/preHandle.html">preHandle</a>: An optional callback to be executed before the main middleware logic.</li>
-<li><a href="../common_middleware_middleware/Middleware/postHandle.html">postHandle</a>: An optional callback to be executed after the main middleware logic.</li>
+<li><a href="../common_middleware_middleware/Intercept/path.html">path</a>: The path on which the middleware should be applied.</li>
+<li><a href="../common_middleware_middleware/Intercept/preHandle.html">preHandle</a>: An optional callback to be executed before the main middleware logic.</li>
+<li><a href="../common_middleware_middleware/Intercept/postHandle.html">postHandle</a>: An optional callback to be executed after the main middleware logic.</li>
 </ul>
 </section>
 
@@ -101,11 +101,11 @@ actions before and after the main processing of a request.</p>
     <h2>Constructors</h2>
 
     <dl class="constructor-summary-list">
-        <dt id="Middleware" class="callable">
-          <span class="name"><a href="../common_middleware_middleware/Middleware/Middleware.html">Middleware</a></span><span class="signature">(<span class="parameter" id="-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span><span class="parameter" id="-param-preHandle">{<span class="type-annotation"><a href="../common_middleware_middleware/PreHandle.html">PreHandle</a>?</span> <span class="parameter-name">preHandle</span>, </span><span class="parameter" id="-param-postHandle"><span class="type-annotation"><a href="../common_middleware_middleware/PostHandle.html">PostHandle</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span>?</span> <span class="parameter-name">postHandle</span>}</span>)</span>
+        <dt id="Intercept" class="callable">
+          <span class="name"><a href="../common_middleware_middleware/Intercept/Intercept.html">Intercept</a></span><span class="signature">(<span class="parameter" id="-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span><span class="parameter" id="-param-preHandle">{<span class="type-annotation"><a href="../common_middleware_middleware/PreHandle.html">PreHandle</a>?</span> <span class="parameter-name">preHandle</span>, </span><span class="parameter" id="-param-postHandle"><span class="type-annotation"><a href="../common_middleware_middleware/PostHandle.html">PostHandle</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span>?</span> <span class="parameter-name">postHandle</span>}</span>)</span>
         </dt>
         <dd>
-          Constructs a <a href="../common_middleware_middleware/Middleware-class.html">Middleware</a> instance.
+          Constructs a <a href="../common_middleware_middleware/Intercept-class.html">Intercept</a> instance.
         </dd>
     </dl>
   </section>
@@ -128,7 +128,7 @@ actions before and after the main processing of a request.</p>
 </dd>
 
         <dt id="path" class="property">
-  <span class="name"><a href="../common_middleware_middleware/Middleware/path.html">path</a></span>
+  <span class="name"><a href="../common_middleware_middleware/Intercept/path.html">path</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
   
 
@@ -140,7 +140,7 @@ actions before and after the main processing of a request.</p>
 </dd>
 
         <dt id="postHandle" class="property">
-  <span class="name"><a href="../common_middleware_middleware/Middleware/postHandle.html">postHandle</a></span>
+  <span class="name"><a href="../common_middleware_middleware/Intercept/postHandle.html">postHandle</a></span>
   <span class="signature">&#8596; <a href="../common_middleware_middleware/PostHandle.html">PostHandle</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span>?</span>
   
 
@@ -152,7 +152,7 @@ actions before and after the main processing of a request.</p>
 </dd>
 
         <dt id="preHandle" class="property">
-  <span class="name"><a href="../common_middleware_middleware/Middleware/preHandle.html">preHandle</a></span>
+  <span class="name"><a href="../common_middleware_middleware/Intercept/preHandle.html">preHandle</a></span>
   <span class="signature">&#8596; <a href="../common_middleware_middleware/PreHandle.html">PreHandle</a>?</span>
   
 
@@ -197,7 +197,7 @@ actions before and after the main processing of a request.</p>
 </dd>
 
         <dt id="register" class="callable">
-  <span class="name"><a href="../common_middleware_middleware/Middleware/register.html">register</a></span><span class="signature">(<wbr>)
+  <span class="name"><a href="../common_middleware_middleware/Intercept/register.html">register</a></span><span class="signature">(<wbr>)
     <span class="returntype parameter">&#8594; dynamic</span>
   </span>
   
@@ -263,7 +263,7 @@ actions before and after the main processing of a request.</p>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../index.html">portal</a></li>
     <li><a href="../common_middleware_middleware/common_middleware_middleware-library.html">middleware</a></li>
-    <li class="self-crumb">Middleware<span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span> class</li>
+    <li class="self-crumb">Intercept<span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="../common_model_serializable_model/SerializableModel-class.html">SerializableModel</a></span>&gt;</span> class</li>
 </ol>
 
 

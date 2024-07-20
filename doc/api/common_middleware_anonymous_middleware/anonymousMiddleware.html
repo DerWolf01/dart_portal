@@ -95,7 +95,7 @@ A <a href="https://api.flutter.dev/flutter/dart-async/FutureOr-class.html">Futur
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">FutureOr anonymousMiddleware(String path,
     {PreHandle? preHandle, PostHandle? postHandle}) {
-  Middleware(path, postHandle: postHandle, preHandle: preHandle).register();
+  Intercept(path, postHandle: postHandle, preHandle: preHandle).register();
 }</code></pre>
 </section>
 

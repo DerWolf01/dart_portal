@@ -5,7 +5,7 @@ Portal is a Dart-based open source server-client communication framework that le
 ## Features
 
 - **Portal-Based Architecture**: Organize your code into portals for both server & client to handle specific paths and actions, improving modularity and readability.
-- **Middleware Support**: Easily add middleware for request preprocessing and postprocessing.
+- **Intercept Support**: Easily add middleware for request preprocessing and postprocessing.
 - **Serializable Models**: Define models that can be automatically serialized and deserialized from JSON, streamlining client-server data exchange.
 - **Reflectable**: Utilizes Dart's reflectable package for runtime reflection, enabling dynamic invocation of methods based on request paths.
 
@@ -99,11 +99,11 @@ void main() async {
     ```dart
     import 'package:portal/portal.dart';
 
-    var exampleMiddleware = Middleware<SocketMessage>("/example", preHandle: (accepts) async => true, postHandle: (portalAccepted, {portalReturned}) async => print(portalAccepted));
+    var exampleMiddleware = Intercept<SocketMessage>("/example", preHandle: (accepts) async => true, postHandle: (portalAccepted, {portalReturned}) async => print(portalAccepted));
     
    ```
 
-5. **Register Middleware**: Before running your application, register your middleware with the framework.
+5. **Register Intercept**: Before running your application, register your middleware with the framework.
 
     ```dart
     void main() {
@@ -113,10 +113,10 @@ void main() async {
       exampleMiddleware.register();
       //or use the anonymousMiddleware function if you do not wanna define a class
       anonymousMiddleware("/example", preHandle: (UInt8List request) {
-        print("Middleware for /example");
+        print("Intercept for /example");
         return true;
       }, postHandle: (SerializableModel portalAccepted, {SerializableModel? portalReturned}) {
-        print("Middleware for /example");
+        print("Intercept for /example");
       });
       // Start your server or client
     }
