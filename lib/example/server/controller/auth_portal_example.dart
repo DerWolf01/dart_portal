@@ -6,8 +6,8 @@ import 'package:portal/interceptor/intercept.dart';
 import 'package:portal/portal/gateway.dart';
 import 'package:portal/portal/portal_impl.dart';
 
-class AuthInterceptor extends Interceptor<SignUpForm> {
-  const AuthInterceptor();
+class AuthInterceptorExample extends Interceptor<SignUpForm> {
+  const AuthInterceptorExample();
 
   @override
   Future<int> preHandle(HttpRequest request) async {
@@ -26,8 +26,8 @@ class AuthInterceptor extends Interceptor<SignUpForm> {
 }
 
 @Portal("/auth")
-class AuthPortal {
-  @AuthInterceptor()
+class AuthPortalExample {
+  @AuthInterceptorExample()
   @Post("/sign-in")
   handle(SignUpForm data) {
     print(data);
