@@ -1,18 +1,12 @@
-import 'dart:io';
+import 'dart:mirrors';
 
-import 'package:portal/example/server/controller/auth_portal_example.dart';
-import 'package:portal/example/sign_up_form.dart';
 import 'package:portal/portal.dart';
-import 'package:portal/portal/gateway.dart';
-import 'package:portal/portal/portal_impl.dart';
 import 'package:portal/portal_server.dart';
 
 void main<T>() async {
   PortalService().registerPortals();
-  await PortalServer.init();
+  await PortalServer.init(mirrorSystem: currentMirrorSystem());
 }
-
-
 
 // @Portal("/auth")
 // class AuthPortalExample {

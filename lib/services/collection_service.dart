@@ -2,14 +2,16 @@ import 'dart:mirrors';
 
 import 'package:portal/portal.dart';
 import 'package:portal/portal/portal_impl.dart';
+import 'package:portal/portal_server.dart';
+import 'package:portal/portal_server.dart';
+import 'package:portal/portal_server.dart';
 
 class CollectorService {
   List<AnotatedClass<T>> searchClassesUsingAnnotation<T>() {
     final classes = <AnotatedClass<T>>[];
 
-    MirrorSystem mirrorSystem = currentMirrorSystem();
     final portalMirror = reflectClass(Portal);
-    for (final library in mirrorSystem.libraries.entries) {
+    for (final library in appMirrorSystem.libraries.entries) {
       for (final libraryDecleration in library.value.declarations.entries) {
         final isClassMirror = libraryDecleration.value is ClassMirror;
 
@@ -37,9 +39,7 @@ class CollectorService {
   List<ClassMirror> searchClassesByType<T>() {
     final classes = <ClassMirror>[];
 
-    MirrorSystem mirrorSystem = currentMirrorSystem();
-
-    for (final library in mirrorSystem.libraries.entries) {
+    for (final library in appMirrorSystem.libraries.entries) {
       for (final libraryDecleration in library.value.declarations.entries) {
         final isClassMirror = libraryDecleration.value is ClassMirror;
 
