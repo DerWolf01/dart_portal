@@ -8,7 +8,7 @@ class CollectorService {
     final classes = <AnotatedClass<T>>[];
 
     MirrorSystem mirrorSystem = currentMirrorSystem();
-
+    final portalMirror = reflectClass(Portal);
     for (final library in mirrorSystem.libraries.entries) {
       for (final libraryDecleration in library.value.declarations.entries) {
         final isClassMirror = libraryDecleration.value is ClassMirror;
@@ -16,8 +16,11 @@ class CollectorService {
         if (isClassMirror) {
           ClassMirror classMirror = libraryDecleration.value as ClassMirror;
           for (final anotationInstanceMirror in classMirror.metadata) {
-            final isPortal = anotationInstanceMirror.type
-                .isAssignableTo(reflectType(Portal));
+            final isPortal =
+                anotationInstanceMirror.type.isSubclassOf(portalMirror) ||
+                    anotationInstanceMirror.type.isSubtypeOf(portalMirror) ||
+                    anotationInstanceMirror.type.isAssignableTo(portalMirror) ||
+                    anotationInstanceMirror.reflectee.runtimeType == Portal;
 
             if (isPortal) {
               classes.add(AnotatedClass(
