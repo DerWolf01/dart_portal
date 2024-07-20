@@ -19,7 +19,7 @@ class Portal {
   String get getPath {
     String path = this.path;
 
-    if (path.startsWith("/")) {
+    if (!path.startsWith("/")) {
       path = '/$path';
     }
     if (path.endsWith("/")) {
