@@ -36,9 +36,9 @@ class PortalService {
     _portalMap.clear();
     _portalMap.addAll(Map.fromEntries(PortalCollector.collect().map(
       (e) {
-        print("registering portal: ${e.portal.path}");
+        print("registering portal: ${e.portal.getPath}");
         print("gateway: ${e.gateways}");
-        return MapEntry(e.portal.path, e);
+        return MapEntry(e.portal.getPath, e);
       },
     )));
 
