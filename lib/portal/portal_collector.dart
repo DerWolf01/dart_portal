@@ -21,7 +21,7 @@ class PortalCollector {
     }else{
       print('Portals found');
       print(portals.length);
-      pritn(portals);
+      print(portals);
     }
     return portals;
   }
