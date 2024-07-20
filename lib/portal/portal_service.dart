@@ -166,10 +166,16 @@ class PortalService {
     portal.gateways.forEach((element) {
       print(element.path);
     });
-    final gateway = portal.gateways.firstWhere(
-      (element) => element.path == mPath,
-      orElse: () => throw Exception("No Gateway registered with path: $mPath"),
-    );
+    late GatewayMirror gateway;
+    try {
+      gateway = portal.gateways.firstWhere(
+        (element) => element.path == mPath,
+        orElse: () =>
+            throw Exception("No Gateway registered with path: $mPath"),
+      );
+    } catch (e) {
+      print(e);
+    }
     return gateway;
   }
 
