@@ -41,6 +41,8 @@ class PortalService {
         return MapEntry(e.portal.path, e);
       },
     )));
+
+    print("registered portals: $_portalMap");
   }
 
   registerPortal(dynamic portal) {
