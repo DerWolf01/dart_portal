@@ -46,7 +46,7 @@ class GatewayMirror {
       required this.interceptors})
       : portalInstanceMirror = portalClassMirror.newInstance(Symbol(''), []);
 
-  String get path => gateway.path;
+  String get getPath => gateway.getPath;
 
   final ClassMirror portalClassMirror;
   final InstanceMirror portalInstanceMirror;

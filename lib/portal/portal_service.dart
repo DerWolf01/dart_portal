@@ -60,7 +60,7 @@ class PortalService {
   ///
   /// Returns:
   ///   The portal instance associated with the extracted path.
-  dynamic _portalByFullPath(String fullPath) {
+  PortalMirror _portalByFullPath(String fullPath) {
     print(_portalMap);
     dynamic portal;
     try {
@@ -166,18 +166,13 @@ class PortalService {
     print("Method path: $mPath");
     print("portal has gateways: ${portal.gateways.length}");
     portal.gateways.forEach((element) {
-      print(element.path);
+      print(element.getPath);
     });
-    late GatewayMirror gateway;
-    try {
-      gateway = portal.gateways.firstWhere(
-        (element) => element.path == mPath,
-        orElse: () =>
-            throw Exception("No Gateway registered with path: $mPath"),
-      );
-    } catch (e) {
-      print(e);
-    }
+    final GatewayMirror gateway = portal.gateways.firstWhere(
+      (element) => element.getPath == mPath,
+      orElse: () => throw Exception("No Gateway registered with path: $mPath"),
+    );
+
     return gateway;
   }
 
