@@ -5,6 +5,7 @@ import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/interceptor/interceptor_service.dart';
 import 'package:portal/portal/gateway.dart';
 import 'package:portal/portal/portal_collector.dart';
+import 'package:portal/portal/portal_exception.dart';
 import 'package:portal/portal/portal_impl.dart';
 import 'package:portal/reflection.dart';
 import 'package:portal/services/collection_service.dart';
@@ -214,7 +215,18 @@ class PortalService {
     final argumentObject = ConversionService.mapToObject(
         request.uri.queryParameters,
         type: gatewayMirror.methodArgumentType());
-    final response = await gatewayMirror.invoke([argumentObject]);
+
+    late final dynamic response;
+    try {
+      response = await gatewayMirror.invoke([object]);
+    } on PortalException catch (e) {
+      request.response.statusCode = e.statusCode;
+      response = {"error": e.message};
+    } catch (e) {
+      request.response.statusCode = HttpStatus.internalServerError;
+      response = {"error": e.toString()};
+    }
+    print(response);
     request.response.write(ConversionService.convertToStringOrJson(response));
     await MiddlewareService().postHandle(
         request, gatewayMirror.interceptors, argumentObject, response);
@@ -226,8 +238,17 @@ class PortalService {
     var object = await ConversionService.requestToObject(request,
         type: gatewayMirror.methodArgumentType());
 
-    final result = await gatewayMirror.invoke([object]);
-    print(result);
+    late final dynamic result;
+    try {
+      result = await gatewayMirror.invoke([object]);
+    } on PortalException catch (e) {
+      request.response.statusCode = e.statusCode;
+      result = {"error": e.message};
+    } catch (e) {
+      request.response.statusCode = HttpStatus.internalServerError;
+      result = {"error": e.toString()};
+    }
+
     request.response.write(ConversionService.convertToStringOrJson(result));
     await MiddlewareService()
         .postHandle(request, gatewayMirror.interceptors, object, result);
