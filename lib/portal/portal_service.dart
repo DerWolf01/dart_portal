@@ -221,10 +221,9 @@ class PortalService {
       response = await gatewayMirror.invoke([argumentObject]);
     } on PortalException catch (e) {
       request.response.statusCode = e.statusCode;
-      response = {"error": e.message};
+      response = e.message;
     } catch (e) {
       request.response.statusCode = HttpStatus.internalServerError;
-      response = {"error": e.toString()};
     }
     print(response);
     request.response.write(ConversionService.convertToStringOrJson(response));
@@ -243,10 +242,9 @@ class PortalService {
       result = await gatewayMirror.invoke([object]);
     } on PortalException catch (e) {
       request.response.statusCode = e.statusCode;
-      result = {"error": e.message};
+      result = e.message;
     } catch (e) {
       request.response.statusCode = HttpStatus.internalServerError;
-      result = {"error": e.toString()};
     }
 
     request.response.write(ConversionService.convertToStringOrJson(result));
