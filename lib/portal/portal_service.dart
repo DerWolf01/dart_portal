@@ -218,7 +218,7 @@ class PortalService {
 
     late final dynamic response;
     try {
-      response = await gatewayMirror.invoke([object]);
+      response = await gatewayMirror.invoke([argumentObject]);
     } on PortalException catch (e) {
       request.response.statusCode = e.statusCode;
       response = {"error": e.message};
@@ -238,7 +238,7 @@ class PortalService {
     var object = await ConversionService.requestToObject(request,
         type: gatewayMirror.methodArgumentType());
 
-    late final dynamic result;
+    late final result;
     try {
       result = await gatewayMirror.invoke([object]);
     } on PortalException catch (e) {
