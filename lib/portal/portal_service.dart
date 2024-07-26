@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:characters/characters.dart';
 import 'package:dart_conversion/dart_conversion.dart';
+import 'package:portal/interceptor/interceptor_exception.dart';
 import 'package:portal/interceptor/interceptor_service.dart';
 import 'package:portal/portal/gateway.dart';
 import 'package:portal/portal/portal_collector.dart';
@@ -182,13 +183,21 @@ class PortalService {
     HttpRequest request,
   ) async {
     final gatewayMirror = gatewayMirrorUsingFullPath(fullPath);
-    final canPass = await MiddlewareService()
-        .preHandle(request, gatewayMirror.interceptors);
-    if (canPass < 200 || canPass > 300) {
-      request.response.statusCode = canPass;
+    try {
+      final canPass = await MiddlewareService()
+          .preHandle(request, gatewayMirror.interceptors);
+      if (!canPass) {
+        request.response.statusCode = HttpStatus.unprocessableEntity;
+        return request;
+      }
+    } on IntercetporException catch (e) {
+      request.response.statusCode = e.statusCode;
+      return request;
+    } catch (e) {
+      print(e);
+      request.response.statusCode = HttpStatus.internalServerError;
       return request;
     }
-
     if (gatewayMirror.isGet()) {
       print(request.method);
       if (request.method != "GET") {

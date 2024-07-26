@@ -9,11 +9,10 @@ abstract class Interceptor<T> {
   const Interceptor();
 
   /// An optional pre-handle callback.
-  FutureOr<int> preHandle(HttpRequest request);
+  FutureOr<bool> preHandle(HttpRequest request);
 
   /// An optional post-handle callback.
-  FutureOr<void> postHandle(
-      {required HttpRequest request,
-      required T portalReceived,
-      dynamic? portalGaveBack});
+  FutureOr<void> postHandle({required HttpRequest request,
+    required T portalReceived,
+    dynamic? portalGaveBack});
 }

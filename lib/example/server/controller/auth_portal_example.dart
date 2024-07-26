@@ -10,9 +10,9 @@ class AuthInterceptorExample extends Interceptor<SignUpForm> {
   const AuthInterceptorExample();
 
   @override
-  Future<int> preHandle(HttpRequest request) async {
+  Future<bool> preHandle(HttpRequest request) async {
     print("pre-handled request $request");
-    return HttpStatus.ok;
+    return true;
   }
 
   @override
@@ -20,7 +20,6 @@ class AuthInterceptorExample extends Interceptor<SignUpForm> {
       {required HttpRequest request,
       required SignUpForm portalReceived,
       portalGaveBack}) {
-
     print("post-handled request $request");
   }
 }

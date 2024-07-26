@@ -38,23 +38,25 @@ class MiddlewareService {
   ///
   /// Returns:
   ///   A [FutureOr<bool>] indicating whether to continue processing the request.
-  FutureOr<int> preHandle(
+  FutureOr<bool> preHandle(
       HttpRequest request, List<Interceptor> interceptors) async {
     for (final interceptor in interceptors) {
-      if (interceptor.preHandle == null) return HttpStatus.ok;
-      final preHandleCode = await interceptor.preHandle!(request);
-      if ((preHandleCode < 200 || preHandleCode > 300)) {
-        return preHandleCode;
+      if (interceptor.preHandle == null) return true;
+      if (!(await interceptor.preHandle!(request))) {
+        return false;
       }
     }
-    return HttpStatus.ok;
+    return true;
   }
 
-  FutureOr<void> postHandle(
-      HttpRequest request, List<Interceptor> interceptors,dynamic portalReceived, dynamic portalGaveBack) async {
+  FutureOr<void> postHandle(HttpRequest request, List<Interceptor> interceptors,
+      dynamic portalReceived, dynamic portalGaveBack) async {
     for (final interceptor in interceptors) {
       if (interceptor.postHandle == null) continue;
-      await interceptor.postHandle!(request:request,portalReceived: portalReceived,portalGaveBack:portalGaveBack);
+      await interceptor.postHandle!(
+          request: request,
+          portalReceived: portalReceived,
+          portalGaveBack: portalGaveBack);
     }
   }
 }
