@@ -225,7 +225,7 @@ class PortalService {
         request.uri.queryParameters,
         type: gatewayMirror.methodArgumentType());
 
-    late final dynamic response;
+    dynamic response;
     try {
       response = await gatewayMirror.invoke([argumentObject]);
     } on PortalException catch (e) {
@@ -246,7 +246,7 @@ class PortalService {
     var object = await ConversionService.requestToObject(request,
         type: gatewayMirror.methodArgumentType());
 
-    late final result;
+    dynamic result;
     try {
       result = await gatewayMirror.invoke([object]);
     } on PortalException catch (e) {
@@ -255,7 +255,7 @@ class PortalService {
     } catch (e) {
       request.response.statusCode = HttpStatus.internalServerError;
     }
-
+    print(result);
     request.response.write(ConversionService.convertToStringOrJson(result));
     await MiddlewareService()
         .postHandle(request, gatewayMirror.interceptors, object, result);
