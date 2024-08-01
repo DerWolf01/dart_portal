@@ -245,18 +245,20 @@ class PortalService {
       HttpRequest request, GatewayMirror gatewayMirror) async {
     var object = await ConversionService.requestToObject(request,
         type: gatewayMirror.methodArgumentType());
-
     dynamic result;
     try {
       result = await gatewayMirror.invoke([object]);
+      print(result);
+      request.response.write(ConversionService.convertToStringOrJson(result));
     } on PortalException catch (e) {
       request.response.statusCode = e.statusCode;
-      result = e.message;
+      print(e);
+      request.response.write(e.message);
     } catch (e) {
+      print(e);
       request.response.statusCode = HttpStatus.internalServerError;
     }
-    print(result);
-    request.response.write(ConversionService.convertToStringOrJson(result));
+
     await MiddlewareService()
         .postHandle(request, gatewayMirror.interceptors, object, result);
     return request;
