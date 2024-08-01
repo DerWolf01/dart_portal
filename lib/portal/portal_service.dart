@@ -228,10 +228,13 @@ class PortalService {
     dynamic response;
     try {
       response = await gatewayMirror.invoke([argumentObject]);
+      print(response);
     } on PortalException catch (e) {
+      print(e);
       request.response.statusCode = e.statusCode;
       response = e.message;
     } catch (e) {
+      print(e);
       request.response.statusCode = HttpStatus.internalServerError;
     }
     print(response);
