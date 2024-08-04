@@ -5,6 +5,7 @@ import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/interceptor/interceptor_exception.dart';
 import 'package:portal/interceptor/interceptor_service.dart';
 import 'package:portal/portal/gateway.dart';
+import 'package:portal/portal/header_service.dart';
 import 'package:portal/portal/portal_collector.dart';
 import 'package:portal/portal/portal_exception.dart';
 import 'package:portal/portal/portal_impl.dart';
@@ -221,13 +222,16 @@ class PortalService {
 
   Future<HttpRequest> handleGet(
       HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
+    final headerMappingArguments =
+        headerService.findMappings(request, gatewayMirror);
     final argumentObject = ConversionService.mapToObject(
         request.uri.queryParameters,
         type: gatewayMirror.methodArgumentType());
 
     dynamic response;
     try {
-      response = await gatewayMirror.invoke([argumentObject]);
+      response = await gatewayMirror
+          .invoke([argumentObject, ...headerMappingArguments]);
       print(response);
     } on PortalException catch (e) {
       print(e);
@@ -237,7 +241,7 @@ class PortalService {
       print(e);
       request.response.statusCode = HttpStatus.internalServerError;
     }
-    print(response);
+
     request.response.write(ConversionService.convertToStringOrJson(response));
     await MiddlewareService().postHandle(
         request, gatewayMirror.interceptors, argumentObject, response);
@@ -246,11 +250,13 @@ class PortalService {
 
   Future<HttpRequest> handlePost(
       HttpRequest request, GatewayMirror gatewayMirror) async {
+    final headerMappingArguments =
+        headerService.findMappings(request, gatewayMirror);
     var object = await ConversionService.requestToObject(request,
         type: gatewayMirror.methodArgumentType());
     dynamic result;
     try {
-      result = await gatewayMirror.invoke([object]);
+      result = await gatewayMirror.invoke([object, ...headerMappingArguments]);
       print(result);
       request.response.write(ConversionService.convertToStringOrJson(result));
     } on PortalException catch (e) {
