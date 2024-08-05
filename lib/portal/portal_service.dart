@@ -238,12 +238,14 @@ class PortalService {
           .reflectee;
 
       print(response);
-    } on PortalException catch (e) {
-      print(e);
+    } on PortalException catch (e, s) {
+      print("Error: $e"
+          "Stacktrace: $s");
       request.response.statusCode = e.statusCode;
       response = e.message;
-    } catch (e) {
-      print(e);
+    } catch (e, s) {
+      print("Error: $e"
+          "Stacktrace: $s");
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
@@ -273,12 +275,14 @@ class PortalService {
           .reflectee;
       print(result);
       request.response.write(ConversionService.convertToStringOrJson(result));
-    } on PortalException catch (e) {
+    } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;
-      print(e);
+      print("Error: $e"
+          "Stacktrace: $s");
       request.response.write(e.message);
-    } catch (e) {
-      print(e);
+    } catch (e, s) {
+      print("Error: $e"
+          "Stacktrace: $s");
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
