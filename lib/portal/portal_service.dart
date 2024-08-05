@@ -227,7 +227,8 @@ class PortalService {
       response = (await methodService.invokeAsync(
               holderMirror: gatewayMirror.portalInstanceMirror,
               methodMirror: gatewayMirror.methodMirror,
-              argumentsMap: argumentObject,
+              argumentsMap:
+                  await ConversionService.requestToRequestDataMap(request),
               onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               (key, value, headerMapping) {
@@ -257,14 +258,13 @@ class PortalService {
 
   Future<HttpRequest> handlePost(
       HttpRequest request, GatewayMirror gatewayMirror) async {
-    var object = await ConversionService.requestToObject(request,
-        type: gatewayMirror.methodArgumentType());
     dynamic result;
     try {
       result = (await methodService.invokeAsync(
               holderMirror: gatewayMirror.portalInstanceMirror,
               methodMirror: gatewayMirror.methodMirror,
-              argumentsMap: object,
+              argumentsMap:
+                  await ConversionService.requestToRequestDataMap(request),
               onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               (key, value, headerMapping) {
