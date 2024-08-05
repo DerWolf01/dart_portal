@@ -226,23 +226,24 @@ class PortalService {
     final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
     dynamic response;
     try {
-      response = (await methodService.invokeAsync(
-              holderMirror: gatewayMirror.portalInstanceMirror,
-              methodMirror: gatewayMirror.methodMirror,
-              argumentsMap: {
+      final _response = await methodService.invokeAsync(
+          holderMirror: gatewayMirror.portalInstanceMirror,
+          methodMirror: gatewayMirror.methodMirror,
+          argumentsMap: {
             methodParamName:
                 await ConversionService.requestToRequestDataMap(request)
           },
-              onParameterAnotation: [
+          onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               (key, value, headerMapping) {
                 return request.headers[headerMapping.key];
               },
             )
-          ]))
-          .reflectee;
+          ]);
 
-      print("Result: $response");
+      response = _response.reflectee;
+
+      print("Result: $_response");
     } on PortalException catch (e, s) {
       print("Error: $e"
           "Stacktrace: $s");
@@ -268,21 +269,22 @@ class PortalService {
         type: gatewayMirror.methodArgumentType());
     final argMap = ConversionService.objectToMap(argInstance);
     try {
-      result = (await methodService.invokeAsync(
-              holderMirror: gatewayMirror.portalInstanceMirror,
-              methodMirror: gatewayMirror.methodMirror,
-              argumentsMap: {
+      final _result = await methodService.invokeAsync(
+          holderMirror: gatewayMirror.portalInstanceMirror,
+          methodMirror: gatewayMirror.methodMirror,
+          argumentsMap: {
             methodParamName: argMap
           },
-              onParameterAnotation: [
+          onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               (key, value, headerMapping) {
                 return request.headers[headerMapping.key];
               },
             )
-          ]))
-          .reflectee;
-      print("Result: $result");
+          ]);
+
+      result = _result.reflectee;
+      print("Result: $_result");
       request.response.write(ConversionService.convertToStringOrJson(result));
     } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;
