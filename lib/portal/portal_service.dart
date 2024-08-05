@@ -242,7 +242,7 @@ class PortalService {
           ]))
           .reflectee;
 
-      print(response);
+      print("Result: $response");
     } on PortalException catch (e, s) {
       print("Error: $e"
           "Stacktrace: $s");
@@ -282,7 +282,7 @@ class PortalService {
             )
           ]))
           .reflectee;
-      print(result);
+      print("Result: $result");
       request.response.write(ConversionService.convertToStringOrJson(result));
     } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;
