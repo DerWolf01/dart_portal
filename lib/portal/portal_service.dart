@@ -286,8 +286,12 @@ class PortalService {
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
-    await MiddlewareService()
-        .postHandle(request, gatewayMirror.interceptors, object, result);
+    await MiddlewareService().postHandle(
+        request,
+        gatewayMirror.interceptors,
+        await ConversionService.requestToObject(request,
+            type: gatewayMirror.methodArgumentType()),
+        result);
     return request;
   }
 }
