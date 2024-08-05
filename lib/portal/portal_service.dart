@@ -264,14 +264,15 @@ class PortalService {
       HttpRequest request, GatewayMirror gatewayMirror) async {
     dynamic result;
     final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
-
+    final argInstance = await ConversionService.requestToObject(request,
+        type: gatewayMirror.methodArgumentType());
+    final argMap = ConversionService.objectToMap(argInstance);
     try {
       result = (await methodService.invokeAsync(
               holderMirror: gatewayMirror.portalInstanceMirror,
               methodMirror: gatewayMirror.methodMirror,
               argumentsMap: {
-            methodParamName:
-                await ConversionService.requestToRequestDataMap(request)
+            methodParamName: argMap
           },
               onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
@@ -294,12 +295,8 @@ class PortalService {
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
-    await MiddlewareService().postHandle(
-        request,
-        gatewayMirror.interceptors,
-        await ConversionService.requestToObject(request,
-            type: gatewayMirror.methodArgumentType()),
-        result);
+    await MiddlewareService()
+        .postHandle(request, gatewayMirror.interceptors, argInstance, result);
     return request;
   }
 }
