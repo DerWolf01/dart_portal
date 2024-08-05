@@ -159,7 +159,7 @@
         <entry key="dart_conversion">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/git/dart_conversion-973700b297b943e661fe6bf3c9a6f29a08b6e1ba//lib" />
+              <option value="$USER_HOME$/.pub-cache/git/dart_conversion-fa2bf34d1e18968415ce07dba678a68c730cfd3a//lib" />
             </list>
           </value>
         </entry>
@@ -495,7 +495,7 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://$USER_HOME$/.pub-cache/git/dart_conversion-973700b297b943e661fe6bf3c9a6f29a08b6e1ba//lib" />
+      <root url="file://$USER_HOME$/.pub-cache/git/dart_conversion-fa2bf34d1e18968415ce07dba678a68c730cfd3a//lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-66.0.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/analyzer-6.4.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/args-2.5.0/lib" />

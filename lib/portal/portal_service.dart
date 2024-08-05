@@ -216,6 +216,8 @@ class PortalService {
 
   Future<HttpRequest> handleGet(
       HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
+    print("Handling get request for $fullPath with gateway $gatewayMirror "
+        "${request.uri.queryParameters} ${gatewayMirror.methodArgumentType()}");
     final argumentObject = ConversionService.mapToObject(
         request.uri.queryParameters,
         type: gatewayMirror.methodArgumentType());
