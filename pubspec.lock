@@ -157,10 +157,10 @@ packages:
     dependency: transitive
     description:
       name: coverage
-      sha256: "3945034e86ea203af7a056d98e98e42a5518fff200d6e8e6647e1886b07e936e"
+      sha256: "576aaab8b1abdd452e0f656c3e73da9ead9d7880e15bdc494189d9c1a1baf0db"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.0"
+    version: "1.9.0"
   crypto:
     dependency: transitive
     description:
@@ -182,7 +182,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "6a1d9f53cead9d04de341a75fe065711d1261cd4"
+      resolved-ref: fa2bf34d1e18968415ce07dba678a68c730cfd3a
       url: "https://github.com/DerWolf01/dart_conversion.git"
     source: git
     version: "1.0.0"

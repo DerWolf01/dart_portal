@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:mirrors';
 
+import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/interceptor/intercept.dart';
 import 'package:portal/portal/portal_impl.dart';
 
@@ -62,28 +63,4 @@ class GatewayMirror {
     return methodMirror.parameters.first.type.reflectedType;
   }
 
-  dynamic invokeMethodArgumentInstance(
-      {required constructorName, required List<dynamic> positionalArguments}) {
-    var res = reflectClass(methodArgumentType())
-        .newInstance(Symbol("$constructorName"), positionalArguments);
-    return res;
-  }
-
-  FutureOr<T>? invoke<T>(List<dynamic> positionalArguments) async {
-    return await (portalInstanceMirror.invoke(
-            methodMirror.simpleName, positionalArguments))
-        .reflectee as FutureOr<T>;
-  }
-
-  Future<T> invokeUsingMap<T>(Map map) async {
-    dynamic argument;
-    try {
-      argument = invokeMethodArgumentInstance(
-          constructorName: "fromMap", positionalArguments: [map]);
-    } catch (e) {
-      print(e);
-    }
-    return await (portalClassMirror.invoke(methodMirror.simpleName, [argument])
-        as FutureOr<T>);
-  }
 }

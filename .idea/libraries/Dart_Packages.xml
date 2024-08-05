@@ -138,7 +138,7 @@
         <entry key="coverage">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/coverage-1.8.0/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/coverage-1.9.0/lib" />
             </list>
           </value>
         </entry>
@@ -159,7 +159,7 @@
         <entry key="dart_conversion">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/git/dart_conversion-6a1d9f53cead9d04de341a75fe065711d1261cd4//lib" />
+              <option value="$USER_HOME$/.pub-cache/git/dart_conversion-973700b297b943e661fe6bf3c9a6f29a08b6e1ba//lib" />
             </list>
           </value>
         </entry>
@@ -495,7 +495,7 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://$USER_HOME$/.pub-cache/git/dart_conversion-6a1d9f53cead9d04de341a75fe065711d1261cd4//lib" />
+      <root url="file://$USER_HOME$/.pub-cache/git/dart_conversion-973700b297b943e661fe6bf3c9a6f29a08b6e1ba//lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-66.0.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/analyzer-6.4.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/args-2.5.0/lib" />
@@ -515,7 +515,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/code_builder-4.10.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/collection-1.19.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/convert-3.1.1/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/coverage-1.8.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/coverage-1.9.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/crypto-3.0.3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/csslib-1.0.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/dart_style-2.3.6/lib" />

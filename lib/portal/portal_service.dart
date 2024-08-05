@@ -3,14 +3,8 @@ import 'dart:io';
 import 'package:characters/characters.dart';
 import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/interceptor/interceptor_exception.dart';
-import 'package:portal/interceptor/interceptor_service.dart';
-import 'package:portal/portal/gateway.dart';
-import 'package:portal/portal/header_service.dart';
+import 'package:portal/portal.dart';
 import 'package:portal/portal/portal_collector.dart';
-import 'package:portal/portal/portal_exception.dart';
-import 'package:portal/portal/portal_impl.dart';
-import 'package:portal/reflection.dart';
-import 'package:portal/services/collection_service.dart';
 
 PortalService get portalService => PortalService();
 
@@ -222,16 +216,25 @@ class PortalService {
 
   Future<HttpRequest> handleGet(
       HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
-    final headerMappingArguments =
-        headerService.findMappings(request, gatewayMirror);
     final argumentObject = ConversionService.mapToObject(
         request.uri.queryParameters,
         type: gatewayMirror.methodArgumentType());
 
     dynamic response;
     try {
-      response = await gatewayMirror
-          .invoke([argumentObject, ...headerMappingArguments]);
+      response = (await methodService.invokeAsync(
+              holderMirror: gatewayMirror.portalInstanceMirror,
+              methodMirror: gatewayMirror.methodMirror,
+              argumentsMap: argumentObject,
+              onParameterAnotation: [
+            OnParameterAnotation<HeaderMapping>(
+              (key, value, headerMapping) {
+                return request.headers[headerMapping.key];
+              },
+            )
+          ]))
+          .reflectee;
+
       print(response);
     } on PortalException catch (e) {
       print(e);
@@ -250,13 +253,22 @@ class PortalService {
 
   Future<HttpRequest> handlePost(
       HttpRequest request, GatewayMirror gatewayMirror) async {
-    final headerMappingArguments =
-        headerService.findMappings(request, gatewayMirror);
     var object = await ConversionService.requestToObject(request,
         type: gatewayMirror.methodArgumentType());
     dynamic result;
     try {
-      result = await gatewayMirror.invoke([object, ...headerMappingArguments]);
+      result = (await methodService.invokeAsync(
+              holderMirror: gatewayMirror.portalInstanceMirror,
+              methodMirror: gatewayMirror.methodMirror,
+              argumentsMap: object,
+              onParameterAnotation: [
+            OnParameterAnotation<HeaderMapping>(
+              (key, value, headerMapping) {
+                return request.headers[headerMapping.key];
+              },
+            )
+          ]))
+          .reflectee;
       print(result);
       request.response.write(ConversionService.convertToStringOrJson(result));
     } on PortalException catch (e) {
