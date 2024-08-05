@@ -4,6 +4,7 @@ import 'package:characters/characters.dart';
 import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/interceptor/interceptor_exception.dart';
 import 'package:portal/portal.dart';
+import 'package:portal/portal/gateway_service.dart';
 import 'package:portal/portal/portal_collector.dart';
 
 PortalService get portalService => PortalService();
@@ -154,17 +155,20 @@ class PortalService {
   ///   An [AnnotatedMethod] instance representing the method to handle the request, or null
   ///   if no matching method is found.
   GatewayMirror gatewayMirrorUsingFullPath(String fullPath) {
-    var portal = _portalByFullPath(fullPath);
-    print(portal);
-    if (portal == null) {
+    PortalMirror? portal;
+    try {
+      _portalByFullPath(fullPath);
+    } catch (e) {
       throw Exception("No Portal registered with path: $fullPath");
     }
+    print(portal);
+
     var mPath = methodPath(fullPath);
     print("Method path: $mPath");
-    print("portal has gateways: ${portal.gateways.length}");
-    portal.gateways.forEach((element) {
+    print("portal has gateways: ${portal!.gateways.length}");
+    for (var element in portal.gateways) {
       print(element.getPath);
-    });
+    }
     final GatewayMirror gateway = portal.gateways.firstWhere(
       (element) => element.getPath == mPath,
       orElse: () => throw Exception("No Gateway registered with path: $mPath"),
@@ -221,14 +225,16 @@ class PortalService {
     final argumentObject = ConversionService.mapToObject(
         request.uri.queryParameters,
         type: gatewayMirror.methodArgumentType());
-
+    final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
     dynamic response;
     try {
       response = (await methodService.invokeAsync(
               holderMirror: gatewayMirror.portalInstanceMirror,
               methodMirror: gatewayMirror.methodMirror,
-              argumentsMap:
-                  await ConversionService.requestToRequestDataMap(request),
+              argumentsMap: {
+            methodParamName:
+                await ConversionService.requestToRequestDataMap(request)
+          },
               onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               (key, value, headerMapping) {
@@ -259,12 +265,16 @@ class PortalService {
   Future<HttpRequest> handlePost(
       HttpRequest request, GatewayMirror gatewayMirror) async {
     dynamic result;
+    final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
+
     try {
       result = (await methodService.invokeAsync(
               holderMirror: gatewayMirror.portalInstanceMirror,
               methodMirror: gatewayMirror.methodMirror,
-              argumentsMap:
-                  await ConversionService.requestToRequestDataMap(request),
+              argumentsMap: {
+            methodParamName:
+                await ConversionService.requestToRequestDataMap(request)
+          },
               onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               (key, value, headerMapping) {
