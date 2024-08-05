@@ -58,7 +58,7 @@ class PortalService {
   ///
   /// Returns:
   ///   The portal instance associated with the extracted path.
-  PortalMirror _portalByFullPath(String fullPath) {
+  PortalMirror? _portalByFullPath(String fullPath) {
     print(_portalMap);
     dynamic portal;
     try {
@@ -155,14 +155,12 @@ class PortalService {
   ///   An [AnnotatedMethod] instance representing the method to handle the request, or null
   ///   if no matching method is found.
   GatewayMirror gatewayMirrorUsingFullPath(String fullPath) {
-    PortalMirror? portal;
-    try {
-      _portalByFullPath(fullPath);
-    } catch (e) {
+    PortalMirror? portal = _portalByFullPath(fullPath);
+
+    print(portal);
+    if (portal == null) {
       throw Exception("No Portal registered with path: $fullPath");
     }
-    print(portal);
-
     var mPath = methodPath(fullPath);
     print("Method path: $mPath");
     print("portal has gateways: ${portal!.gateways.length}");
