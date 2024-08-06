@@ -59,8 +59,13 @@ class GatewayMirror {
 
   bool isPost() => gateway is Post;
 
-  Type methodArgumentType() {
-    return methodMirror.parameters.first.type.reflectedType;
+  Type? methodArgumentType() {
+    return methodMirror.parameters
+        .where(
+          (element) => element.metadata.isEmpty,
+        )
+        .firstOrNull
+        ?.type
+        .reflectedType;
   }
-
 }

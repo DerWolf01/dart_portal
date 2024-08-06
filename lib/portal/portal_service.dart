@@ -265,8 +265,12 @@ class PortalService {
       HttpRequest request, GatewayMirror gatewayMirror) async {
     dynamic result;
     final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
-    final argInstance = await ConversionService.requestToObject(request,
-        type: gatewayMirror.methodArgumentType());
+    final argType = gatewayMirror.methodArgumentType();
+
+    final argInstance = argType != null
+        ? ConversionService.requestToObject(request,
+            type: gatewayMirror.methodArgumentType())
+        : null;
     final argMap = ConversionService.objectToMap(argInstance);
     try {
       final _result = await methodService.invokeAsync(
