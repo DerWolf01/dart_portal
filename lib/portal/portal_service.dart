@@ -262,7 +262,7 @@ class PortalService {
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
-    request.response.write(ConversionService.convertToStringOrJson(response));
+    request.response.write(ConversionService.encodeJSON(response));
     await MiddlewareService()
         .postHandle(request, gatewayMirror.interceptors, argInstance, response);
     return request;
