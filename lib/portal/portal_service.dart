@@ -220,9 +220,12 @@ class PortalService {
       HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
     print("Handling get request for $fullPath with gateway $gatewayMirror "
         "${request.uri.queryParameters} ${gatewayMirror.methodArgumentType()}");
-    final argumentObject = ConversionService.mapToObject(
-        request.uri.queryParameters,
-        type: gatewayMirror.methodArgumentType());
+    final argType = gatewayMirror.methodArgumentType();
+
+    final argInstance = argType != null
+        ? await ConversionService.requestToObject(request,
+            type: gatewayMirror.methodArgumentType())
+        : null;
     final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
     dynamic response;
     try {
@@ -256,8 +259,8 @@ class PortalService {
     }
 
     request.response.write(ConversionService.convertToStringOrJson(response));
-    await MiddlewareService().postHandle(
-        request, gatewayMirror.interceptors, argumentObject, response);
+    await MiddlewareService()
+        .postHandle(request, gatewayMirror.interceptors, argInstance, response);
     return request;
   }
 
