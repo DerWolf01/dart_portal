@@ -241,7 +241,7 @@ class PortalService {
             )
           ]);
 
-      response = _response.reflectee;
+      response = _response;
 
       print("Result: $_response");
     } on PortalException catch (e, s) {
@@ -283,7 +283,7 @@ class PortalService {
             )
           ]);
 
-      result = _result.reflectee;
+      result = _result;
       print("Result: $_result");
       request.response.write(ConversionService.convertToStringOrJson(result));
     } on PortalException catch (e, s) {
