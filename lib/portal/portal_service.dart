@@ -285,7 +285,7 @@ class PortalService {
           onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               (key, value, headerMapping) {
-                return request.headers[headerMapping.key];
+                return request.headers.value(headerMapping.key);
               },
             )
           ]);
