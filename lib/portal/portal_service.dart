@@ -268,7 +268,7 @@ class PortalService {
     final argType = gatewayMirror.methodArgumentType();
 
     final argInstance = argType != null
-        ? ConversionService.requestToObject(request,
+        ? await ConversionService.requestToObject(request,
             type: gatewayMirror.methodArgumentType())
         : null;
     final argMap = ConversionService.objectToMap(argInstance);
