@@ -182,7 +182,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: f03498a083b37e19b875eb3acd64a9d88fa7dc11
+      resolved-ref: "998698a290657547b4c7ec79197173a0b153fc29"
       url: "https://github.com/DerWolf01/dart_conversion.git"
     source: git
     version: "1.0.0"
@@ -242,6 +242,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.15.4"
+  http:
+    dependency: "direct dev"
+    description:
+      name: http
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.6"
   http_multi_server:
     dependency: transitive
     description:

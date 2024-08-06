@@ -11,7 +11,7 @@ class CollectorService {
     final classes = <AnotatedClass<T>>[];
 
     final portalMirror = reflectClass(Portal);
-    for (final library in appMirrorSystem.libraries.entries) {
+    for (final library in currentMirrorSystem().libraries.entries) {
       for (final libraryDecleration in library.value.declarations.entries) {
         final isClassMirror = libraryDecleration.value is ClassMirror;
 
@@ -39,7 +39,7 @@ class CollectorService {
   List<ClassMirror> searchClassesByType<T>() {
     final classes = <ClassMirror>[];
 
-    for (final library in appMirrorSystem.libraries.entries) {
+    for (final library in currentMirrorSystem().libraries.entries) {
       for (final libraryDecleration in library.value.declarations.entries) {
         final isClassMirror = libraryDecleration.value is ClassMirror;
 

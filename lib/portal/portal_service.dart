@@ -240,10 +240,10 @@ class PortalService {
               : {},
           onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
-              (key, value, headerMapping) {
+              <NullableString>(key, value, headerMapping) {
                 final value = request.headers.value(headerMapping.key);
                 print(value);
-                return value;
+                return value as NullableString;
               },
             )
           ]);
@@ -286,17 +286,17 @@ class PortalService {
           argumentsMap: argType != null ? {methodParamName: argMap} : {},
           onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
-              (key, value, headerMapping) {
+              <NullableString>(key, value, headerMapping) {
                 final value = request.headers.value(headerMapping.key);
                 print(value);
-                return value;
+                return value as NullableString;
               },
             )
           ]);
 
       result = _result;
       print("Result: $_result");
-      request.response.write(ConversionService.convertToStringOrJson(result));
+      request.response.write(ConversionService.encodeJSON(result));
     } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;
       print("Error: $e"
@@ -323,3 +323,5 @@ FutureOr oneTimerPortal<T>(String path, AnonymousPortal callback) async {
         PortalService()._anonymousPortalMap[path]!.remove(callback);
       }) as AnonymousPortal<dynamic>);
 }
+
+typedef NullableString = String?;

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:portal/example/sign_up_form.dart';
 import 'package:portal/interceptor/intercept.dart';
 import 'package:portal/portal/gateway.dart';
+import 'package:portal/portal/header_mapping.dart';
 import 'package:portal/portal/portal_impl.dart';
 
 class AuthInterceptorExample extends Interceptor<SignUpForm> {
@@ -30,6 +31,12 @@ class AuthPortalExample {
   @Post("/sign-in")
   handle(SignUpForm data) {
     print(data);
+    return SignUpResult("andsoinewoiwndoenwf1231231231321");
+  }
+
+  @Post("/authenticate")
+  handleAuthenticate(@HeaderMapping("Authorization") String token) {
+    print(token);
     return SignUpResult("andsoinewoiwndoenwf1231231231321");
   }
 }

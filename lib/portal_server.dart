@@ -3,7 +3,7 @@ import 'dart:mirrors';
 
 import 'package:portal/portal.dart';
 
-late MirrorSystem appMirrorSystem;
+
 
 /// Represents the server in the Portal application.
 ///
@@ -40,10 +40,10 @@ class PortalServer {
   ///   A [Future] that resolves to the singleton instance of [PortalServer] if
   ///   the server is successfully started, or null if the server fails to start.
   static Future<PortalServer?> init(
-      {required MirrorSystem mirrorSystem,
+      {
       String host = 'localhost',
       int port = 3000}) async {
-    appMirrorSystem = mirrorSystem;
+
     PortalService().registerPortals();
 
     try {
