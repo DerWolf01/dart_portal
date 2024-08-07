@@ -224,8 +224,10 @@ class PortalService {
     print("argType: $argType");
     final argInstance = argType != null
         ? await ConversionService.requestToObject(request,
-            type: gatewayMirror.methodArgumentType())
+            type: gatewayMirror.methodArgumentType()?.reflectedType)
         : null;
+    print("argInstance $argInstance");
+
     final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
     dynamic response;
     try {
@@ -275,8 +277,9 @@ class PortalService {
 
     final argInstance = argType != null
         ? await ConversionService.requestToObject(request,
-            type: gatewayMirror.methodArgumentType())
+            type: gatewayMirror.methodArgumentType()?.reflectedType)
         : null;
+    print("argInstance $argInstance");
     final argMap = ConversionService.objectToMap(argInstance);
     try {
       final _result = await methodService.invokeAsync(
