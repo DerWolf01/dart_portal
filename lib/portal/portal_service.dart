@@ -228,14 +228,22 @@ class PortalService {
         : null;
     print("argInstance $argInstance");
 
-    final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
+    final String? methodParamName = gatewayMirror.methodMirror.parameters
+        .where(
+          (element) => element.metadata.isEmpty,
+        )
+        .firstOrNull
+        ?.name;
     dynamic response;
     try {
       final dynamic _response = await methodService.invokeAsync(
           holderMirror: gatewayMirror.portalInstanceMirror,
           methodMirror: gatewayMirror.methodMirror,
           argumentsMap: argType != null
-              ? await ConversionService.requestToRequestDataMap(request)
+              ? {
+                  methodParamName!:
+                      await ConversionService.requestToRequestDataMap(request)
+                }
               : {},
           onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
@@ -269,7 +277,12 @@ class PortalService {
   Future<HttpRequest> handlePost(
       HttpRequest request, GatewayMirror gatewayMirror) async {
     dynamic result;
-    final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
+    final String? methodParamName = gatewayMirror.methodMirror.parameters
+        .where(
+          (element) => element.metadata.isEmpty,
+        )
+        .firstOrNull
+        ?.name;
     final argType = gatewayMirror.methodArgumentType();
 
     final argInstance = argType != null
@@ -282,7 +295,7 @@ class PortalService {
       final _result = await methodService.invokeAsync(
           holderMirror: gatewayMirror.portalInstanceMirror,
           methodMirror: gatewayMirror.methodMirror,
-          argumentsMap: argType != null ? argMap : {},
+          argumentsMap: argType != null ? {methodParamName!: argMap} : {},
           onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               <NullableString>(key, value, headerMapping) {
