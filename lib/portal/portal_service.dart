@@ -221,7 +221,7 @@ class PortalService {
     print("Handling get request for $fullPath with gateway $gatewayMirror "
         "${request.uri.queryParameters} ${gatewayMirror.methodArgumentType()}");
     final argType = gatewayMirror.methodArgumentType();
-
+    print("argType: $argType");
     final argInstance = argType != null
         ? await ConversionService.requestToObject(request,
             type: gatewayMirror.methodArgumentType())
@@ -229,7 +229,7 @@ class PortalService {
     final methodParamName = gatewayMirror.methodMirror.parameters.first.name;
     dynamic response;
     try {
-      final _response = await methodService.invokeAsync(
+      final dynamic _response = await methodService.invokeAsync(
           holderMirror: gatewayMirror.portalInstanceMirror,
           methodMirror: gatewayMirror.methodMirror,
           argumentsMap: argType != null
@@ -247,10 +247,9 @@ class PortalService {
               },
             )
           ]);
+      print("Result: $_response");
 
       response = _response;
-
-      print("Result: $_response");
     } on PortalException catch (e, s) {
       print("Error: $e"
           "Stacktrace: $s");
