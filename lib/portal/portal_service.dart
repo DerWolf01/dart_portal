@@ -235,10 +235,7 @@ class PortalService {
           holderMirror: gatewayMirror.portalInstanceMirror,
           methodMirror: gatewayMirror.methodMirror,
           argumentsMap: argType != null
-              ? {
-                  methodParamName:
-                      await ConversionService.requestToRequestDataMap(request)
-                }
+              ? await ConversionService.requestToRequestDataMap(request)
               : {},
           onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
@@ -285,7 +282,7 @@ class PortalService {
       final _result = await methodService.invokeAsync(
           holderMirror: gatewayMirror.portalInstanceMirror,
           methodMirror: gatewayMirror.methodMirror,
-          argumentsMap: argType != null ? {methodParamName: argMap} : {},
+          argumentsMap: argType != null ? argMap : {},
           onParameterAnotation: [
             OnParameterAnotation<HeaderMapping>(
               <NullableString>(key, value, headerMapping) {
