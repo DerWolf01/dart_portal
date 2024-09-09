@@ -189,6 +189,7 @@ class PortalService {
       }
     } on IntercetporException catch (e) {
       request.response.statusCode = e.statusCode;
+      request.response.write(e.message);
       return request;
     } catch (e) {
       print(e);
@@ -222,10 +223,18 @@ class PortalService {
         "${request.uri.queryParameters} ${gatewayMirror.methodArgumentType()}");
     final argType = gatewayMirror.methodArgumentType();
     print("argType: $argType");
-    final argInstance = argType != null
-        ? await ConversionService.requestToObject(request,
-            type: gatewayMirror.methodArgumentType()?.reflectedType)
-        : null;
+    late final dynamic argInstance;
+
+    try {
+      argInstance = argType != null
+          ? await ConversionService.requestToObject(request,
+              type: gatewayMirror.methodArgumentType()?.reflectedType)
+          : null;
+    } on ConversionException catch (e) {
+      request.response.statusCode = HttpStatus.badRequest;
+      request.response.write(e.message);
+      return request;
+    }
     print("argInstance $argInstance");
 
     final String? methodParamName = gatewayMirror.methodMirror.parameters
@@ -285,11 +294,18 @@ class PortalService {
         ?.name;
     final argType = gatewayMirror.methodArgumentType();
 
-    final argInstance = argType != null
-        ? await ConversionService.requestToObject(request,
-            type: gatewayMirror.methodArgumentType()?.reflectedType)
-        : null;
-    print("argInstance $argInstance");
+    late final dynamic argInstance;
+    try {
+      argInstance = argType != null
+          ? await ConversionService.requestToObject(request,
+              type: gatewayMirror.methodArgumentType()?.reflectedType)
+          : null;
+      print("argInstance $argInstance");
+    } on ConversionException catch (e) {
+      request.response.statusCode = HttpStatus.badRequest;
+      request.response.write(e.message);
+      return request;
+    }
     final argMap = ConversionService.objectToMap(argInstance);
     try {
       final _result = await methodService.invokeAsync(
