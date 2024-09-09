@@ -232,7 +232,8 @@ class PortalService {
           : null;
     } on ConversionException catch (e) {
       request.response.statusCode = HttpStatus.badRequest;
-      request.response.write(e.message);
+      request.response.write("Data invalid.");
+      print(e.message);
       return request;
     }
     print("argInstance $argInstance");
@@ -303,7 +304,9 @@ class PortalService {
       print("argInstance $argInstance");
     } on ConversionException catch (e) {
       request.response.statusCode = HttpStatus.badRequest;
-      request.response.write(e.message);
+      request.response.write("Data invalid.");
+      print(e.message);
+
       return request;
     }
     final argMap = ConversionService.objectToMap(argInstance);
