@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:characters/characters.dart';
 import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/interceptor/interceptor_exception.dart';
@@ -9,12 +10,22 @@ import 'package:portal/portal/portal_collector.dart';
 
 PortalService get portalService => PortalService();
 
+FutureOr oneTimerPortal<T>(String path, AnonymousPortal callback) async {
+  PortalService()._anonymousPortalMap[path] ??= [];
+  PortalService()._anonymousPortalMap[path]!.add(((T data) async {
+        await callback(data);
+        PortalService()._anonymousPortalMap[path]!.remove(callback);
+      }) as AnonymousPortal<dynamic>);
+}
+
+typedef AnonymousPortal<T> = FutureOr Function(T data);
+
+typedef NullableString = String?;
+
 class PortalService {
+  static PortalService? _instance;
   final Map<String, PortalMirror> _portalMap = {};
   final Map<String, List<AnonymousPortal<dynamic>>> _anonymousPortalMap = {};
-  static PortalService? _instance;
-
-  PortalService._internal();
 
   /// Factory constructor for creating or retrieving a singleton instance of [PortalService].
   factory PortalService() {
@@ -22,96 +33,61 @@ class PortalService {
     return _instance!;
   }
 
-  /// Registers a portal with the service.
-  ///
-  /// This method takes a portal instance, retrieves its path using the [Portal] annotation,
-  /// and maps the path to the portal in the [_portalMap]. This allows for the retrieval of
-  /// portal instances based on their path.
-  ///
-  /// Parameters:
-  ///   - [portal]: The portal instance to register.
-  registerPortals() {
-    _portalMap.clear();
-    _portalMap.addAll(Map.fromEntries(PortalCollector.collect().map(
-      (e) {
-        print("registering portal: ${e.portal.getPath}");
-        print("gateway: ${e.gateways}");
-        return MapEntry(e.portal.getPath, e);
-      },
-    )));
+  PortalService._internal();
 
-    print("registered portals: $_portalMap");
-  }
-
-  registerPortal(dynamic portal) {
-    final path = metadata(type: portal.runtimeType).first.getPath;
-    _portalMap[path] = portal;
-  }
-
-  /// Retrieves a portal instance based on the full path of a request.
-  ///
-  /// This method parses the full path to extract the portal path, then retrieves the portal
-  /// instance associated with that path from the [_portalMap].
-  ///
-  /// Parameters:
-  ///   - [fullPath]: The full path of the request.
-  ///
-  /// Returns:
-  ///   The portal instance associated with the extracted path.
-  PortalMirror? _portalByFullPath(String fullPath) {
-    print(_portalMap);
-    dynamic portal;
+  Future<HttpRequest> callGateway(
+    String fullPath,
+    HttpRequest request,
+  ) async {
     try {
-      portal = _portalMap[_pathByFullPath(fullPath)];
-      if (portal == null) {
-        throw Exception("No Portal registered with path: $fullPath");
-      }
-    } catch (e) {
-      print("Error: $e");
-    }
-    return portal;
-  }
-
-  /// Extracts the portal path from the full path of a request.
-  ///
-  /// This method processes the full path to isolate and return the path segment that corresponds
-  /// to the portal. It is used internally to map requests to their respective portals.
-  ///
-  /// Parameters:
-  ///   - [rawFullPath]: The full path of the request.
-  ///
-  /// Returns:
-  ///   The extracted path segment corresponding to the portal.
-  String _pathByFullPath(String rawFullPath) {
-    var path = rawFullPath;
-    if (path.characters.first == "/") {
-      path = "/";
-      for (int i = 1; i < rawFullPath.characters.length; i++) {
-        var char = rawFullPath.characters.elementAt(i);
-        if (char == "/") {
-          break;
+      final gatewayMirror = gatewayMirrorUsingFullPath(fullPath);
+      try {
+        final canPass = await MiddlewareService()
+            .preHandle(request, gatewayMirror.interceptors);
+        if (!canPass) {
+          request.response.statusCode = HttpStatus.unprocessableEntity;
+          return request;
         }
-        path += char;
+      } on IntercetporException catch (e) {
+        request.response.statusCode = e.statusCode;
+        request.response.write(e.message);
+        return request;
+      } catch (e) {
+        print(e);
+        request.response.statusCode = HttpStatus.internalServerError;
+        return request;
       }
+      if (gatewayMirror.isGet()) {
+        print(request.method);
+        if (request.method != "GET") {
+          request.response.statusCode = HttpStatus.methodNotAllowed;
+          return request;
+        }
+        print("is get");
+        return await handleGet(request, gatewayMirror, fullPath);
+      } else if (gatewayMirror.isPost()) {
+        if (request.method != "POST") {
+          request.response.statusCode = HttpStatus.methodNotAllowed;
+          return request;
+        }
+        print("is post");
+        return await handlePost(request, gatewayMirror);
+      }
+
+      request.response.statusCode = HttpStatus.notFound;
+      return request;
+    } on PortalException catch (e, s) {
+      request.response.statusCode = e.statusCode;
+      request.response.write("Error: not found.");
+      return request;
     }
-    return path;
   }
 
-  /// Extracts the method path from the full path of a request.
-  ///
-  /// This method separates the portal path from the full path and returns the remaining
-  /// part, which corresponds to the method path within the portal.
-  ///
-  /// Parameters:
-  ///   - [fullPath]: The full path of the request.
-  ///
-  /// Returns:
-  ///   The method path extracted from the full path.
-  String methodPath(String fullPath) {
-    var portalPath = _pathByFullPath(fullPath);
-    var methodPath = fullPath.substring(portalPath.length);
+  dynamic callMethod(AnnotatedMethod m, Map<String, dynamic> map) async {
+    final expectedData = ConversionService.mapToObject(map);
 
-    return methodPath;
+    return await (m.partOf.invoke(m.method.simpleName, [expectedData])
+        as FutureOr);
   }
 
   /// Invokes a method on a portal using a map as the argument.
@@ -127,13 +103,6 @@ class PortalService {
   /// Returns:
   ///   The result of invoking the method.
   dynamic callMethodFromMap(AnnotatedMethod m, Map<String, dynamic> map) async {
-    final expectedData = ConversionService.mapToObject(map);
-
-    return await (m.partOf.invoke(m.method.simpleName, [expectedData])
-        as FutureOr);
-  }
-
-  dynamic callMethod(AnnotatedMethod m, Map<String, dynamic> map) async {
     final expectedData = ConversionService.mapToObject(map);
 
     return await (m.partOf.invoke(m.method.simpleName, [expectedData])
@@ -159,11 +128,13 @@ class PortalService {
 
     print(portal);
     if (portal == null) {
-      throw Exception("No Portal registered with path: $fullPath");
+      throw PortalException(
+          message: "No Portal registered with path: $fullPath",
+          statusCode: 404);
     }
     var mPath = methodPath(fullPath);
     print("Method path: $mPath");
-    print("portal has gateways: ${portal!.gateways.length}");
+    print("portal has gateways: ${portal.gateways.length}");
     for (var element in portal.gateways) {
       print(element.getPath);
     }
@@ -173,48 +144,6 @@ class PortalService {
     );
 
     return gateway;
-  }
-
-  Future<HttpRequest> callGateway(
-    String fullPath,
-    HttpRequest request,
-  ) async {
-    final gatewayMirror = gatewayMirrorUsingFullPath(fullPath);
-    try {
-      final canPass = await MiddlewareService()
-          .preHandle(request, gatewayMirror.interceptors);
-      if (!canPass) {
-        request.response.statusCode = HttpStatus.unprocessableEntity;
-        return request;
-      }
-    } on IntercetporException catch (e) {
-      request.response.statusCode = e.statusCode;
-      request.response.write(e.message);
-      return request;
-    } catch (e) {
-      print(e);
-      request.response.statusCode = HttpStatus.internalServerError;
-      return request;
-    }
-    if (gatewayMirror.isGet()) {
-      print(request.method);
-      if (request.method != "GET") {
-        request.response.statusCode = HttpStatus.methodNotAllowed;
-        return request;
-      }
-      print("is get");
-      return await handleGet(request, gatewayMirror, fullPath);
-    } else if (gatewayMirror.isPost()) {
-      if (request.method != "POST") {
-        request.response.statusCode = HttpStatus.methodNotAllowed;
-        return request;
-      }
-      print("is post");
-      return await handlePost(request, gatewayMirror);
-    }
-
-    request.response.statusCode = HttpStatus.notFound;
-    return request;
   }
 
   Future<HttpRequest> handleGet(
@@ -246,7 +175,7 @@ class PortalService {
         ?.name;
     dynamic response;
     try {
-      final dynamic _response = await methodService.invokeAsync(
+      final dynamic response0 = await methodService.invokeAsync(
           holderMirror: gatewayMirror.portalInstanceMirror,
           methodMirror: gatewayMirror.methodMirror,
           argumentsMap: argType != null
@@ -264,9 +193,9 @@ class PortalService {
               },
             )
           ]);
-      print("Result: $_response");
+      print("Result: $response0");
 
-      response = _response;
+      response = response0;
     } on PortalException catch (e, s) {
       print("Error: $e"
           "Stacktrace: $s");
@@ -311,7 +240,7 @@ class PortalService {
     }
     final argMap = ConversionService.objectToMap(argInstance);
     try {
-      final _result = await methodService.invokeAsync(
+      final result0 = await methodService.invokeAsync(
           holderMirror: gatewayMirror.portalInstanceMirror,
           methodMirror: gatewayMirror.methodMirror,
           argumentsMap: argType != null ? {methodParamName!: argMap} : {},
@@ -325,8 +254,8 @@ class PortalService {
             )
           ]);
 
-      result = _result;
-      print("Result: $_result");
+      result = result0;
+      print("Result: $result0");
       request.response.write(ConversionService.encodeJSON(result));
     } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;
@@ -343,16 +272,98 @@ class PortalService {
         .postHandle(request, gatewayMirror.interceptors, argInstance, result);
     return request;
   }
+
+  /// Extracts the method path from the full path of a request.
+  ///
+  /// This method separates the portal path from the full path and returns the remaining
+  /// part, which corresponds to the method path within the portal.
+  ///
+  /// Parameters:
+  ///   - [fullPath]: The full path of the request.
+  ///
+  /// Returns:
+  ///   The method path extracted from the full path.
+  String methodPath(String fullPath) {
+    var portalPath = _pathByFullPath(fullPath);
+    var methodPath = fullPath.substring(portalPath.length);
+
+    return methodPath;
+  }
+
+  registerPortal(dynamic portal) {
+    final path = metadata(type: portal.runtimeType).first.getPath;
+    _portalMap[path] = portal;
+  }
+
+  /// Registers a portal with the service.
+  ///
+  /// This method takes a portal instance, retrieves its path using the [Portal] annotation,
+  /// and maps the path to the portal in the [_portalMap]. This allows for the retrieval of
+  /// portal instances based on their path.
+  ///
+  /// Parameters:
+  ///   - [portal]: The portal instance to register.
+  registerPortals() {
+    _portalMap.clear();
+    _portalMap.addAll(Map.fromEntries(PortalCollector.collect().map(
+      (e) {
+        print("registering portal: ${e.portal.getPath}");
+        print("gateway: ${e.gateways}");
+        return MapEntry(e.portal.getPath, e);
+      },
+    )));
+
+    print("registered portals: $_portalMap");
+  }
+
+  /// Extracts the portal path from the full path of a request.
+  ///
+  /// This method processes the full path to isolate and return the path segment that corresponds
+  /// to the portal. It is used internally to map requests to their respective portals.
+  ///
+  /// Parameters:
+  ///   - [rawFullPath]: The full path of the request.
+  ///
+  /// Returns:
+  ///   The extracted path segment corresponding to the portal.
+  String _pathByFullPath(String rawFullPath) {
+    var path = rawFullPath;
+    if (path.characters.first == "/") {
+      path = "/";
+      for (int i = 1; i < rawFullPath.characters.length; i++) {
+        var char = rawFullPath.characters.elementAt(i);
+        if (char == "/") {
+          break;
+        }
+        path += char;
+      }
+    }
+    return path;
+  }
+
+  /// Retrieves a portal instance based on the full path of a request.
+  ///
+  /// This method parses the full path to extract the portal path, then retrieves the portal
+  /// instance associated with that path from the [_portalMap].
+  ///
+  /// Parameters:
+  ///   - [fullPath]: The full path of the request.
+  ///
+  /// Returns:
+  ///   The portal instance associated with the extracted path.
+  PortalMirror? _portalByFullPath(String fullPath) {
+    print(_portalMap);
+    dynamic portal;
+    try {
+      portal = _portalMap[_pathByFullPath(fullPath)];
+      if (portal == null) {
+        throw PortalException(
+            message: "No Portal registered with path: $fullPath",
+            statusCode: 404);
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+    return portal;
+  }
 }
-
-typedef AnonymousPortal<T> = FutureOr Function(T data);
-
-FutureOr oneTimerPortal<T>(String path, AnonymousPortal callback) async {
-  PortalService()._anonymousPortalMap[path] ??= [];
-  PortalService()._anonymousPortalMap[path]!.add(((T data) async {
-        await callback(data);
-        PortalService()._anonymousPortalMap[path]!.remove(callback);
-      }) as AnonymousPortal<dynamic>);
-}
-
-typedef NullableString = String?;
