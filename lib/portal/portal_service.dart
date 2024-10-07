@@ -18,6 +18,13 @@ FutureOr oneTimerPortal<T>(String path, AnonymousPortal callback) async {
       }) as AnonymousPortal<dynamic>);
 }
 
+setBaseHeaders(HttpRequest request) {
+  request.response.headers.contentType = ContentType.json;
+  request.response.headers.set("Access-Control-Allow-Origin", "*");
+  request.response.headers.set("Access-Control-Allow-Methods", "GET, POST");
+  request.response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+}
+
 typedef AnonymousPortal<T> = FutureOr Function(T data);
 
 typedef NullableString = String?;
@@ -40,6 +47,7 @@ class PortalService {
     HttpRequest request,
   ) async {
     try {
+      setBaseHeaders(request);
       final gatewayMirror = gatewayMirrorUsingFullPath(fullPath);
       try {
         final canPass = await MiddlewareService()
@@ -50,7 +58,7 @@ class PortalService {
         }
       } on IntercetporException catch (e) {
         request.response.statusCode = e.statusCode;
-        request.response.write(e.message);
+
         return request;
       } catch (e) {
         print(e);
