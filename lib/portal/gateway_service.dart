@@ -10,7 +10,7 @@ class GatewayService {
   Future<MethodParameters> generateGatewayArguments(
       {required HttpRequest request,
       required GatewayMirror gatewayMirror}) async {
-    final broadcastStream = request.asBroadcastStream();
+    final ut8String = await utf8.decodeStream(request);
     final arguments = <dynamic>[];
     final namedArguments = <String, dynamic>{};
     final params = gatewayMirror.methodMirror.parameters;
@@ -48,7 +48,7 @@ class GatewayService {
               value: request.uri.queryParameters[param.name]);
         } else if (gatewayMirror.isPost()) {
           namedArguments[param.name] = ConversionService.mapToObject(
-              jsonDecode(await utf8.decodeStream(broadcastStream)),
+              jsonDecode(ut8String),
               type: param.type.reflectedType);
         }
       } else {
@@ -88,8 +88,7 @@ class GatewayService {
               "Using requestToObject to convert body to object for parameter \"${param.name}\". See documentation for details.",
               header: "GatewayService");
           arguments.add(ConversionService.convert(
-              value: await utf8.decodeStream(broadcastStream),
-              type: param.type.reflectedType));
+              value: ut8String, type: param.type.reflectedType));
         }
       }
     }

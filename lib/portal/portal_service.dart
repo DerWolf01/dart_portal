@@ -176,7 +176,6 @@ class PortalService {
   Future<HttpRequest> handleGet(
       HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
     myLogger.d("GET: $gatewayMirror", header: "PortalService --> handleGet");
-    final argType = gatewayMirror.methodArgumentType();
 
     MethodParameters methodParameters = await GatewayService()
         .generateGatewayArguments(
