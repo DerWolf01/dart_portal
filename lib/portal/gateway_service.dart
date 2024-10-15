@@ -1,37 +1,112 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:mirrors';
 
+import 'package:dart_conversion/dart_conversion.dart';
+import 'package:portal/my_logger.dart';
 import 'package:portal/portal.dart';
+import 'package:portal/portal/mappings/query_mapping.dart';
 
 class GatewayService {
-  generateGatewayArguments(
-      {required HttpRequest request, required GatewayMirror gatewayMirror}) {
+  Future<MethodParameters> generateGatewayArguments(
+      {required HttpRequest request,
+      required GatewayMirror gatewayMirror}) async {
     final arguments = <dynamic>[];
     final namedArguments = <String, dynamic>{};
     final params = gatewayMirror.methodMirror.parameters;
     for (final param in params) {
       if (param.isNamed) {
-        if (param.metadata.any(
-              (element) => element is HeaderMapping,
-        )) {
+        myLogger.d("Named parameter: ${param.name}", header: "GatewayService");
+        if (param.isHeaderMapping) {
+          myLogger.d("Found HeaderMapping --> ${param.name}",
+              header: "GatewayService");
           namedArguments[param.name] = request.headers[param.name];
           continue;
         }
-        namedArguments[param.name] = request.uri.queryParameters[param.name];
+        if (param.isQueryMapping) {
+          myLogger.d("Found QueryMapping --> ${param.name}",
+              header: "GatewayService");
+          namedArguments[param.name] = ConversionService.convert(
+              type: param.type.reflectedType,
+              value: request.uri.queryParameters[param.name]);
+          continue;
+        }
+        if (param.isQueriesMapping) {
+          myLogger.d("Found QueriesMapping --> ${param.name}",
+              header: "GatewayService");
+          namedArguments[param.name] = ConversionService.mapToObject(
+              request.uri.queryParameters,
+              type: param.type.reflectedType);
+          continue;
+        }
+        myLogger.d(
+            "No Mapping found for named parameter \"${param.name}\". Interpreting as @QueryiesMapping. See documentation for details.",
+            header: "GatewayService");
+        if (gatewayMirror.isGet()) {
+          namedArguments[param.name] = ConversionService.convert(
+              type: param.type.reflectedType,
+              value: request.uri.queryParameters[param.name]);
+        } else if (gatewayMirror.isPost()) {
+          namedArguments[param.name] = await ConversionService.requestToObject(
+              request,
+              type: param.type.reflectedType);
+        }
       } else {
-        if (param.metadata.any(
-              (element) => element is HeaderMapping,
-        )) {
+        myLogger.d("Named parameter: ${param.name}", header: "GatewayService");
+        if (param.isHeaderMapping) {
+          myLogger.d("Found HeaderMapping --> ${param.name}",
+              header: "GatewayService");
           arguments.add(request.headers[param.name]);
           continue;
         }
-        final value = request.uri.queryParameters[param.name];
-        arguments.add(value);
+        if (param.isQueryMapping) {
+          myLogger.d("Found QueryMapping --> ${param.name}",
+              header: "GatewayService");
+          arguments.add(ConversionService.convert(
+              type: param.type.reflectedType,
+              value: request.uri.queryParameters[param.name]));
+          continue;
+        }
+        if (param.isQueriesMapping) {
+          myLogger.d("Found QueriesMapping --> ${param.name}",
+              header: "GatewayService");
+          arguments.add(ConversionService.mapToObject(
+              request.uri.queryParameters,
+              type: param.type.reflectedType));
+          continue;
+        }
+
+        if (gatewayMirror.isGet()) {
+          myLogger.d(
+              "No Mapping found for named parameter \"${param.name}\". Interpreting as @QueryiesMapping. See documentation for details.",
+              header: "GatewayService");
+          arguments.add(ConversionService.convert(
+              type: param.type.reflectedType,
+              value: request.uri.queryParameters[param.name]));
+        } else if (gatewayMirror.isPost()) {
+          myLogger.d(
+              "Using requestToObject to convert body to object for parameter \"${param.name}\". See documentation for details.",
+              header: "GatewayService");
+          arguments.add(ConversionService.convert(
+              value: await utf8.decodeStream(request),
+              type: param.type.reflectedType));
+        }
       }
     }
+
+    return MethodParameters(arguments, namedArguments);
   }
 }
 
 extension ParameterName on ParameterMirror {
+  bool get isHeaderMapping =>
+      this.metadata.any((element) => element is HeaderMapping);
+
+  bool get isQueriesMapping =>
+      this.metadata.any((element) => element is QueriesMapping);
+
+  bool get isQueryMapping =>
+      this.metadata.any((element) => element is QueryMapping);
+
   String get name => MirrorSystem.getName(simpleName);
 }

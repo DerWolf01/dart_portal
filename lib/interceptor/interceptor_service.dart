@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:mirrors';
+
+import 'package:dart_conversion/dart_conversion.dart';
+import 'package:portal/interceptor/interceptor_exception.dart';
+import 'package:portal/my_logger.dart';
+
 import 'intercept.dart';
 
 /// A service for managing interceptor in the application.
@@ -9,20 +13,38 @@ import 'intercept.dart';
 /// interceptor for incoming requests. Interceptor can be used to perform
 /// actions before and after the main processing of a request, such as
 /// authentication checks or logging.
-class MiddlewareService {
-  /// Private constructor for the singleton pattern.
-  MiddlewareService._internal();
-
-  /// The singleton instance of [MiddlewareService].
-  static MiddlewareService? _instance;
+class InterceptorService {
+  /// The singleton instance of [InterceptorService].
+  static InterceptorService? _instance;
 
   /// Factory constructor to provide a singleton instance.
   ///
   /// If an instance already exists, it returns that; otherwise, it creates
   /// a new instance using the private constructor.
-  factory MiddlewareService() {
-    _instance ??= MiddlewareService._internal();
+  factory InterceptorService() {
+    _instance ??= InterceptorService._internal();
     return _instance!;
+  }
+
+  /// Private constructor for the singleton pattern.
+  InterceptorService._internal();
+
+  FutureOr<void> postHandle(HttpRequest request, List<Interceptor> interceptors,
+      MethodParameters portalReceived, dynamic portalGaveBack) async {
+    for (final interceptor in interceptors) {
+      try {
+        await interceptor.postHandle(
+            request: request,
+            portalReceived: portalReceived,
+            portalGaveBack: portalGaveBack);
+      } catch (e, s) {
+        if (e is IntercetporException) {
+          rethrow;
+        }
+        myLogger.e("Error in postHandle for ${interceptor.runtimeType} $e",
+            stackTrace: s);
+      }
+    }
   }
 
   /// Executes the pre-handle phase of middlewares for a given path.
@@ -41,34 +63,16 @@ class MiddlewareService {
   FutureOr<bool> preHandle(
       HttpRequest request, List<Interceptor> interceptors) async {
     for (final interceptor in interceptors) {
-      if (interceptor.preHandle == null) return true;
-      if (!(await interceptor.preHandle!(request))) {
+      myLogger.d("Calling preHandle for ${interceptor.runtimeType}",
+          header: "InterceptorService");
+      if (!(await interceptor.preHandle(request))) {
+        myLogger.w("${interceptor.runtimeType} blocked request",
+            header: "InterceptorService");
         return false;
       }
+      myLogger.i("${interceptor.runtimeType} passed",
+          header: "InterceptorService");
     }
     return true;
   }
-
-  FutureOr<void> postHandle(HttpRequest request, List<Interceptor> interceptors,
-      dynamic portalReceived, dynamic portalGaveBack) async {
-    for (final interceptor in interceptors) {
-      if (interceptor.postHandle == null) continue;
-      await interceptor.postHandle!(
-          request: request,
-          portalReceived: portalReceived,
-          portalGaveBack: portalGaveBack);
-    }
-  }
-}
-
-extension MiddlewareFilter on List<InstanceMirror> {
-  preHandle(String path) => where(
-        (element) {
-          final reflectee = element.reflectee as Interceptor;
-          return (reflectee).preHandle != null;
-        },
-      );
-
-  postHandle(String path) =>
-      where((element) => (element.reflectee as Interceptor).postHandle != null);
 }

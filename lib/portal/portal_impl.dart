@@ -16,18 +16,6 @@ class Portal {
   /// This path is used by the routing mechanism to direct requests to the appropriate portal.
   final String path;
 
-  String get getPath {
-    String path = this.path;
-
-    if (!path.startsWith("/")) {
-      path = '/$path';
-    }
-    if (path.endsWith("/")) {
-      path = path.substring(0, path.length - 1);
-    }
-    return path;
-  }
-
   /// Constructs a [Portal] instance with the given path.
   const Portal(this.path);
 
@@ -39,15 +27,32 @@ class Portal {
   factory Portal.fromInstance(dynamic portal) {
     return instanceMetadata(portal).whereType<Portal>().first;
   }
+
+  String get getPath {
+    String path = this.path;
+
+    if (!path.startsWith("/")) {
+      path = '/$path';
+    }
+    if (path.endsWith("/")) {
+      path = path.substring(0, path.length - 1);
+    }
+    return path;
+  }
 }
 
 class PortalMirror {
+  ClassMirror classMirror;
+
+  Portal portal;
+  List<GatewayMirror> gateways;
   PortalMirror(
       {required this.classMirror,
       required this.portal,
       required this.gateways});
 
-  ClassMirror classMirror;
-  Portal portal;
-  List<GatewayMirror> gateways;
+  @override
+  String toString() {
+    return "PortalMirror{classMirror: $classMirror, portal: $portal, gateways: $gateways}";
+  }
 }

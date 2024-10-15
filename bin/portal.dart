@@ -1,13 +1,10 @@
 import 'dart:isolate';
-import 'dart:mirrors';
 
-import 'package:portal/portal.dart';
-import 'package:portal/portal_server.dart';
 import 'package:http/http.dart' as http;
+import 'package:portal/portal_server.dart';
 
 void main<T>() async {
-  PortalService().registerPortals();
-  await PortalServer.init(port: 3001);
+  await PortalServer.init(port: 3001, enableLogging: true);
 
   Isolate.spawn((message) {
     http.post(
@@ -26,7 +23,7 @@ void main<T>() async {
 //   @AuthInterceptor()
 //   @Post("/sign-in")
 //   handle(SignUpForm data) {
-//     print(data);
+//     myLogger.d(data);
 //     return SignUpResult("jdsonfdksjfnsekjfsj");
 //   }
 // }

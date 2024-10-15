@@ -1,6 +1,7 @@
 import 'dart:mirrors';
 
 import 'package:portal/interceptor/intercept.dart';
+import 'package:portal/my_logger.dart';
 import 'package:portal/portal/gateway.dart';
 import 'package:portal/portal/portal_impl.dart';
 import 'package:portal/reflection.dart';
@@ -8,7 +9,7 @@ import 'package:portal/services/collection_service.dart';
 
 class PortalCollector {
   static List<PortalMirror> collect() {
-    print('Collecting portals');
+    myLogger.d('Collecting portals');
     final portals =
         CollectorService().searchClassesUsingAnnotation<Portal>().map((e) {
       return PortalMirror(
@@ -17,21 +18,21 @@ class PortalCollector {
           gateways: gateways(e.classMirror));
     }).toList();
     if (portals.isEmpty) {
-      print('No portals found');
-    }else{
-      print('Portals found');
-      print(portals.length);
-      print(portals);
+      myLogger.d('No portals found');
+    } else {
+      myLogger.d('Portals found');
+      myLogger.d(portals.length);
+      myLogger.d(portals);
     }
     return portals;
   }
 
   static List<GatewayMirror> gateways(ClassMirror classMirror) {
-    print("Collecting data from portal ${classMirror.simpleName}");
+    myLogger.d("Collecting data from portal ${classMirror.simpleName}");
     final List<GatewayMirror> gateways = [];
     for (final method in methods(classMirror)) {
       if (MirrorSystem.getName(method.simpleName) == "handle") {
-        print('Collecting data from gateway-method handle');
+        myLogger.d('Collecting data from gateway-method handle');
       }
       final Gateway? gateway = method.metadata
           .where(

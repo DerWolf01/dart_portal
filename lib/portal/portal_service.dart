@@ -4,18 +4,20 @@ import 'dart:io';
 import 'package:characters/characters.dart';
 import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/interceptor/interceptor_exception.dart';
+import 'package:portal/my_logger.dart';
 import 'package:portal/portal.dart';
+import 'package:portal/portal/collection/portal_collection.dart';
 import 'package:portal/portal/gateway_service.dart';
 import 'package:portal/portal/portal_collector.dart';
 
 PortalService get portalService => PortalService();
 
-FutureOr oneTimerPortal<T>(String path, AnonymousPortal callback) async {
-  PortalService()._anonymousPortalMap[path] ??= [];
-  PortalService()._anonymousPortalMap[path]!.add(((T data) async {
-        await callback(data);
-        PortalService()._anonymousPortalMap[path]!.remove(callback);
-      }) as AnonymousPortal<dynamic>);
+FutureOr closePortal<T>(String path, AnonymousPortal callback) async {
+  throw UnimplementedError("Not implemented");
+}
+
+FutureOr openPortal<T>(String path, AnonymousPortal callback) async {
+  throw UnimplementedError("Not implemented");
 }
 
 setBaseHeaders(HttpRequest request) {
@@ -31,8 +33,7 @@ typedef NullableString = String?;
 
 class PortalService {
   static PortalService? _instance;
-  final Map<String, PortalMirror> _portalMap = {};
-  final Map<String, List<AnonymousPortal<dynamic>>> _anonymousPortalMap = {};
+  final PortalCollection _portalCollection = PortalCollection();
 
   /// Factory constructor for creating or retrieving a singleton instance of [PortalService].
   factory PortalService() {
@@ -50,36 +51,51 @@ class PortalService {
       setBaseHeaders(request);
       final gatewayMirror = gatewayMirrorUsingFullPath(fullPath);
       try {
-        final canPass = await MiddlewareService()
+        final canPass = await InterceptorService()
             .preHandle(request, gatewayMirror.interceptors);
         if (!canPass) {
           request.response.statusCode = HttpStatus.unprocessableEntity;
+          myLogger.w("Interceptor blocked request.", header: "PortalService");
           return request;
         }
-      } on IntercetporException catch (e) {
+      } on IntercetporException catch (e, s) {
+        myLogger.e(e);
+        myLogger.e(s);
         request.response.statusCode = e.statusCode;
-
+        request.response.reasonPhrase = e.message;
         return request;
-      } catch (e) {
-        print(e);
+      } catch (e, s) {
+        myLogger.e(e);
+        myLogger.e(s);
+
         request.response.statusCode = HttpStatus.internalServerError;
+        request.response.reasonPhrase = "Couldn't process request.";
         return request;
       }
-      if (gatewayMirror.isGet()) {
-        print(request.method);
-        if (request.method != "GET") {
-          request.response.statusCode = HttpStatus.methodNotAllowed;
-          return request;
+      try {
+        if (gatewayMirror.isGet()) {
+          myLogger.d("Processing GET request", header: "PortalService");
+          if (request.method != "GET") {
+            myLogger.w("Method not allowed", header: "PortalService");
+            request.response.statusCode = HttpStatus.methodNotAllowed;
+            return request;
+          }
+
+          return await handleGet(request, gatewayMirror, fullPath);
+        } else if (gatewayMirror.isPost()) {
+          if (request.method != "POST") {
+            request.response.statusCode = HttpStatus.methodNotAllowed;
+            return request;
+          }
+          myLogger.d("is post");
+          return await handlePost(request, gatewayMirror);
         }
-        print("is get");
-        return await handleGet(request, gatewayMirror, fullPath);
-      } else if (gatewayMirror.isPost()) {
-        if (request.method != "POST") {
-          request.response.statusCode = HttpStatus.methodNotAllowed;
-          return request;
-        }
-        print("is post");
-        return await handlePost(request, gatewayMirror);
+      } catch (e, s) {
+        myLogger.e("Error processing request: $e");
+        myLogger.e(s);
+
+        request.response.statusCode = HttpStatus.internalServerError;
+        return request;
       }
 
       request.response.statusCode = HttpStatus.notFound;
@@ -87,6 +103,7 @@ class PortalService {
     } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;
       request.response.write("Error: not found.");
+      myLogger.e("Error: $e", stackTrace: s);
       return request;
     }
   }
@@ -132,19 +149,21 @@ class PortalService {
   ///   An [AnnotatedMethod] instance representing the method to handle the request, or null
   ///   if no matching method is found.
   GatewayMirror gatewayMirrorUsingFullPath(String fullPath) {
+    myLogger.d("Retrieving portal for path: $fullPath",
+        header: "PortalService");
     PortalMirror? portal = _portalByFullPath(fullPath);
 
-    print(portal);
+    myLogger.d("Portal: $portal", header: "PortalService");
     if (portal == null) {
       throw PortalException(
           message: "No Portal registered with path: $fullPath",
           statusCode: 404);
     }
     var mPath = methodPath(fullPath);
-    print("Method path: $mPath");
-    print("portal has gateways: ${portal.gateways.length}");
+    myLogger.d("Method path: $mPath");
+    myLogger.d("portal has gateways: ${portal.gateways.length}");
     for (var element in portal.gateways) {
-      print(element.getPath);
+      myLogger.d(element.getPath);
     }
     final GatewayMirror gateway = portal.gateways.firstWhere(
       (element) => element.getPath == mPath,
@@ -156,68 +175,39 @@ class PortalService {
 
   Future<HttpRequest> handleGet(
       HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
-    print("Handling get request for $fullPath with gateway $gatewayMirror "
-        "${request.uri.queryParameters} ${gatewayMirror.methodArgumentType()}");
+    myLogger.d("GET: $gatewayMirror", header: "PortalService --> handleGet");
     final argType = gatewayMirror.methodArgumentType();
-    print("argType: $argType");
-    late final dynamic argInstance;
 
-    try {
-      argInstance = argType != null
-          ? await ConversionService.requestToObject(request,
-              type: gatewayMirror.methodArgumentType()?.reflectedType)
-          : null;
-    } on ConversionException catch (e) {
-      request.response.statusCode = HttpStatus.badRequest;
-      request.response.write("Data invalid.");
-      print(e.message);
-      return request;
-    }
-    print("argInstance $argInstance");
-
-    final String? methodParamName = gatewayMirror.methodMirror.parameters
-        .where(
-          (element) => element.metadata.isEmpty,
-        )
-        .firstOrNull
-        ?.name;
+    MethodParameters methodParameters = await GatewayService()
+        .generateGatewayArguments(
+            request: request, gatewayMirror: gatewayMirror);
     dynamic response;
     try {
-      final dynamic response0 = await methodService.invokeAsync(
-          holderMirror: gatewayMirror.portalInstanceMirror,
-          methodMirror: gatewayMirror.methodMirror,
-          argumentsMap: argType != null
-              ? {
-                  methodParamName!:
-                      await ConversionService.requestToRequestDataMap(request)
-                }
-              : {},
-          onParameterAnotation: [
-            OnParameterAnotation<HeaderMapping>(
-              <NullableString>(key, value, headerMapping) {
-                final value = request.headers.value(headerMapping.key);
-                print(value);
-                return value as NullableString;
-              },
-            )
-          ]);
-      print("Result: $response0");
+      final dynamic response0 =
+          await (gatewayMirror.portalInstanceMirror.invoke(
+              Symbol(gatewayMirror.methodMirror.name),
+              methodParameters.args,
+              methodParameters.namedArgs.map(
+                (key, value) => MapEntry(Symbol(key), value),
+              )) as FutureOr);
+
+      myLogger.d("Result: $response0");
 
       response = response0;
     } on PortalException catch (e, s) {
-      print("Error: $e"
-          "Stacktrace: $s");
+      myLogger.e("Error: $e",
+          stackTrace: s, header: "PortalService --> handleGet");
       request.response.statusCode = e.statusCode;
       response = e.message;
     } catch (e, s) {
-      print("Error: $e"
-          "Stacktrace: $s");
+      myLogger.e("Error: $e",
+          stackTrace: s, header: "PortalService --> handleGet");
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
     request.response.write(ConversionService.encodeJSON(response));
-    await MiddlewareService()
-        .postHandle(request, gatewayMirror.interceptors, argInstance, response);
+    await InterceptorService().postHandle(
+        request, gatewayMirror.interceptors, methodParameters, response);
     return request;
   }
 
@@ -238,46 +228,43 @@ class PortalService {
           ? await ConversionService.requestToObject(request,
               type: gatewayMirror.methodArgumentType()?.reflectedType)
           : null;
-      print("argInstance $argInstance");
-    } on ConversionException catch (e) {
+      myLogger.d("argInstance $argInstance");
+    } on ConversionException catch (e, s) {
       request.response.statusCode = HttpStatus.badRequest;
       request.response.write("Data invalid.");
-      print(e.message);
+      myLogger.e(e.message,
+          header: "PortalService --> handlePost", stackTrace: s);
 
       return request;
     }
-    final argMap = ConversionService.objectToMap(argInstance);
-    try {
-      final result0 = await methodService.invokeAsync(
-          holderMirror: gatewayMirror.portalInstanceMirror,
-          methodMirror: gatewayMirror.methodMirror,
-          argumentsMap: argType != null ? {methodParamName!: argMap} : {},
-          onParameterAnotation: [
-            OnParameterAnotation<HeaderMapping>(
-              <NullableString>(key, value, headerMapping) {
-                final value = request.headers.value(headerMapping.key);
-                print(value);
-                return value as NullableString;
-              },
-            )
-          ]);
 
-      result = result0;
-      print("Result: $result0");
+    MethodParameters methodParameters = await GatewayService()
+        .generateGatewayArguments(
+            request: request, gatewayMirror: gatewayMirror);
+    try {
+      final response0 = await (gatewayMirror.portalInstanceMirror.invoke(
+          gatewayMirror.methodMirror.simpleName,
+          methodParameters.args,
+          methodParameters.namedArgs.map(
+            (key, value) => MapEntry(Symbol(key), value),
+          )) as FutureOr);
+
+      result = response0;
+      myLogger.d("Result: $response0");
       request.response.write(ConversionService.encodeJSON(result));
     } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;
-      print("Error: $e"
-          "Stacktrace: $s");
+      myLogger.e("Error: $e",
+          stackTrace: s, header: "PortalService --> handlePost");
       request.response.write(e.message);
     } catch (e, s) {
-      print("Error: $e"
-          "Stacktrace: $s");
+      myLogger.e("Error: $e", stackTrace: s);
+      myLogger.e("Stacktrace: $s");
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
-    await MiddlewareService()
-        .postHandle(request, gatewayMirror.interceptors, argInstance, result);
+    await InterceptorService().postHandle(
+        request, gatewayMirror.interceptors, methodParameters, result);
     return request;
   }
 
@@ -299,29 +286,26 @@ class PortalService {
   }
 
   registerPortal(dynamic portal) {
-    final path = metadata(type: portal.runtimeType).first.getPath;
-    _portalMap[path] = portal;
+    _portalCollection.add(portal);
   }
 
   /// Registers a portal with the service.
   ///
   /// This method takes a portal instance, retrieves its path using the [Portal] annotation,
-  /// and maps the path to the portal in the [_portalMap]. This allows for the retrieval of
+  /// and maps the path to the portal in the [_portalCollection]. This allows for the retrieval of
   /// portal instances based on their path.
   ///
   /// Parameters:
   ///   - [portal]: The portal instance to register.
   registerPortals() {
-    _portalMap.clear();
-    _portalMap.addAll(Map.fromEntries(PortalCollector.collect().map(
-      (e) {
-        print("registering portal: ${e.portal.getPath}");
-        print("gateway: ${e.gateways}");
-        return MapEntry(e.portal.getPath, e);
-      },
-    )));
+    myLogger.d("Registering portals...",
+        header: "PortalService --> registerPortals");
 
-    print("registered portals: $_portalMap");
+    final portalCollection = PortalCollector.collect().toSet();
+    _portalCollection.clear();
+    _portalCollection.addAll(portalCollection);
+    myLogger.d("registered portals: $portalCollection",
+        header: "PortalService --> registerPortals");
   }
 
   /// Extracts the portal path from the full path of a request.
@@ -352,7 +336,7 @@ class PortalService {
   /// Retrieves a portal instance based on the full path of a request.
   ///
   /// This method parses the full path to extract the portal path, then retrieves the portal
-  /// instance associated with that path from the [_portalMap].
+  /// instance associated with that path from the [_portalCollection].
   ///
   /// Parameters:
   ///   - [fullPath]: The full path of the request.
@@ -360,17 +344,21 @@ class PortalService {
   /// Returns:
   ///   The portal instance associated with the extracted path.
   PortalMirror? _portalByFullPath(String fullPath) {
-    print(_portalMap);
     dynamic portal;
     try {
-      portal = _portalMap[_pathByFullPath(fullPath)];
+      final finalPath = _pathByFullPath(fullPath);
+      myLogger.d("Getting portal by path: $finalPath");
+      portal = _portalCollection.getByPath(finalPath);
       if (portal == null) {
         throw PortalException(
-            message: "No Portal registered with path: $fullPath",
+            message: "No Portal registered with path: $finalPath",
             statusCode: 404);
       }
-    } catch (e) {
-      print("Error: $e");
+    } catch (e, s) {
+      if (e is PortalException) {
+        rethrow;
+      }
+      myLogger.e("Error: $e", stackTrace: s);
     }
     return portal;
   }

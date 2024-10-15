@@ -40,7 +40,7 @@ class ExamplePortalServer {
   @Get('/sayHello')
   SocketMessage sayHello(SocketMessage request) {
     // this will be the response to the client
-    print("client says: ${request.text}");
+    myLogger.d("client says: ${request.text}");
     return SocketMessage('Hello Client!');
   }
 }
@@ -71,7 +71,7 @@ class ExamplePortalClient {
   // The Response and Request handler with the sane paths have to match the same types when it comes to the handler argument  
   @ResponseHandler('/sayHello')
   void sayHello(SocketMessage response) {
-    print("server says: ${response.text}");
+    myLogger.d("server says: ${response.text}");
     //... 
   }
 }
@@ -94,12 +94,12 @@ void main() async {
     ```
 
 
-4. **Define Middlewares**: Create middlewares to preprocess and postprocess requests and responses. Use the `MiddlewareService` to register your middleware.
+4. **Define Middlewares**: Create middlewares to preprocess and postprocess requests and responses. Use the `InterceptorService` to register your middleware.
 
     ```dart
     import 'package:portal/portal.dart';
 
-    var exampleMiddleware = Interceptor<SocketMessage>("/example", preHandle: (accepts) async => true, postHandle: (portalReceived, {portalGaveBack}) async => print(portalReceived));
+    var exampleMiddleware = Interceptor<SocketMessage>("/example", preHandle: (accepts) async => true, postHandle: (portalReceived, {portalGaveBack}) async => myLogger.d(portalReceived));
     
    ```
 
@@ -108,15 +108,15 @@ void main() async {
     ```dart
     void main() {
       //...
-      MiddlewareService().registerMiddleware(exampleMiddleware);
+      InterceptorService().registerMiddleware(exampleMiddleware);
       //or use the member method
       exampleMiddleware.register();
       //or use the anonymousMiddleware function if you do not wanna define a class
       anonymousMiddleware("/example", preHandle: (UInt8List request) {
-        print("Interceptor for /example");
+        myLogger.d("Interceptor for /example");
         return true;
       }, postHandle: (SerializableModel portalReceived, {SerializableModel? portalGaveBack}) {
-        print("Interceptor for /example");
+        myLogger.d("Interceptor for /example");
       });
       // Start your server or client
     }
