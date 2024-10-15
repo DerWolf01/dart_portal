@@ -213,29 +213,6 @@ class PortalService {
   Future<HttpRequest> handlePost(
       HttpRequest request, GatewayMirror gatewayMirror) async {
     dynamic result;
-    final String? methodParamName = gatewayMirror.methodMirror.parameters
-        .where(
-          (element) => element.metadata.isEmpty,
-        )
-        .firstOrNull
-        ?.name;
-    final argType = gatewayMirror.methodArgumentType();
-
-    late final dynamic argInstance;
-    try {
-      argInstance = argType != null
-          ? await ConversionService.requestToObject(request,
-              type: gatewayMirror.methodArgumentType()?.reflectedType)
-          : null;
-      myLogger.d("argInstance $argInstance");
-    } on ConversionException catch (e, s) {
-      request.response.statusCode = HttpStatus.badRequest;
-      request.response.write("Data invalid.");
-      myLogger.e(e.message,
-          header: "PortalService --> handlePost", stackTrace: s);
-
-      return request;
-    }
 
     MethodParameters methodParameters = await GatewayService()
         .generateGatewayArguments(
