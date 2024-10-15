@@ -81,15 +81,16 @@ class GatewayService {
           myLogger.d(
               "No Mapping found for named parameter \"${param.name}\". Interpreting as @QueryiesMapping. See documentation for details.",
               header: "GatewayService");
-          arguments.add(ConversionService.convert(
-              type: param.type.reflectedType,
-              value: request.uri.queryParameters[param.name]));
+          arguments.add(ConversionService.mapToObject(
+            request.uri.queryParameters,
+            type: param.type.reflectedType,
+          ));
         } else if (gatewayMirror.isPost()) {
           myLogger.d(
-              "Using requestToObject to convert body to object for parameter \"${param.name}\". See documentation for details.",
+              "Using requestToObject to mapToObject body to object for parameter \"${param.name}\". See documentation for details.",
               header: "GatewayService");
-          arguments.add(ConversionService.convert(
-              value: ut8String, type: param.type.reflectedType));
+          arguments.add(ConversionService.mapToObject(jsonDecode(ut8String),
+              type: param.type.reflectedType));
         }
       }
     }
