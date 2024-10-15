@@ -43,9 +43,10 @@ class GatewayService {
             "No Mapping found for named parameter \"${param.name}\". Interpreting as @QueryiesMapping. See documentation for details.",
             header: "GatewayService");
         if (gatewayMirror.isGet()) {
-          namedArguments[param.name] = ConversionService.convert(
-              type: param.type.reflectedType,
-              value: request.uri.queryParameters[param.name]);
+          namedArguments[param.name] = ConversionService.mapToObject(
+            request.uri.queryParameters,
+            type: param.type.reflectedType,
+          );
         } else if (gatewayMirror.isPost()) {
           namedArguments[param.name] = ConversionService.mapToObject(
               jsonDecode(ut8String),

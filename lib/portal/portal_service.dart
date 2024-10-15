@@ -235,7 +235,7 @@ class PortalService {
       request.response.write(e.message);
     } catch (e, s) {
       myLogger.e("Error: $e", stackTrace: s);
-      myLogger.e("Stacktrace: $s");
+
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
