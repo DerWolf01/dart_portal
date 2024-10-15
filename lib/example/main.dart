@@ -1,14 +1,13 @@
-import 'dart:isolate';
-import 'dart:mirrors';
+// ignore_for_file: unused_import
 
-import 'package:portal/example/server/controller/auth_portal_example.dart';
-import 'package:portal/portal.dart';
-import 'package:portal/portal_server.dart';
+import 'dart:isolate';
+
 import 'package:http/http.dart' as http;
+import 'package:portal/example/server/controller/auth_portal_example.dart';
+import 'package:portal/portal_server.dart';
 
 void main<T>() async {
-  PortalService().registerPortals();
-  await PortalServer.init(port: 3001);
+  await PortalServer.init(port: 3001, enableLogging: true);
 
   Isolate.spawn((message) {
     http.post(

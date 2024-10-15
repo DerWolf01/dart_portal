@@ -3,8 +3,9 @@ import 'dart:io';
 
 import 'package:portal/example/sign_up_form.dart';
 import 'package:portal/interceptor/intercept.dart';
+import 'package:portal/my_logger.dart';
 import 'package:portal/portal/gateway.dart';
-import 'package:portal/portal/header_mapping.dart';
+import 'package:portal/portal/mappings/header_mapping.dart';
 import 'package:portal/portal/portal_impl.dart';
 
 class AuthInterceptorExample extends Interceptor<SignUpForm> {
@@ -12,7 +13,7 @@ class AuthInterceptorExample extends Interceptor<SignUpForm> {
 
   @override
   Future<bool> preHandle(HttpRequest request) async {
-    print("pre-handled request $request");
+    myLogger.d("pre-handled request $request");
     return true;
   }
 
@@ -21,7 +22,7 @@ class AuthInterceptorExample extends Interceptor<SignUpForm> {
       {required HttpRequest request,
       required SignUpForm portalReceived,
       portalGaveBack}) {
-    print("post-handled request $request");
+    myLogger.d("post-handled request $request");
   }
 }
 
@@ -30,13 +31,13 @@ class AuthPortalExample {
   @AuthInterceptorExample()
   @Post("/sign-in")
   handle(SignUpForm data) {
-    print(data);
+    myLogger.d(data);
     return SignUpResult("andsoinewoiwndoenwf1231231231321");
   }
 
   @Post("/authenticate")
   handleAuthenticate(@HeaderMapping("Authorization") String token) {
-    print(token);
+    myLogger.d(token);
     return SignUpResult("andsoinewoiwndoenwf1231231231321");
   }
 }
