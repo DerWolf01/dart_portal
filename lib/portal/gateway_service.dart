@@ -5,7 +5,6 @@ import 'dart:mirrors';
 import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/my_logger.dart';
 import 'package:portal/portal.dart';
-import 'package:portal/portal/mappings/query_mapping.dart';
 
 class GatewayService {
   Future<MethodParameters> generateGatewayArguments(
@@ -88,7 +87,7 @@ class GatewayService {
               "Using requestToObject to convert body to object for parameter \"${param.name}\". See documentation for details.",
               header: "GatewayService");
           arguments.add(ConversionService.convert(
-              value: await utf8.decodeStream(request),
+              value: await utf8.decodeStream(request.asBroadcastStream()),
               type: param.type.reflectedType));
         }
       }
