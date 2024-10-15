@@ -46,8 +46,8 @@ class GatewayService {
               type: param.type.reflectedType,
               value: request.uri.queryParameters[param.name]);
         } else if (gatewayMirror.isPost()) {
-          namedArguments[param.name] = await ConversionService.requestToObject(
-              request,
+          namedArguments[param.name] = ConversionService.mapToObject(
+              jsonDecode(await utf8.decodeStream(request.asBroadcastStream())),
               type: param.type.reflectedType);
         }
       } else {

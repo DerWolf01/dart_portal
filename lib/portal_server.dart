@@ -46,6 +46,7 @@ class PortalServer {
   /// and adds it to the list of active sessions.
   void listen() {
     server.listen((HttpRequest request) async {
+      
       myLogger.i('''
   Ip-Adress: ${request.connectionInfo?.remoteAddress}
   Method: ${request.method}
@@ -55,7 +56,7 @@ class PortalServer {
           ''', header: "PortalServer --> Request");
 
       await portalService.callGateway(request.uri.path, request);
-      
+
       await request.response.flush();
       await request.response.close();
     });
