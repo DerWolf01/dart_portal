@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/example/server/controller/auth_portal_example.dart';
 import 'package:portal/my_logger.dart';
 import 'package:portal/portal.dart';
@@ -46,7 +47,6 @@ class PortalServer {
   /// and adds it to the list of active sessions.
   void listen() {
     server.listen((HttpRequest request) async {
-      
       myLogger.i('''
   Ip-Adress: ${request.connectionInfo?.remoteAddress}
   Method: ${request.method}
@@ -80,8 +80,14 @@ class PortalServer {
       {String host = 'localhost',
       int port = 3000,
       SecurityContext? securityContext,
-      bool enableLogging = false}) async {
+      bool enableLogging = false,
+      bool enableConversionLogging = false}) async {
     try {
+      if (enableConversionLogging) {
+        ConversionService.enableLogging();
+      } else {
+        ConversionService.disableLogging();
+      }
       MyLogger.init(enabled: enableLogging);
       PortalService().registerPortals();
       final server = securityContext == null
