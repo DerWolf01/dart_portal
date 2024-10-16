@@ -127,7 +127,7 @@ class GatewayService {
             arguments.add(convertedValue);
           } else if (gatewayMirror.isPost()) {
             myLogger.d(
-                "Using ConversionService.convert for parameter \"${param.name}\". See documentation for details.",
+                "Using ConversionService.convert for parameter \"${param.name}\" of value $ut8String to ${param.type.reflectedType} See documentation for details.",
                 header: "GatewayService");
 
             final convertedValue = ConversionService.convert(
