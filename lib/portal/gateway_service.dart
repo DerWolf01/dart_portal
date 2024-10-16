@@ -71,7 +71,8 @@ class GatewayService {
             namedArguments[param.name] = convertedValue;
           } else if (gatewayMirror.isPost()) {
             late final dynamic convertedValue;
-            if (contentType == ContentType.json) {
+            if (contentType == ContentType.json ||
+                contentType.subType == "json") {
               final json = jsonDecode(ut8String);
               myLogger.d(
                   "Converting $json to object of type ${param.type.reflectedType}",
@@ -148,7 +149,8 @@ class GatewayService {
           } else if (gatewayMirror.isPost()) {
             late final dynamic convertedValue;
 
-            if (contentType == ContentType.json) {
+            if (contentType == ContentType.json ||
+                contentType.subType == "json") {
               final json = jsonDecode(ut8String);
               myLogger.d(
                   "Converting $json to object of type ${param.type.reflectedType}",
