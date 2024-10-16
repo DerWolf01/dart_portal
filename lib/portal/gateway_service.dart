@@ -48,9 +48,8 @@ class GatewayService {
             type: param.type.reflectedType,
           );
         } else if (gatewayMirror.isPost()) {
-          namedArguments[param.name] = ConversionService.mapToObject(
-              jsonDecode(ut8String),
-              type: param.type.reflectedType);
+          namedArguments[param.name] = ConversionService.convert(
+              value: jsonDecode(ut8String), type: param.type.reflectedType);
         }
       } else {
         myLogger.d("Named parameter: ${param.name}", header: "GatewayService");
@@ -71,8 +70,8 @@ class GatewayService {
         if (param.isQueriesMapping) {
           myLogger.d("Found QueriesMapping --> ${param.name}",
               header: "GatewayService");
-          arguments.add(ConversionService.mapToObject(
-              request.uri.queryParameters,
+          arguments.add(ConversionService.convert(
+              value: request.uri.queryParameters,
               type: param.type.reflectedType));
           continue;
         }
@@ -81,16 +80,16 @@ class GatewayService {
           myLogger.d(
               "No Mapping found for named parameter \"${param.name}\". Interpreting as @QueryiesMapping. See documentation for details.",
               header: "GatewayService");
-          arguments.add(ConversionService.mapToObject(
-            request.uri.queryParameters,
+          arguments.add(ConversionService.convert(
+            value: request.uri.queryParameters,
             type: param.type.reflectedType,
           ));
         } else if (gatewayMirror.isPost()) {
           myLogger.d(
               "Using requestToObject to mapToObject body to object for parameter \"${param.name}\". See documentation for details.",
               header: "GatewayService");
-          arguments.add(ConversionService.mapToObject(jsonDecode(ut8String),
-              type: param.type.reflectedType));
+          arguments.add(ConversionService.convert(
+              value: jsonDecode(ut8String), type: param.type.reflectedType));
         }
       }
     }
