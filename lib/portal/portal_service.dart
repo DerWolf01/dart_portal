@@ -4,6 +4,7 @@ import 'dart:mirrors';
 
 import 'package:characters/characters.dart';
 import 'package:dart_conversion/dart_conversion.dart';
+import 'package:portal/example/server/controller/auth_portal_example.dart';
 import 'package:portal/interceptor/interceptor_exception.dart';
 import 'package:portal/my_logger.dart';
 import 'package:portal/portal.dart';
@@ -92,7 +93,15 @@ class PortalService {
           return await handlePost(request, gatewayMirror);
         }
       } catch (e, s) {
-        myLogger.e("Error processing request: $e");
+        myLogger.e("""
+  Error while processing request: $e with details: 
+
+  Ip-Adress: ${request.connectionInfo?.remoteAddress}
+  Method: ${request.method}
+  Headers: { ${request.headers} }
+  Uri: ${request.uri.path}
+  Query: ${request.uri.queryParametersAll}
+  """, stackTrace: s);
         myLogger.e(s);
 
         request.response.statusCode = HttpStatus.internalServerError;
@@ -191,16 +200,23 @@ class PortalService {
           ));
       if (response0 is InstanceMirror && response0.reflectee is Future) {
         response0 = await response0.reflectee;
+      } else {
+        response0 = response0.reflectee;
       }
       final jsonResult = ConversionService.encodeJSON(response0);
 
       myLogger.i(
           "${gatewayMirror.methodMirror.name} --> $response0 --> $jsonResult");
+
+      if (response0 is SignUpResult) {
+        myLogger.w("SignUpResult: ${response0.token} ");
+      }
       response = response0;
       request.response.write(jsonResult);
     } on PortalException catch (e, s) {
       myLogger.e("Error: $e",
           stackTrace: s, header: "PortalService --> handleGet");
+
       request.response.statusCode = e.statusCode;
       response = e.message;
     } catch (e, s) {
@@ -232,13 +248,18 @@ class PortalService {
 
       if (response0 is InstanceMirror && response0.reflectee is Future) {
         response0 = await response0.reflectee;
+      } else {
+        response0 = response0.reflectee;
       }
       final jsonResult = ConversionService.encodeJSON(response0);
       myLogger.i(
           "${gatewayMirror.methodMirror.name} --> $response0 --> $jsonResult");
 
       result = response0;
-      myLogger.d("Result: $response0");
+
+      if (response0 is SignUpResult) {
+        myLogger.w("SignUpResult: ${response0.token} ");
+      }
       request.response.write(jsonResult);
     } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;

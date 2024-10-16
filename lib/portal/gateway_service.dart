@@ -10,6 +10,7 @@ class GatewayService {
   Future<MethodParameters> generateGatewayArguments(
       {required HttpRequest request,
       required GatewayMirror gatewayMirror}) async {
+    final contentType = request.headers.contentType ?? ContentType.json;
     final ut8String = await utf8.decodeStream(request);
     final arguments = <dynamic>[];
     final namedArguments = <String, dynamic>{};
@@ -49,7 +50,7 @@ class GatewayService {
           );
         } else if (gatewayMirror.isPost()) {
           namedArguments[param.name] = ConversionService.convert(
-              value: jsonDecode(ut8String), type: param.type.reflectedType);
+              value: ut8String, type: param.type.reflectedType);
         }
       } else {
         myLogger.d("Named parameter: ${param.name}", header: "GatewayService");
@@ -89,7 +90,10 @@ class GatewayService {
               "Using ConversionService.convert for parameter \"${param.name}\". See documentation for details.",
               header: "GatewayService");
           arguments.add(ConversionService.convert(
-              value: jsonDecode(ut8String), type: param.type.reflectedType));
+              value: contentType == ContentType.json
+                  ? jsonDecode(ut8String)
+                  : ut8String,
+              type: param.type.reflectedType));
         }
       }
     }

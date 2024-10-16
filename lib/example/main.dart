@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
 
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:http/http.dart' as http;
@@ -16,7 +17,10 @@ void main<T>() async {
           port: 3001,
           scheme: "http",
           path: "/auth/authenticate"),
-      headers: {"Authorization": "test_token"},
+      headers: {
+        "Authorization": "test_token",
+        "Content-Type": ContentType.text.mimeType
+      },
     );
   }, "");
 }
