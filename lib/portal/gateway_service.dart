@@ -12,8 +12,7 @@ class GatewayService {
       required GatewayMirror gatewayMirror}) async {
     try {
       final contentType = request.headers.contentType ?? ContentType.json;
-      myLogger.d("Content-Type: ${contentType.mimeType}",
-          header: "GatewayService");
+      myLogger.d("Content-Type: $contentType", header: "GatewayService");
       final ut8String = await utf8.decodeStream(request);
       final arguments = <dynamic>[];
       final namedArguments = <String, dynamic>{};
