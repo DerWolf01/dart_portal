@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:mirrors';
 
 import 'package:characters/characters.dart';
 import 'package:dart_conversion/dart_conversion.dart';
@@ -182,13 +183,15 @@ class PortalService {
             request: request, gatewayMirror: gatewayMirror);
     dynamic response;
     try {
-      final dynamic response0 =
-          await (gatewayMirror.portalInstanceMirror.invoke(
-              Symbol(gatewayMirror.methodMirror.name),
-              methodParameters.args,
-              methodParameters.namedArgs.map(
-                (key, value) => MapEntry(Symbol(key), value),
-              )) as FutureOr);
+      dynamic response0 = gatewayMirror.portalInstanceMirror.invoke(
+          Symbol(gatewayMirror.methodMirror.name),
+          methodParameters.args,
+          methodParameters.namedArgs.map(
+            (key, value) => MapEntry(Symbol(key), value),
+          ));
+      if (response0 is InstanceMirror && response0.reflectee is Future) {
+        response0 = await response0.reflectee;
+      }
       final jsonResult = ConversionService.encodeJSON(response0);
 
       myLogger.i(
@@ -220,12 +223,16 @@ class PortalService {
         .generateGatewayArguments(
             request: request, gatewayMirror: gatewayMirror);
     try {
-      final response0 = await (gatewayMirror.portalInstanceMirror.invoke(
+      dynamic response0 = gatewayMirror.portalInstanceMirror.invoke(
           gatewayMirror.methodMirror.simpleName,
           methodParameters.args,
           methodParameters.namedArgs.map(
             (key, value) => MapEntry(Symbol(key), value),
-          )) as FutureOr);
+          ));
+
+      if (response0 is InstanceMirror && response0.reflectee is Future) {
+        response0 = await response0.reflectee;
+      }
       final jsonResult = ConversionService.encodeJSON(response0);
       myLogger.i(
           "${gatewayMirror.methodMirror.name} --> $response0 --> $jsonResult");
