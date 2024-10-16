@@ -34,8 +34,8 @@ class GatewayService {
         if (param.isQueriesMapping) {
           myLogger.d("Found QueriesMapping --> ${param.name}",
               header: "GatewayService");
-          namedArguments[param.name] = ConversionService.mapToObject(
-              request.uri.queryParameters,
+          namedArguments[param.name] = ConversionService.convert(
+              value: request.uri.queryParameters,
               type: param.type.reflectedType);
           continue;
         }
@@ -43,8 +43,8 @@ class GatewayService {
             "No Mapping found for named parameter \"${param.name}\". Interpreting as @QueryiesMapping. See documentation for details.",
             header: "GatewayService");
         if (gatewayMirror.isGet()) {
-          namedArguments[param.name] = ConversionService.mapToObject(
-            request.uri.queryParameters,
+          namedArguments[param.name] = ConversionService.convert(
+            value: request.uri.queryParameters,
             type: param.type.reflectedType,
           );
         } else if (gatewayMirror.isPost()) {
@@ -86,7 +86,7 @@ class GatewayService {
           ));
         } else if (gatewayMirror.isPost()) {
           myLogger.d(
-              "Using requestToObject to mapToObject body to object for parameter \"${param.name}\". See documentation for details.",
+              "Using ConversionService.convert for parameter \"${param.name}\". See documentation for details.",
               header: "GatewayService");
           arguments.add(ConversionService.convert(
               value: jsonDecode(ut8String), type: param.type.reflectedType));
