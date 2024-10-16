@@ -187,9 +187,13 @@ class PortalService {
       HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
     myLogger.d("GET: $gatewayMirror", header: "PortalService --> handleGet");
 
-    MethodParameters methodParameters = await GatewayService()
+    MethodParameters? methodParameters = await GatewayService()
         .generateGatewayArguments(
             request: request, gatewayMirror: gatewayMirror);
+    if (methodParameters == null) {
+      throw PortalException(
+          message: "Error while processing request", statusCode: 500);
+    }
     dynamic response;
     try {
       dynamic response0 = gatewayMirror.portalInstanceMirror.invoke(
@@ -235,9 +239,13 @@ class PortalService {
       HttpRequest request, GatewayMirror gatewayMirror) async {
     dynamic result;
 
-    MethodParameters methodParameters = await GatewayService()
+    MethodParameters? methodParameters = await GatewayService()
         .generateGatewayArguments(
             request: request, gatewayMirror: gatewayMirror);
+    if (methodParameters == null) {
+      throw PortalException(
+          message: "Error while processing request", statusCode: 500);
+    }
     try {
       dynamic response0 = gatewayMirror.portalInstanceMirror.invoke(
           gatewayMirror.methodMirror.simpleName,
