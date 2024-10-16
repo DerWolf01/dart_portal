@@ -69,9 +69,18 @@ class GatewayService {
                 header: "GatewayService");
             namedArguments[param.name] = convertedValue;
           } else if (gatewayMirror.isPost()) {
-            final convertedValue = ConversionService.convert(
-                value: ut8String, type: param.type.reflectedType);
-            myLogger.d("Converted $ut8String --> $convertedValue",
+            myLogger.d(
+                "Using ConversionService.convert for parameter \"${param.name}\" of value $ut8String to ${param.type.reflectedType} See documentation for details.",
+                header: "GatewayService");
+
+            final convertedValue = contentType == ContentType.json
+                ? ConversionService.mapToObject(jsonDecode(ut8String),
+                    type: param.type.reflectedType)
+                : ConversionService.convert(
+                    value: ut8String, type: param.type.reflectedType);
+
+            myLogger.d(
+                "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
                 header: "GatewayService");
             namedArguments[param.name] = convertedValue;
           }
@@ -131,7 +140,7 @@ class GatewayService {
                 header: "GatewayService");
 
             final convertedValue = contentType == ContentType.json
-                ? ConversionService.jsonToObject(ut8String,
+                ? ConversionService.mapToObject(jsonDecode(ut8String),
                     type: param.type.reflectedType)
                 : ConversionService.convert(
                     value: ut8String, type: param.type.reflectedType);
