@@ -130,11 +130,11 @@ class GatewayService {
                 "Using ConversionService.convert for parameter \"${param.name}\" of value $ut8String to ${param.type.reflectedType} See documentation for details.",
                 header: "GatewayService");
 
-            final convertedValue = ConversionService.convert(
-                value: contentType == ContentType.json
-                    ? jsonDecode(ut8String)
-                    : ut8String,
-                type: param.type.reflectedType);
+            final convertedValue = contentType == ContentType.json
+                ? ConversionService.jsonToObject(ut8String,
+                    type: param.type.reflectedType)
+                : ConversionService.convert(
+                    value: ut8String, type: param.type.reflectedType);
 
             myLogger.d(
                 "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
