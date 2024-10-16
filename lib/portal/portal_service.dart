@@ -197,7 +197,7 @@ class PortalService {
     dynamic response;
     try {
       myLogger.d(
-          "Invoking GatewayMirror: \n $gatewayMirror --> ${gatewayMirror.methodMirror.parameters.map(
+          "Invoking $gatewayMirror:\n ${gatewayMirror.methodMirror.parameters.map(
                 (e) => "${e.metadata.map(
                       (e) => "\n @${e.type.name}\n",
                     ).join("")} ${e.type.reflectedType} ${e.name} : ${methodParameters.namedArgs[e.name] ?? ("\"${methodParameters.args[gatewayMirror.methodMirror.parameters.indexOf(e)]}\"")}",
@@ -257,7 +257,7 @@ class PortalService {
     }
     try {
       myLogger.d(
-          "Invoking GatewayMirror: \n $gatewayMirror --> ${gatewayMirror.methodMirror.parameters.map(
+          "Invoking $gatewayMirror: \n ${gatewayMirror.methodMirror.parameters.map(
                 (e) => "${e.metadata.map(
                       (e) => "\n @${e.type.name}\n",
                     ).join("")} ${e.type.reflectedType} ${e.name} : ${methodParameters.namedArgs[e.name] ?? ("\"${methodParameters.args[gatewayMirror.methodMirror.parameters.indexOf(e)]}\"")}",

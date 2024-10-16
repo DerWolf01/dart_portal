@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'dart:mirrors';
 
-import 'package:dart_conversion/dart_conversion.dart';
 import 'package:portal/interceptor/intercept.dart';
-import 'package:portal/portal/portal_impl.dart';
 
 abstract class Gateway {
   /// The URL path associated with this request type.
@@ -11,10 +8,47 @@ abstract class Gateway {
   /// This path is used by the routing mechanism to match incoming requests to their handlers.
   final String path;
 
-  String get getPath => path.startsWith("/") ? path : '/$path';
-
   /// Constructs a [RequestType] instance with the given path.
   const Gateway(this.path);
+
+  String get getPath => path.startsWith("/") ? path : '/$path';
+
+  @override
+  String toString() => "Instance of Gateway($getPath)";
+}
+
+class GatewayMirror {
+  final ClassMirror portalClassMirror;
+  final InstanceMirror portalInstanceMirror;
+
+  final MethodMirror methodMirror;
+
+  final Gateway gateway;
+  final List<Interceptor> interceptors;
+  GatewayMirror(
+      {required this.portalClassMirror,
+      required this.methodMirror,
+      required this.gateway,
+      required this.interceptors})
+      : portalInstanceMirror = portalClassMirror.newInstance(Symbol(''), []);
+  String get getPath => gateway.getPath;
+  bool isGet() => gateway is Get;
+
+  bool isPost() => gateway is Post;
+
+  TypeMirror? methodArgumentType() {
+    return methodMirror.parameters
+        .where(
+          (element) => element.metadata.isEmpty,
+        )
+        .firstOrNull
+        ?.type;
+  }
+
+  @override
+  String toString() {
+    return 'GatewayMirror{gateway: $gateway, methodMirror: $methodMirror, interceptors: $interceptors, }';
+  }
 }
 
 /// A decorator for methods that handle specific types of requests.
@@ -37,34 +71,4 @@ class Get extends Gateway {
 class Post extends Gateway {
   /// Constructs a [Post] instance with the given path.
   const Post(super.path);
-}
-
-class GatewayMirror {
-  GatewayMirror(
-      {required this.portalClassMirror,
-      required this.methodMirror,
-      required this.gateway,
-      required this.interceptors})
-      : portalInstanceMirror = portalClassMirror.newInstance(Symbol(''), []);
-
-  String get getPath => gateway.getPath;
-
-  final ClassMirror portalClassMirror;
-  final InstanceMirror portalInstanceMirror;
-  final MethodMirror methodMirror;
-  final Gateway gateway;
-  final List<Interceptor> interceptors;
-
-  bool isGet() => gateway is Get;
-
-  bool isPost() => gateway is Post;
-
-  TypeMirror? methodArgumentType() {
-    return methodMirror.parameters
-        .where(
-          (element) => element.metadata.isEmpty,
-        )
-        .firstOrNull
-        ?.type;
-  }
 }
