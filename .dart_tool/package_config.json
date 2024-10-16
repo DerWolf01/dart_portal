@@ -135,7 +135,7 @@
     },
     {
       "name": "dart_conversion",
-      "rootUri": "file:///Users/bdemir/.pub-cache/git/dart_conversion-6ee323412626a86081458a6b6ae202923ac70759/",
+      "rootUri": "file:///Users/bdemir/.pub-cache/git/dart_conversion-d36e8f494360d1a93b7b3de95fffbb289d53d4a9/",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -351,7 +351,7 @@
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/string_scanner-1.3.0",
+      "rootUri": "file:///Users/bdemir/.pub-cache/hosted/pub.dev/string_scanner-1.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
@@ -440,7 +440,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-10-16T12:30:19.059708Z",
+  "generated": "2024-10-16T18:00:15.116124Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///opt/homebrew/Caskroom/flutter/3.19.3/flutter",
