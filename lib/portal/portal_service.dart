@@ -189,10 +189,12 @@ class PortalService {
               methodParameters.namedArgs.map(
                 (key, value) => MapEntry(Symbol(key), value),
               )) as FutureOr);
+      final jsonResult = ConversionService.encodeJSON(response0);
 
-      myLogger.d("Result: $response0");
-
+      myLogger.i(
+          "${gatewayMirror.methodMirror.name} --> $response0 --> $jsonResult");
       response = response0;
+      request.response.write(jsonResult);
     } on PortalException catch (e, s) {
       myLogger.e("Error: $e",
           stackTrace: s, header: "PortalService --> handleGet");
@@ -224,10 +226,13 @@ class PortalService {
           methodParameters.namedArgs.map(
             (key, value) => MapEntry(Symbol(key), value),
           )) as FutureOr);
+      final jsonResult = ConversionService.encodeJSON(response0);
+      myLogger.i(
+          "${gatewayMirror.methodMirror.name} --> $response0 --> $jsonResult");
 
       result = response0;
       myLogger.d("Result: $response0");
-      request.response.write(ConversionService.encodeJSON(result));
+      request.response.write(jsonResult);
     } on PortalException catch (e, s) {
       request.response.statusCode = e.statusCode;
       myLogger.e("Error: $e",
