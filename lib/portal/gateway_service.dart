@@ -70,19 +70,29 @@ class GatewayService {
                 header: "GatewayService");
             namedArguments[param.name] = convertedValue;
           } else if (gatewayMirror.isPost()) {
-            myLogger.d(
-                "Using ConversionService.convert for parameter \"${param.name}\" of value $ut8String to ${param.type.reflectedType} See documentation for details.",
-                header: "GatewayService");
+            late final dynamic convertedValue;
+            if (contentType == ContentType.json) {
+              final json = jsonDecode(ut8String);
+              myLogger.d(
+                  "Converting $json to object of type ${param.type.reflectedType}",
+                  header: "GatewayService");
+              convertedValue = ConversionService.mapToObject(json,
+                  type: param.type.reflectedType);
 
-            final convertedValue = contentType == ContentType.json
-                ? ConversionService.mapToObject(jsonDecode(ut8String),
-                    type: param.type.reflectedType)
-                : ConversionService.convert(
-                    value: ut8String, type: param.type.reflectedType);
+              myLogger.d(
+                  "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
+                  header: "GatewayService");
+            } else {
+              myLogger.d(
+                  "Converting $ut8String to object of type ${param.type.reflectedType}",
+                  header: "GatewayService");
+              convertedValue = ConversionService.convert(
+                  value: ut8String, type: param.type.reflectedType);
+              myLogger.d(
+                  "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
+                  header: "GatewayService");
+            }
 
-            myLogger.d(
-                "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
-                header: "GatewayService");
             namedArguments[param.name] = convertedValue;
           }
         } else {
@@ -136,19 +146,30 @@ class GatewayService {
                 header: "GatewayService");
             arguments.add(convertedValue);
           } else if (gatewayMirror.isPost()) {
-            myLogger.d(
-                "Using ConversionService.convert for parameter \"${param.name}\" of value $ut8String to ${param.type.reflectedType} See documentation for details.",
-                header: "GatewayService");
+            late final dynamic convertedValue;
 
-            final convertedValue = contentType == ContentType.json
-                ? ConversionService.mapToObject(jsonDecode(ut8String),
-                    type: param.type.reflectedType)
-                : ConversionService.convert(
-                    value: ut8String, type: param.type.reflectedType);
+            if (contentType == ContentType.json) {
+              final json = jsonDecode(ut8String);
+              myLogger.d(
+                  "Converting $json to object of type ${param.type.reflectedType}",
+                  header: "GatewayService");
+              convertedValue = ConversionService.mapToObject(json,
+                  type: param.type.reflectedType);
 
-            myLogger.d(
-                "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
-                header: "GatewayService");
+              myLogger.d(
+                  "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
+                  header: "GatewayService");
+            } else {
+              myLogger.d(
+                  "Converting $ut8String to object of type ${param.type.reflectedType}",
+                  header: "GatewayService");
+              convertedValue = ConversionService.convert(
+                  value: ut8String, type: param.type.reflectedType);
+              myLogger.d(
+                  "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
+                  header: "GatewayService");
+            }
+
             arguments.add(convertedValue);
           }
         }
