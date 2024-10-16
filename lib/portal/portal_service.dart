@@ -247,6 +247,13 @@ class PortalService {
           message: "Error while processing request", statusCode: 500);
     }
     try {
+      myLogger.d(
+          "Invoking GatewayMirror: \n $gatewayMirror --> ${gatewayMirror.methodMirror.parameters.map(
+                (e) => "${e.metadata.map(
+                      (e) => "\n @${e.type.name}\n",
+                    ).join("")} ${e.type.reflectedType} ${e.name} : ${methodParameters.namedArgs[e.name] ?? ("\"${methodParameters.args[gatewayMirror.methodMirror.parameters.indexOf(e)]}\"")}",
+              ).join(",")}",
+          header: "PortalService --> handlePost");
       dynamic response0 = gatewayMirror.portalInstanceMirror.invoke(
           gatewayMirror.methodMirror.simpleName,
           methodParameters.args,

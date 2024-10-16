@@ -23,7 +23,15 @@ class GatewayService {
           if (param.isHeaderMapping) {
             myLogger.d("Found HeaderMapping --> ${param.name}",
                 header: "GatewayService");
-            namedArguments[param.name] = request.headers[param.name];
+
+            final headerMapping = param.metadata
+                .where((element) => element.reflectee is HeaderMapping)
+                .first
+                .reflectee as HeaderMapping;
+            final key = headerMapping.key;
+            myLogger.d("HeaderMapping key -->  \"$key\"",
+                header: "GatewayService");
+            namedArguments[param.name] = request.headers.value(key);
             continue;
           }
           if (param.isQueryMapping) {
@@ -73,7 +81,15 @@ class GatewayService {
           if (param.isHeaderMapping) {
             myLogger.d("Found HeaderMapping --> ${param.name}",
                 header: "GatewayService");
-            arguments.add(request.headers[param.name]);
+
+            final headerMapping = param.metadata
+                .where((element) => element.reflectee is HeaderMapping)
+                .first
+                .reflectee as HeaderMapping;
+            final key = headerMapping.key;
+            myLogger.d("HeaderMapping key -->  \"$key\"",
+                header: "GatewayService");
+            arguments.add(request.headers.value(key));
             continue;
           }
           if (param.isQueryMapping) {
@@ -120,7 +136,7 @@ class GatewayService {
                     : ut8String,
                 type: param.type.reflectedType);
 
-            myLogger.d("Converted $ut8String --> $convertedValue",
+            myLogger.d("Converted \"$ut8String\" --> \"$convertedValue\"",
                 header: "GatewayService");
             arguments.add(convertedValue);
           }
@@ -137,13 +153,13 @@ class GatewayService {
 
 extension ParameterName on ParameterMirror {
   bool get isHeaderMapping =>
-      this.metadata.any((element) => element is HeaderMapping);
+      this.metadata.any((element) => element.reflectee is HeaderMapping);
 
   bool get isQueriesMapping =>
-      this.metadata.any((element) => element is QueriesMapping);
+      this.metadata.any((element) => element.reflectee is QueriesMapping);
 
   bool get isQueryMapping =>
-      this.metadata.any((element) => element is QueryMapping);
+      this.metadata.any((element) => element.reflectee is QueryMapping);
 
   String get name => MirrorSystem.getName(simpleName);
 }

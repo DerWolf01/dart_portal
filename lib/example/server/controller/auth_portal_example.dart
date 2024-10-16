@@ -12,17 +12,17 @@ class AuthInterceptorExample extends Interceptor<SignUpForm> {
   const AuthInterceptorExample();
 
   @override
-  Future<bool> preHandle(HttpRequest request) async {
-    myLogger.d("pre-handled request $request");
-    return true;
-  }
-
-  @override
   FutureOr<void> postHandle(
       {required HttpRequest request,
       required SignUpForm portalReceived,
       portalGaveBack}) {
     myLogger.d("post-handled request $request");
+  }
+
+  @override
+  Future<bool> preHandle(HttpRequest request) async {
+    myLogger.d("pre-handled request $request");
+    return true;
   }
 }
 
@@ -37,13 +37,13 @@ class AuthPortalExample {
 
   @Post("/authenticate")
   handleAuthenticate(@HeaderMapping("Authorization") String token) {
-    myLogger.d(token);
+    myLogger.d("Token: \"$token\"", header: "AuthPortalExample");
     return SignUpResult("andsoinewoiwndoenwf1231231231321");
   }
 }
 
 class SignUpResult {
-  const SignUpResult(this.token);
-
   final String token;
+
+  const SignUpResult(this.token);
 }
