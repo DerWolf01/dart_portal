@@ -136,7 +136,8 @@ class GatewayService {
                     : ut8String,
                 type: param.type.reflectedType);
 
-            myLogger.d("Converted \"$ut8String\" --> \"$convertedValue\"",
+            myLogger.d(
+                "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
                 header: "GatewayService");
             arguments.add(convertedValue);
           }
