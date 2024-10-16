@@ -196,6 +196,13 @@ class PortalService {
     }
     dynamic response;
     try {
+      myLogger.d(
+          "Invoking GatewayMirror: \n $gatewayMirror --> ${gatewayMirror.methodMirror.parameters.map(
+                (e) => "${e.metadata.map(
+                      (e) => "\n @${e.type.name}\n",
+                    ).join("")} ${e.type.reflectedType} ${e.name} : ${methodParameters.namedArgs[e.name] ?? ("\"${methodParameters.args[gatewayMirror.methodMirror.parameters.indexOf(e)]}\"")}",
+              ).join(",")}",
+          header: "PortalService --> handlePost");
       dynamic response0 = gatewayMirror.portalInstanceMirror.invoke(
           Symbol(gatewayMirror.methodMirror.name),
           methodParameters.args,
@@ -228,8 +235,10 @@ class PortalService {
           stackTrace: s, header: "PortalService --> handleGet");
       request.response.statusCode = HttpStatus.internalServerError;
     }
-
-    request.response.write(ConversionService.encodeJSON(response));
+    final jsonResult = ConversionService.encodeJSON(response);
+    request.response.write(jsonResult);
+    myLogger
+        .i("${gatewayMirror.methodMirror.name} --> $response --> $jsonResult");
     await InterceptorService().postHandle(
         request, gatewayMirror.interceptors, methodParameters, response);
     return request;
