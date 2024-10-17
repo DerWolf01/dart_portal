@@ -12,17 +12,17 @@ class GatewayService {
       required GatewayMirror gatewayMirror}) async {
     try {
       final contentType = request.headers.contentType ?? ContentType.json;
-      myLogger.d("Content-Type: $contentType", header: "GatewayService");
+      myLogger.i("Content-Type: $contentType", header: "GatewayService");
       final ut8String = await utf8.decodeStream(request);
       final arguments = <dynamic>[];
       final namedArguments = <String, dynamic>{};
       final params = gatewayMirror.methodMirror.parameters;
       for (final param in params) {
         if (param.isNamed) {
-          myLogger.d("Named parameter: ${param.name}",
+          myLogger.i("Named parameter: ${param.name}",
               header: "GatewayService");
           if (param.isHeaderMapping) {
-            myLogger.d("Found HeaderMapping --> ${param.name}",
+            myLogger.i("Found HeaderMapping --> ${param.name}",
                 header: "GatewayService");
 
             final headerMapping = param.metadata
@@ -30,35 +30,35 @@ class GatewayService {
                 .first
                 .reflectee as HeaderMapping;
             final key = headerMapping.key;
-            myLogger.d("HeaderMapping key -->  \"$key\"",
+            myLogger.i("HeaderMapping key -->  \"$key\"",
                 header: "GatewayService");
             namedArguments[param.name] = request.headers.value(key);
             continue;
           }
           if (param.isQueryMapping) {
-            myLogger.d("Found QueryMapping --> ${param.name}",
+            myLogger.i("Found QueryMapping --> ${param.name}",
                 header: "GatewayService");
 
             final convertedValue = ConversionService.convert(
                 type: param.type.reflectedType,
                 value: request.uri.queryParameters[param.name]);
-            myLogger.d("Converted $ut8String --> $convertedValue",
+            myLogger.i("Converted $ut8String --> $convertedValue",
                 header: "GatewayService");
             namedArguments[param.name] = convertedValue;
             continue;
           }
           if (param.isQueriesMapping) {
-            myLogger.d("Found QueriesMapping --> ${param.name}",
+            myLogger.i("Found QueriesMapping --> ${param.name}",
                 header: "GatewayService");
             final convertedValue = ConversionService.convert(
                 value: request.uri.queryParameters,
                 type: param.type.reflectedType);
-            myLogger.d("Converted $ut8String --> $convertedValue",
+            myLogger.i("Converted $ut8String --> $convertedValue",
                 header: "GatewayService");
             namedArguments[param.name] = convertedValue;
             continue;
           }
-          myLogger.d(
+          myLogger.i(
               "No Mapping found for named parameter \"${param.name}\". Interpreting as @QueryiesMapping. See documentation for details.",
               header: "GatewayService");
           if (gatewayMirror.isGet()) {
@@ -66,7 +66,7 @@ class GatewayService {
               value: request.uri.queryParameters,
               type: param.type.reflectedType,
             );
-            myLogger.d("Converted $ut8String --> $convertedValue",
+            myLogger.i("Converted $ut8String --> $convertedValue",
                 header: "GatewayService");
             namedArguments[param.name] = convertedValue;
           } else if (gatewayMirror.isPost()) {
@@ -74,22 +74,22 @@ class GatewayService {
             if (contentType == ContentType.json ||
                 contentType.subType == "json") {
               final json = jsonDecode(ut8String);
-              myLogger.d(
+              myLogger.i(
                   "Converting $json to object of type ${param.type.reflectedType}",
                   header: "GatewayService");
               convertedValue = ConversionService.mapToObject(json,
                   type: param.type.reflectedType);
 
-              myLogger.d(
+              myLogger.i(
                   "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
                   header: "GatewayService");
             } else {
-              myLogger.d(
+              myLogger.i(
                   "Converting $ut8String to object of type ${param.type.reflectedType}",
                   header: "GatewayService");
               convertedValue = ConversionService.convert(
                   value: ut8String, type: param.type.reflectedType);
-              myLogger.d(
+              myLogger.i(
                   "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
                   header: "GatewayService");
             }
@@ -97,10 +97,10 @@ class GatewayService {
             namedArguments[param.name] = convertedValue;
           }
         } else {
-          myLogger.d("Named parameter: ${param.name}",
+          myLogger.i("Named parameter: ${param.name}",
               header: "GatewayService");
           if (param.isHeaderMapping) {
-            myLogger.d("Found HeaderMapping --> ${param.name}",
+            myLogger.i("Found HeaderMapping --> ${param.name}",
                 header: "GatewayService");
 
             final headerMapping = param.metadata
@@ -108,13 +108,13 @@ class GatewayService {
                 .first
                 .reflectee as HeaderMapping;
             final key = headerMapping.key;
-            myLogger.d("HeaderMapping key -->  \"$key\"",
+            myLogger.i("HeaderMapping key -->  \"$key\"",
                 header: "GatewayService");
             arguments.add(request.headers.value(key));
             continue;
           }
           if (param.isQueryMapping) {
-            myLogger.d("Found QueryMapping --> ${param.name}",
+            myLogger.i("Found QueryMapping --> ${param.name}",
                 header: "GatewayService");
             arguments.add(ConversionService.convert(
                 type: param.type.reflectedType,
@@ -122,20 +122,20 @@ class GatewayService {
             continue;
           }
           if (param.isQueriesMapping) {
-            myLogger.d("Found QueriesMapping --> ${param.name}",
+            myLogger.i("Found QueriesMapping --> ${param.name}",
                 header: "GatewayService");
 
             final convertedValue = ConversionService.convert(
                 value: request.uri.queryParameters,
                 type: param.type.reflectedType);
-            myLogger.d("Converted $ut8String --> $convertedValue",
+            myLogger.i("Converted $ut8String --> $convertedValue",
                 header: "GatewayService");
             arguments.add(convertedValue);
             continue;
           }
 
           if (gatewayMirror.isGet()) {
-            myLogger.d(
+            myLogger.i(
                 "No Mapping found for named parameter \"${param.name}\". Interpreting as @QueryiesMapping. See documentation for details.",
                 header: "GatewayService");
 
@@ -143,7 +143,7 @@ class GatewayService {
               value: request.uri.queryParameters,
               type: param.type.reflectedType,
             );
-            myLogger.d("Converted $ut8String --> $convertedValue",
+            myLogger.i("Converted $ut8String --> $convertedValue",
                 header: "GatewayService");
             arguments.add(convertedValue);
           } else if (gatewayMirror.isPost()) {
@@ -152,22 +152,22 @@ class GatewayService {
             if (contentType == ContentType.json ||
                 contentType.subType == "json") {
               final json = jsonDecode(ut8String);
-              myLogger.d(
+              myLogger.i(
                   "Converting $json to object of type ${param.type.reflectedType}",
                   header: "GatewayService");
               convertedValue = ConversionService.mapToObject(json,
                   type: param.type.reflectedType);
 
-              myLogger.d(
+              myLogger.i(
                   "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
                   header: "GatewayService");
             } else {
-              myLogger.d(
+              myLogger.i(
                   "Converting $ut8String to object of type ${param.type.reflectedType}",
                   header: "GatewayService");
               convertedValue = ConversionService.convert(
                   value: ut8String, type: param.type.reflectedType);
-              myLogger.d(
+              myLogger.i(
                   "Converted \"$ut8String\" to value \"$convertedValue\" of type ${convertedValue.runtimeType}",
                   header: "GatewayService");
             }

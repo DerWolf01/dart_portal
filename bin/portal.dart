@@ -23,7 +23,7 @@ void main<T>() async {
 //   @AuthInterceptor()
 //   @Post("/sign-in")
 //   handle(SignUpForm data) {
-//     myLogger.d(data);
+//     myLogger.i(data);
 //     return SignUpResult("jdsonfdksjfnsekjfsj");
 //   }
 // }

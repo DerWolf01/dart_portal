@@ -63,7 +63,7 @@ class InterceptorService {
   FutureOr<bool> preHandle(
       HttpRequest request, List<Interceptor> interceptors) async {
     for (final interceptor in interceptors) {
-      myLogger.d("Calling preHandle for ${interceptor.runtimeType}",
+      myLogger.i("Calling preHandle for ${interceptor.runtimeType}",
           header: "InterceptorService");
       if (!(await interceptor.preHandle(request))) {
         myLogger.w("${interceptor.runtimeType} blocked request",

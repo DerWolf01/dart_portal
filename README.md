@@ -40,7 +40,7 @@ class ExamplePortalServer {
   @Get('/sayHello')
   SocketMessage sayHello(SocketMessage request) {
     // this will be the response to the client
-    myLogger.d("client says: ${request.text}");
+    myLogger.i("client says: ${request.text}");
     return SocketMessage('Hello Client!');
   }
 }
@@ -71,7 +71,7 @@ class ExamplePortalClient {
   // The Response and Request handler with the sane paths have to match the same types when it comes to the handler argument  
   @ResponseHandler('/sayHello')
   void sayHello(SocketMessage response) {
-    myLogger.d("server says: ${response.text}");
+    myLogger.i("server says: ${response.text}");
     //... 
   }
 }
@@ -99,7 +99,7 @@ void main() async {
     ```dart
     import 'package:portal/portal.dart';
 
-    var exampleMiddleware = Interceptor<SocketMessage>("/example", preHandle: (accepts) async => true, postHandle: (portalReceived, {portalGaveBack}) async => myLogger.d(portalReceived));
+    var exampleMiddleware = Interceptor<SocketMessage>("/example", preHandle: (accepts) async => true, postHandle: (portalReceived, {portalGaveBack}) async => myLogger.i(portalReceived));
     
    ```
 
@@ -113,10 +113,10 @@ void main() async {
       exampleMiddleware.register();
       //or use the anonymousMiddleware function if you do not wanna define a class
       anonymousMiddleware("/example", preHandle: (UInt8List request) {
-        myLogger.d("Interceptor for /example");
+        myLogger.i("Interceptor for /example");
         return true;
       }, postHandle: (SerializableModel portalReceived, {SerializableModel? portalGaveBack}) {
-        myLogger.d("Interceptor for /example");
+        myLogger.i("Interceptor for /example");
       });
       // Start your server or client
     }

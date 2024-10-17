@@ -76,7 +76,7 @@ class PortalService {
       }
       try {
         if (gatewayMirror.isGet()) {
-          myLogger.d("Processing GET request", header: "PortalService");
+          myLogger.i("Processing GET request", header: "PortalService");
           if (request.method != "GET") {
             myLogger.w("Method not allowed", header: "PortalService");
             request.response.statusCode = HttpStatus.methodNotAllowed;
@@ -89,7 +89,7 @@ class PortalService {
             request.response.statusCode = HttpStatus.methodNotAllowed;
             return request;
           }
-          myLogger.d("is post");
+          myLogger.i("is post");
           return await handlePost(request, gatewayMirror);
         }
       } catch (e, s) {
@@ -159,21 +159,21 @@ class PortalService {
   ///   An [AnnotatedMethod] instance representing the method to handle the request, or null
   ///   if no matching method is found.
   GatewayMirror gatewayMirrorUsingFullPath(String fullPath) {
-    myLogger.d("Retrieving portal for path: $fullPath",
+    myLogger.i("Retrieving portal for path: $fullPath",
         header: "PortalService");
     PortalMirror? portal = _portalByFullPath(fullPath);
 
-    myLogger.d("Portal: $portal", header: "PortalService");
+    myLogger.i("Portal: $portal", header: "PortalService");
     if (portal == null) {
       throw PortalException(
           message: "No Portal registered with path: $fullPath",
           statusCode: 404);
     }
     var mPath = methodPath(fullPath);
-    myLogger.d("Method path: $mPath");
-    myLogger.d("portal has gateways: ${portal.gateways.length}");
+    myLogger.i("Method path: $mPath");
+    myLogger.i("portal has gateways: ${portal.gateways.length}");
     for (var element in portal.gateways) {
-      myLogger.d(element.getPath);
+      myLogger.i(element.getPath);
     }
     final GatewayMirror gateway = portal.gateways.firstWhere(
       (element) => element.getPath == mPath,
@@ -185,7 +185,7 @@ class PortalService {
 
   Future<HttpRequest> handleGet(
       HttpRequest request, GatewayMirror gatewayMirror, String fullPath) async {
-    myLogger.d("GET: $gatewayMirror", header: "PortalService --> handleGet");
+    myLogger.i("GET: $gatewayMirror", header: "PortalService --> handleGet");
 
     MethodParameters? methodParameters = await GatewayService()
         .generateGatewayArguments(
@@ -196,7 +196,7 @@ class PortalService {
     }
     dynamic response;
     try {
-      myLogger.d(
+      myLogger.i(
           "Invoking $gatewayMirror:\n ${gatewayMirror.methodMirror.parameters.map(
                 (e) => "${e.metadata.map(
                       (e) => "\n @${e.type.name}\n",
@@ -256,7 +256,7 @@ class PortalService {
           message: "Error while processing request", statusCode: 500);
     }
     try {
-      myLogger.d(
+      myLogger.i(
           "Invoking $gatewayMirror: \n ${gatewayMirror.methodMirror.parameters.map(
                 (e) => "${e.metadata.map(
                       (e) => "\n @${e.type.name}\n",
@@ -331,13 +331,13 @@ class PortalService {
   /// Parameters:
   ///   - [portal]: The portal instance to register.
   registerPortals() {
-    myLogger.d("Registering portals...",
+    myLogger.i("Registering portals...",
         header: "PortalService --> registerPortals");
 
     final portalCollection = PortalCollector.collect().toSet();
     _portalCollection.clear();
     _portalCollection.addAll(portalCollection);
-    myLogger.d("registered portals: $portalCollection",
+    myLogger.i("registered portals: $portalCollection",
         header: "PortalService --> registerPortals");
   }
 
@@ -380,7 +380,7 @@ class PortalService {
     dynamic portal;
     try {
       final finalPath = _pathByFullPath(fullPath);
-      myLogger.d("Getting portal by path: $finalPath");
+      myLogger.i("Getting portal by path: $finalPath");
       portal = _portalCollection.getByPath(finalPath);
       if (portal == null) {
         throw PortalException(

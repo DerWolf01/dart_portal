@@ -60,7 +60,7 @@ class PortalServer {
       await request.response.flush();
       await request.response.close();
     });
-    myLogger.d("listening on ${server.address.address}:${server.port}");
+    myLogger.i("listening on ${server.address.address}:${server.port}");
   }
 
   /// Initializes the server asynchronously.

@@ -9,7 +9,7 @@ class RequestService extends RequestServiceNotifier {
   FutureOr handleRequest(HttpRequest request) async {
     final body = await utf8.decodeStream(request.asBroadcastStream());
     var instance = ConversionService.mapToObject(jsonDecode(body));
-    myLogger.d(instance);
+    myLogger.i(instance);
   }
 }
 

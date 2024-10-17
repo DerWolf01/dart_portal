@@ -13,7 +13,7 @@ class AuthInterceptorExample extends Interceptor<SignUpForm> {
 
   @override
   Future<bool> preHandle(HttpRequest request) async {
-    myLogger.d("pre-handled request $request");
+    myLogger.i("pre-handled request $request");
     return true;
   }
 
@@ -22,7 +22,7 @@ class AuthInterceptorExample extends Interceptor<SignUpForm> {
       {required HttpRequest request,
       required SignUpForm portalReceived,
       portalGaveBack}) {
-    myLogger.d("post-handled request $request");
+    myLogger.i("post-handled request $request");
   }
 }
 
@@ -31,13 +31,13 @@ class AuthPortalExample {
   @AuthInterceptorExample()
   @Post("/sign-in")
   handle(SignUpForm data) {
-    myLogger.d(data);
+    myLogger.i(data);
     return SignUpResult("andsoinewoiwndoenwf1231231231321");
   }
 
   @Post("/authenticate")
   handleAuthenticate(@HeaderMapping("Authorization") String token) {
-    myLogger.d(token);
+    myLogger.i(token);
     return SignUpResult("andsoinewoiwndoenwf1231231231321");
   }
 }

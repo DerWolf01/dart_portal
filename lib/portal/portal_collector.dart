@@ -9,7 +9,7 @@ import 'package:portal/services/collection_service.dart';
 
 class PortalCollector {
   static List<PortalMirror> collect() {
-    myLogger.d('Collecting portals');
+    myLogger.i('Collecting portals');
     final portals =
         CollectorService().searchClassesUsingAnnotation<Portal>().map((e) {
       return PortalMirror(
@@ -18,21 +18,21 @@ class PortalCollector {
           gateways: gateways(e.classMirror));
     }).toList();
     if (portals.isEmpty) {
-      myLogger.d('No portals found');
+      myLogger.i('No portals found');
     } else {
-      myLogger.d('Portals found');
-      myLogger.d(portals.length);
-      myLogger.d(portals);
+      myLogger.i('Portals found');
+      myLogger.i(portals.length);
+      myLogger.i(portals);
     }
     return portals;
   }
 
   static List<GatewayMirror> gateways(ClassMirror classMirror) {
-    myLogger.d("Collecting data from portal ${classMirror.simpleName}");
+    myLogger.i("Collecting data from portal ${classMirror.simpleName}");
     final List<GatewayMirror> gateways = [];
     for (final method in methods(classMirror)) {
       if (MirrorSystem.getName(method.simpleName) == "handle") {
-        myLogger.d('Collecting data from gateway-method handle');
+        myLogger.i('Collecting data from gateway-method handle');
       }
       final Gateway? gateway = method.metadata
           .where(
