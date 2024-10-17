@@ -2,6 +2,8 @@
 
 Portal is a Dart-based open source server-client communication framework that leverages portals and the reflectable package to dynamically handle requests and responses. It provides a structured way to manage socket communication, making it easier to develop scalable and maintainable real-time applications.
 
+> :warning: **Still in development**: The library is still under development und not meant to be used in production environments by third parties yet.
+
 ## Features
 
 - **Portal-Based Architecture**: Organize your code into portals for both server & client to handle specific paths and actions, improving modularity and readability.
