@@ -94,7 +94,7 @@ void main() async {
     ```
 
 
-4. **Define Middlewares**: Create middlewares to preprocess and postprocess requests and responses. Use the `MiddlewareService` to register your middleware.
+4. **Define Middlewares**: Create middlewares to preprocess and postprocess requests and responses. Use the `InterceptorService` to register your middleware.
 
     ```dart
     import 'package:portal/portal.dart';
@@ -108,7 +108,7 @@ void main() async {
     ```dart
     void main() {
       //...
-      MiddlewareService().registerMiddleware(exampleMiddleware);
+      InterceptorService().registerMiddleware(exampleMiddleware);
       //or use the member method
       exampleMiddleware.register();
       //or use the anonymousMiddleware function if you do not wanna define a class

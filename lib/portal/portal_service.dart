@@ -50,7 +50,7 @@ class PortalService {
       setBaseHeaders(request);
       final gatewayMirror = gatewayMirrorUsingFullPath(fullPath);
       try {
-        final canPass = await MiddlewareService()
+        final canPass = await InterceptorService()
             .preHandle(request, gatewayMirror.interceptors);
         if (!canPass) {
           request.response.statusCode = HttpStatus.unprocessableEntity;
@@ -216,7 +216,7 @@ class PortalService {
     }
 
     request.response.write(ConversionService.encodeJSON(response));
-    await MiddlewareService()
+    await InterceptorService()
         .postHandle(request, gatewayMirror.interceptors, argInstance, response);
     return request;
   }
@@ -276,7 +276,7 @@ class PortalService {
       request.response.statusCode = HttpStatus.internalServerError;
     }
 
-    await MiddlewareService()
+    await InterceptorService()
         .postHandle(request, gatewayMirror.interceptors, argInstance, result);
     return request;
   }

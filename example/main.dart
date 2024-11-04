@@ -1,7 +1,7 @@
 import 'dart:isolate';
 import 'dart:mirrors';
 
-import 'package:portal/example/server/controller/auth_portal_example.dart';
+import 'server/controller/auth_portal_example.dart';
 import 'package:portal/portal.dart';
 import 'package:portal/portal_server.dart';
 import 'package:http/http.dart' as http;

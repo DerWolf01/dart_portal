@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:portal/example/sign_up_form.dart';
+import '../../sign_up_form.dart';
 import 'package:portal/interceptor/intercept.dart';
 import 'package:portal/portal/gateway.dart';
 import 'package:portal/portal/header_mapping.dart';
