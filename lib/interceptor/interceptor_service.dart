@@ -38,19 +38,19 @@ typedef InterceptorCallback = FutureOr<bool> Function(HttpRequest request);
 /// interceptor for incoming requests. Interceptor can be used to perform
 /// actions before and after the main processing of a request, such as
 /// authentication checks or logging.
-class MiddlewareService {
+class InterceptorService {
   /// Private constructor for the singleton pattern.
-  MiddlewareService._internal();
+  InterceptorService._internal();
 
-  /// The singleton instance of [MiddlewareService].
-  static MiddlewareService? _instance;
+  /// The singleton instance of [InterceptorService].
+  static InterceptorService? _instance;
 
   /// Factory constructor to provide a singleton instance.
   ///
   /// If an instance already exists, it returns that; otherwise, it creates
   /// a new instance using the private constructor.
-  factory MiddlewareService() {
-    _instance ??= MiddlewareService._internal();
+  factory InterceptorService() {
+    _instance ??= InterceptorService._internal();
     return _instance!;
   }
 
@@ -114,6 +114,6 @@ extension MiddlewareFilter on List<InstanceMirror> {
 }
 
 intercept({InterceptorCallback? preHandle, InterceptorCallback? posthandle}) {
-  MiddlewareService().absoluteInterceptors.add(DispensableInterceptor(
+  InterceptorService().absoluteInterceptors.add(DispensableInterceptor(
       preHandleCallback: preHandle, postHandleCallback: posthandle));
 }
